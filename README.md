@@ -24,12 +24,25 @@ Time4A closes this big gap supporting actually 45 languages and has more feature
 library available for the Android platform. Of course, Time4A also supports the newest timezone data available
 at IANA.
 
-## How to use
-Insert following dependency to your build.gradle-file:
+## Usage
+Only two steps are required before coding against the API of Time4A.
 
-```gradle
+- First step: Insert following dependency to your build.gradle-file.
+
+```groovy
 dependencies {
     compile 'net.time4j:time4j-android:3.5:2015f'
+}
+```
+
+- Second step: Initialize your application this way.
+```java
+public class MyApplication extends Application {
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        ApplicationStarter.initialize(this);
+    }
 }
 ```
 
