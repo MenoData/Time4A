@@ -1,0 +1,17 @@
+*.apk
+*.ap_
+*.dex
+*.class
+*.jar
+
+local.properties
+
+*.iml
+*.ipr
+*.iws
+.idea/
+
+.gradle
+.DS_Store
+/build
+/captures

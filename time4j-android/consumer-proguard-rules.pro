@@ -1,0 +1,14 @@
+-keep class net.time4j.android.spi.AndroidResourceLoader
+-keep class net.time4j.tz.olson.AFRICA
+-keep class net.time4j.tz.olson.AMERICA
+-keep class net.time4j.tz.olson.AMERICA$ARGENTINA
+-keep class net.time4j.tz.olson.AMERICA$INDIANA
+-keep class net.time4j.tz.olson.AMERICA$KENTUCKY
+-keep class net.time4j.tz.olson.AMERICA$NORTH_DAKOTA
+-keep class net.time4j.tz.olson.ANTARCTICA
+-keep class net.time4j.tz.olson.ASIA
+-keep class net.time4j.tz.olson.ATLANTIC
+-keep class net.time4j.tz.olson.AUSTRALIA
+-keep class net.time4j.tz.olson.EUROPE
+-keep class net.time4j.tz.olson.INDIAN
+-keep class net.time4j.tz.olson.PACIFIC

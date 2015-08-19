@@ -1,0 +1,85 @@
+apply plugin: 'com.android.library'
+
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'time4j-android'
+
+    publishedGroupId = 'net.time4j'
+    libraryName = 'Time4J-Android'
+    artifact = 'time4j-android'
+
+    libraryDescription = 'Advanced Date and Time library for Android'
+
+    siteUrl = 'https://github.com/menodata/Time4A'
+    gitUrl = 'https://github.com/menodata/Time4A.git'
+
+    libraryVersion = '3.5-2015f'
+
+    developerId = 'mhochschild'
+    developerName = 'Meno Hochschild'
+    developerEmail = 'mhochschild@gmx.de'
+
+    licenseName = 'GNU LESSER GENERAL PUBLIC LICENSE, Version 2.1, February 1999'
+    licenseUrl = 'http://www.gnu.org/licenses/lgpl-2.1.html'
+    allLicenses = ["LGPL-2.1"]
+}
+
+gradle.projectsEvaluated {
+    tasks.withType(JavaCompile) {
+        options.debug = false
+        options.debugOptions.debugLevel = "source"
+    }
+}
+
+android {
+    compileSdkVersion 22
+    buildToolsVersion "22.0.1"
+
+    defaultConfig {
+        minSdkVersion 9
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0"
+        consumerProguardFiles 'consumer-proguard-rules.pro'
+    }
+    buildTypes {
+        release {
+            debuggable false
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_6
+        targetCompatibility JavaVersion.VERSION_1_6
+    }
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+
+    exclude "net/time4j/tz/spi/**"
+    exclude "net/time4j/android/spi/**"
+    exclude "net/time4j/i18n/**"
+    exclude "net/time4j/calendar/service/**"
+
+    options.memberLevel = JavadocMemberLevel.PUBLIC
+    failOnError false
+}
+
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+apply from: 'install-v1.gradle'
+apply from: 'bintray-v1.gradle'
+
+dependencies {
+
+}
