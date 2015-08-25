@@ -44,6 +44,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.TimeUnit;
 
 import static net.time4j.CalendarUnit.DAYS;
 import static net.time4j.CalendarUnit.MONTHS;
@@ -127,9 +128,10 @@ public final class PrettyTime {
     private final Locale locale;
     private final TimeSource<?> refClock;
     private final char zeroDigit;
-    private final IsoUnit emptyUnit;
     private final String minusSign;
+    private final IsoUnit emptyUnit;
     private final boolean weekToDays;
+    private final boolean shortStyle;
 
     //~ Konstruktoren -----------------------------------------------------
 
@@ -139,7 +141,8 @@ public final class PrettyTime {
         char zeroDigit,
         String minusSign,
         IsoUnit emptyUnit,
-        boolean weekToDays
+        boolean weekToDays,
+        boolean shortStyle
     ) {
         super();
 
@@ -157,6 +160,7 @@ public final class PrettyTime {
         this.emptyUnit = emptyUnit;
         this.minusSign = minusSign;
         this.weekToDays = weekToDays;
+        this.shortStyle = shortStyle;
 
     }
 
@@ -190,6 +194,7 @@ public final class PrettyTime {
                     NUMBER_SYMBOLS.getZeroDigit(locale),
                     NUMBER_SYMBOLS.getMinusSign(locale),
                     SECONDS,
+                    false,
                     false);
             PrettyTime old = LANGUAGE_MAP.putIfAbsent(locale, ptime);
 
@@ -274,7 +279,8 @@ public final class PrettyTime {
             this.zeroDigit,
             this.minusSign,
             this.emptyUnit,
-            this.weekToDays);
+            this.weekToDays,
+            this.shortStyle);
 
     }
 
@@ -320,7 +326,8 @@ public final class PrettyTime {
             zeroDigit,
             this.minusSign,
             this.emptyUnit,
-            this.weekToDays);
+            this.weekToDays,
+            this.shortStyle);
 
     }
 
@@ -371,7 +378,8 @@ public final class PrettyTime {
             this.zeroDigit,
             minusSign,
             this.emptyUnit,
-            this.weekToDays);
+            this.weekToDays,
+            this.shortStyle);
 
     }
 
@@ -410,7 +418,8 @@ public final class PrettyTime {
             this.zeroDigit,
             this.minusSign,
             emptyUnit,
-            this.weekToDays);
+            this.weekToDays,
+            this.shortStyle);
 
     }
 
@@ -449,7 +458,8 @@ public final class PrettyTime {
             this.zeroDigit,
             this.minusSign,
             emptyUnit,
-            this.weekToDays);
+            this.weekToDays,
+            this.shortStyle);
 
     }
 
@@ -477,6 +487,43 @@ public final class PrettyTime {
             this.zeroDigit,
             this.minusSign,
             this.emptyUnit,
+            true,
+            this.shortStyle);
+
+    }
+
+    /**
+     * <p>Mandates the use of abbreviations as default style. </p>
+     *
+     * <p>All {@code print()}-methods with explicit {@code TextWidth}-parameters will ignore this
+     * setting however. This method is mainly relevant for printing relative times. </p>
+     *
+     * @return  changed copy of this instance
+     * @since   3.6/4.4
+     */
+    /*[deutsch]
+     * <p>Legt die Verwendung von Abk&uuml;rzungen als Vorgabestil fest. </p>
+     *
+     * <p>Alle {@code print()}-Methoden mit einem expliziten {@code TextWidth}-Parameter ignorieren diese
+     * Einstellung. Diese Methode ist haupts&auml;chlich f&uuml;r die Formatierung von relativen Zeitangaben
+     * von Bedeutung. </p>
+     *
+     * @return  changed copy of this instance
+     * @since   3.6/4.4
+     */
+    public PrettyTime withShortStyle() {
+
+        if (this.shortStyle) {
+            return this;
+        }
+
+        return new PrettyTime(
+            this.locale,
+            this.refClock,
+            this.zeroDigit,
+            this.minusSign,
+            this.emptyUnit,
+            this.weekToDays,
             true);
 
     }
@@ -767,7 +814,7 @@ public final class PrettyTime {
      */
     public String printRelativeInStdTimezone(UnixTime moment) {
 
-        return this.printRelative(moment, Timezone.ofSystem());
+        return this.printRelative(moment, Timezone.ofSystem(), TimeUnit.SECONDS);
 
     }
 
@@ -796,7 +843,7 @@ public final class PrettyTime {
         TZID tzid
     ) {
 
-        return this.printRelative(moment, Timezone.of(tzid));
+        return this.printRelative(moment, Timezone.of(tzid), TimeUnit.SECONDS);
 
     }
 
@@ -825,13 +872,35 @@ public final class PrettyTime {
         String tzid
     ) {
 
-        return this.printRelative(moment, Timezone.of(tzid));
+        return this.printRelative(moment, Timezone.of(tzid), TimeUnit.SECONDS);
 
     }
 
-    private String printRelative(
-        UnixTime ut,
-        Timezone tz
+    /**
+     * <p>Formats given time point relative to the current time of {@link #getReferenceClock()}
+     * as duration in given precision or less. </p>
+     *
+     * @param   moment      relative time point
+     * @param   tz          time zone for translating to a local duration
+     * @param   precision   maximum precision of relative time (not more than seconds)
+     * @return  formatted output of relative time, either in past or in future
+     * @since   3.6/4.4
+     */
+    /*[deutsch]
+     * <p>Formatiert den angegebenen Zeitpunkt relativ zur aktuellen Zeit
+     * der Referenzuhr {@link #getReferenceClock()} als Dauer in der angegebenen
+     * maximalen Genauigkeit. </p>
+     *
+     * @param   moment      relative time point
+     * @param   tz          time zone for translating to a local duration
+     * @param   precision   maximum precision of relative time (not more than seconds)
+     * @return  formatted output of relative time, either in past or in future
+     * @since   3.6/4.4
+     */
+    public String printRelative(
+        UnixTime moment,
+        Timezone tz,
+        TimeUnit precision
     ) {
 
         UnixTime ref = this.getReferenceClock().currentTime();
@@ -842,20 +911,40 @@ public final class PrettyTime {
                 tz.getOffset(ref));
         PlainTimestamp end =
             PlainTimestamp.from(
-                ut,
-                tz.getOffset(ut));
+                moment,
+                tz.getOffset(moment));
 
         IsoUnit[] units = (this.weekToDays ? TSP_UNITS : STD_UNITS);
-        Duration<IsoUnit> duration =
-            Duration.in(tz, units).between(start, end);
+        Duration<IsoUnit> duration = Duration.in(tz, units).between(start, end);
 
         if (duration.isEmpty()) {
-            return UnitPatterns.of(this.locale).getNowWord();
+            return this.getEmptyRelativeString(precision);
         }
 
         TimeSpan.Item<IsoUnit> item = duration.getTotalLength().get(0);
         long amount = item.getAmount();
         IsoUnit unit = item.getUnit();
+
+        if (unit instanceof ClockUnit) {
+            ClockUnit cu = (ClockUnit) unit;
+
+            if (5 - cu.ordinal() < precision.ordinal()) {
+                return this.getEmptyRelativeString(precision);
+            }
+        }
+
+        if (
+            (amount == 1L)
+            && unit.equals(CalendarUnit.DAYS)
+        ) {
+            UnitPatterns patterns = UnitPatterns.of(this.locale);
+            String replacement = (duration.isNegative() ? patterns.getYesterdayWord() : patterns.getTomorrowWord());
+
+            if (!replacement.isEmpty()) {
+                return replacement;
+            }
+        }
+
         String pattern;
 
         if (duration.isNegative()) {
@@ -876,6 +965,22 @@ public final class PrettyTime {
 
     }
 
+    private String getEmptyRelativeString(TimeUnit precision) {
+
+        UnitPatterns patterns = UnitPatterns.of(this.locale);
+
+        if (precision.equals(TimeUnit.DAYS)) {
+            String replacement = patterns.getTodayWord();
+
+            if (!replacement.isEmpty()) {
+                return replacement;
+            }
+        }
+
+        return patterns.getNowWord();
+
+    }
+
     private String getPastPattern(
         long amount,
         CalendarUnit unit
@@ -883,7 +988,7 @@ public final class PrettyTime {
 
         UnitPatterns patterns = UnitPatterns.of(this.locale);
         PluralCategory category = this.getCategory(amount);
-        return patterns.getPatternInPast(category, unit);
+        return patterns.getPatternInPast(category, this.shortStyle, unit);
 
     }
 
@@ -894,7 +999,7 @@ public final class PrettyTime {
 
         UnitPatterns patterns = UnitPatterns.of(this.locale);
         PluralCategory category = this.getCategory(amount);
-        return patterns.getPatternInFuture(category, unit);
+        return patterns.getPatternInFuture(category, this.shortStyle, unit);
 
     }
 
@@ -905,7 +1010,7 @@ public final class PrettyTime {
 
         UnitPatterns patterns = UnitPatterns.of(this.locale);
         PluralCategory category = this.getCategory(amount);
-        return patterns.getPatternInPast(category, unit);
+        return patterns.getPatternInPast(category, this.shortStyle, unit);
 
     }
 
@@ -916,7 +1021,7 @@ public final class PrettyTime {
 
         UnitPatterns patterns = UnitPatterns.of(this.locale);
         PluralCategory category = this.getCategory(amount);
-        return patterns.getPatternInFuture(category, unit);
+        return patterns.getPatternInFuture(category, this.shortStyle, unit);
 
     }
 
