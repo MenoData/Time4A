@@ -13,6 +13,8 @@ import net.time4j.PlainDate;
 import net.time4j.PrettyTime;
 import net.time4j.SystemClock;
 import net.time4j.Weekmodel;
+import net.time4j.calendar.HijriCalendar;
+import net.time4j.engine.StartOfDay;
 import net.time4j.format.TextWidth;
 import net.time4j.format.expert.ChronoFormatter;
 import net.time4j.format.expert.PatternType;
@@ -69,7 +71,9 @@ public class MainActivity extends Activity {
                 ).withAlternativeEraNames().format(moment)
                 + "\n\tTZDB-version: " + Timezone.getVersion("TZDB")
                 + "\n\tZONE-PROVIDERS: " + Timezone.getProviderInfo()
-                + "\n\tDuration=" + formattedDuration;
+                + "\n\tDuration=" + formattedDuration
+                + "\n\tHijri-today=" +
+                    SystemClock.inLocalView().now(HijriCalendar.family(), HijriCalendar.VARIANT_ICU4J, StartOfDay.EVENING);
     }
 
 }
