@@ -56,6 +56,12 @@ public class MainActivity extends Activity {
         Duration<?> dur = Duration.of(337540, ClockUnit.SECONDS).with(Duration.STD_CLOCK_PERIOD);
         String formattedDuration = PrettyTime.of(Locale.FRANCE).print(dur, TextWidth.WIDE);
 
+        ChronoFormatter<HijriCalendar> hf =
+                ChronoFormatter.setUp(HijriCalendar.class, Locale.ENGLISH)
+                .addPattern("MM/dd/yyyy", PatternType.NON_ISO_DATE).build();
+        HijriCalendar hijriDate =
+                SystemClock.inLocalView().now(HijriCalendar.family(), HijriCalendar.VARIANT_ICU4J, StartOfDay.EVENING);
+
         Moment moment = SystemClock.currentMoment();
         return "\tCurrent time (UTC): " + moment.toString()
                 + "\n\tSystem timezone: " + Timezone.ofSystem().getID().canonical()
@@ -72,8 +78,8 @@ public class MainActivity extends Activity {
                 + "\n\tTZDB-version: " + Timezone.getVersion("TZDB")
                 + "\n\tZONE-PROVIDERS: " + Timezone.getProviderInfo()
                 + "\n\tDuration=" + formattedDuration
-                + "\n\tHijri-today=" +
-                    SystemClock.inLocalView().now(HijriCalendar.family(), HijriCalendar.VARIANT_ICU4J, StartOfDay.EVENING);
+                + "\n\tHijri-today=" + hijriDate
+                + "\n\tHijri-formatted=" + hf.format(hijriDate);
     }
 
 }
