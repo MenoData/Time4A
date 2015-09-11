@@ -1,4 +1,9 @@
 ## [v3.8-2015?] not yet released
+### Added
+- New calendar-related class GeneralTimestamp [#340]
+
+### Changed
+- Two specialized now()-methods in ZonalClock changed the return type [#340]
 
 ## [v3.7-2015f] published on 2015-09-03
 ### Added
