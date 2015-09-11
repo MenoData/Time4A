@@ -9,7 +9,6 @@ import android.widget.TextView;
 import net.time4j.ClockUnit;
 import net.time4j.Duration;
 import net.time4j.Moment;
-import net.time4j.PlainDate;
 import net.time4j.PrettyTime;
 import net.time4j.SystemClock;
 import net.time4j.Weekmodel;
@@ -60,7 +59,9 @@ public class MainActivity extends Activity {
                 ChronoFormatter.setUp(HijriCalendar.class, Locale.ENGLISH)
                 .addPattern("MM/dd/yyyy", PatternType.NON_ISO_DATE).build();
         HijriCalendar hijriDate =
-                SystemClock.inLocalView().now(HijriCalendar.family(), HijriCalendar.VARIANT_ICU4J, StartOfDay.EVENING);
+                SystemClock.inLocalView().now(
+                        HijriCalendar.family(), HijriCalendar.VARIANT_ICU4J, StartOfDay.EVENING
+                ).toDate();
 
         Moment moment = SystemClock.currentMoment();
         return "\tCurrent time (UTC): " + moment.toString()
