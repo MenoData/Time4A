@@ -1,5 +1,6 @@
 ## [v3.8-2015?] not yet released
 ### Added
+- Make PatternType.CLDR useable for non-iso-dates [#348]
 - New calendar-related class GeneralTimestamp [#340]
 
 ### Changed
