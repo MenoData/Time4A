@@ -4,6 +4,9 @@
 - Make PatternType.CLDR useable for non-iso-dates [#348]
 - New calendar-related class GeneralTimestamp [#340]
 
+### Fixed
+- Disable parsing of ambivalent text forms [#351]
+
 ### Changed
 - CalendarVariant and Calendrical changed Temporal signature [#350]
 - Two specialized now()-methods in ZonalClock changed the return type [#340]
