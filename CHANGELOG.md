@@ -1,9 +1,11 @@
 ## [v3.8-2015?] not yet released
 ### Added
+- Unify CalendarVariant and Calendrical by new interface CalendarDate [#350]
 - Make PatternType.CLDR useable for non-iso-dates [#348]
 - New calendar-related class GeneralTimestamp [#340]
 
 ### Changed
+- CalendarVariant and Calendrical changed Temporal signature [#350]
 - Two specialized now()-methods in ZonalClock changed the return type [#340]
 
 ## [v3.7-2015f] published on 2015-09-03
