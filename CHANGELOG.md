@@ -1,5 +1,6 @@
 ## [v3.8-2015?] not yet released
 ### Added
+- Support for Malay language [#353]
 - Unify CalendarVariant and Calendrical by new interface CalendarDate [#350]
 - Make PatternType.CLDR useable for non-iso-dates [#348]
 - New calendar-related class GeneralTimestamp [#340]
