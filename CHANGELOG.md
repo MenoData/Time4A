@@ -1,4 +1,6 @@
 ## [v3.9-2015?] not yet released
+### Fixed
+- Pattern letter "L" causes exception for non-iso-dates [#354]
 
 ## [v3.8-2015f] published on 2015-09-15
 ### Added
