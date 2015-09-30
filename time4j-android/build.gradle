@@ -28,6 +28,7 @@ gradle.projectsEvaluated {
     tasks.withType(JavaCompile) {
         options.debug = false
         options.debugOptions.debugLevel = "source"
+        options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
     }
 }
 
