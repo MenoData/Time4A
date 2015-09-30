@@ -14,6 +14,9 @@
 ### Changed
 - Make serialization of HijriCalendar versionable [#356]
 
+### Removed
+- Interface ExtZoneProvider (no usage) [#371]
+
 ## [v3.8-2015f] published on 2015-09-15
 ### Added
 - Support for Malay language [#353]
