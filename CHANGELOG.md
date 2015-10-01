@@ -1,4 +1,6 @@
-## [v3.9-2015?] not yet released
+## [v3.10-2015?] not yet released
+
+## [v3.9-2015f] published on 2015-10-01
 ### Added
 - New Persian calendar [#357]
 - Support for Pashto language [#358]
