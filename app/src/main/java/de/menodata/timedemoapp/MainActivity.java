@@ -13,6 +13,7 @@ import net.time4j.PrettyTime;
 import net.time4j.SystemClock;
 import net.time4j.Weekmodel;
 import net.time4j.calendar.HijriCalendar;
+import net.time4j.calendar.PersianCalendar;
 import net.time4j.engine.StartOfDay;
 import net.time4j.format.TextWidth;
 import net.time4j.format.expert.ChronoFormatter;
@@ -55,6 +56,9 @@ public class MainActivity extends Activity {
         Duration<?> dur = Duration.of(337540, ClockUnit.SECONDS).with(Duration.STD_CLOCK_PERIOD);
         String formattedDuration = PrettyTime.of(Locale.FRANCE).print(dur, TextWidth.WIDE);
 
+        ChronoFormatter<PersianCalendar> pf =
+                ChronoFormatter.setUp(PersianCalendar.class, Locale.ENGLISH)
+                        .addPattern("MMMM d, yyyy G", PatternType.NON_ISO_DATE).build();
         ChronoFormatter<HijriCalendar> hf =
                 ChronoFormatter.setUp(HijriCalendar.class, Locale.ENGLISH)
                 .addPattern("MM/dd/yyyy", PatternType.NON_ISO_DATE).build();
@@ -80,7 +84,8 @@ public class MainActivity extends Activity {
                 + "\n\tZONE-PROVIDERS: " + Timezone.getProviderInfo()
                 + "\n\tDuration=" + formattedDuration
                 + "\n\tHijri-today=" + hijriDate
-                + "\n\tHijri-formatted=" + hf.format(hijriDate);
+                + "\n\tHijri-formatted=" + hf.format(hijriDate)
+                + "\n\tPersian-today=" + pf.format(hijriDate.transform(PersianCalendar.class));
     }
 
 }
