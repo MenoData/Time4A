@@ -9,12 +9,14 @@ import android.widget.TextView;
 import net.time4j.ClockUnit;
 import net.time4j.Duration;
 import net.time4j.Moment;
+import net.time4j.PlainTime;
 import net.time4j.PrettyTime;
 import net.time4j.SystemClock;
 import net.time4j.Weekmodel;
 import net.time4j.calendar.HijriCalendar;
 import net.time4j.calendar.PersianCalendar;
 import net.time4j.engine.StartOfDay;
+import net.time4j.format.DisplayMode;
 import net.time4j.format.TextWidth;
 import net.time4j.format.expert.ChronoFormatter;
 import net.time4j.format.expert.PatternType;
@@ -66,6 +68,9 @@ public class MainActivity extends Activity {
                 SystemClock.inLocalView().now(
                         HijriCalendar.family(), HijriCalendar.VARIANT_ICU4J, StartOfDay.EVENING
                 ).toDate();
+        String germanTime =
+                PlainTime.formatter(DisplayMode.FULL, Locale.GERMANY).format(
+                        SystemClock.inLocalView().now().toTime());
 
         Moment moment = SystemClock.currentMoment();
         return "\tCurrent time (UTC): " + moment.toString()
@@ -73,13 +78,14 @@ public class MainActivity extends Activity {
                 + "\n\tLocal timestamp: " + moment.toLocalTimestamp()
                 + "\n\tNext leap second: " + moment.with(Moment.nextLeapSecond())
                 + "\n\tWeek model: " + Weekmodel.ofSystem()
-                + "\n\tAktuelle Zeit: "
+                + "\n\tAktueller Moment: "
                 + ChronoFormatter.ofMomentPattern(
                     "d. MMMM uuuu GGGG HH:mm z",
                     PatternType.CLDR,
                     Locale.GERMAN,
                     EUROPE.BERLIN
                 ).withAlternativeEraNames().format(moment)
+                + "\n\tDeutsche Uhrzeit: " + germanTime
                 + "\n\tTZDB-version: " + Timezone.getVersion("TZDB")
                 + "\n\tZONE-PROVIDERS: " + Timezone.getProviderInfo()
                 + "\n\tDuration=" + formattedDuration

@@ -27,6 +27,7 @@ import net.time4j.base.ResourceLoader;
 import net.time4j.calendar.service.GenericTextProviderSPI;
 import net.time4j.engine.ChronoExtension;
 import net.time4j.format.FormatEngine;
+import net.time4j.format.FormatPatternProvider;
 import net.time4j.format.NumberSymbolProvider;
 import net.time4j.format.PluralProvider;
 import net.time4j.format.TextProvider;
@@ -88,6 +89,7 @@ public class AndroidResourceLoader
         tmp.put(PluralProvider.class, new LazyPluraldata());
         tmp.put(UnitPatternProvider.class, Collections.singleton(new UnitPatternProviderSPI()));
         tmp.put(WeekdataProvider.class, new LazyWeekdata());
+        tmp.put(FormatPatternProvider.class, new LazyFormatPatterns());
         tmp.put(TickProvider.class, Collections.singleton(new AndroidTickerSPI()));
         PROVIDERS = Collections.unmodifiableMap(tmp);
 
@@ -222,13 +224,40 @@ public class AndroidResourceLoader
 
     }
 
-    private static final class LazyWeekdata
-        implements Iterable<WeekdataProviderSPI> {
+    private static final class LazyFormatPatterns
+        implements Iterable<FormatPatternProvider> {
 
         //~ Methoden ------------------------------------------------------
 
         @Override
-        public Iterator<WeekdataProviderSPI> iterator() {
+        public Iterator<FormatPatternProvider> iterator() {
+
+            return FormatPatternHolder.ITERABLE.iterator();
+
+        }
+
+    }
+
+    private static final class FormatPatternHolder {
+
+        //~ Statische Felder/Initialisierungen ----------------------------
+
+        private static final Iterable<FormatPatternProvider> ITERABLE;
+
+        static {
+            FormatPatternProvider provider = new IsoTextProviderSPI();
+            ITERABLE = Collections.singletonList(provider);
+        }
+
+    }
+
+    private static final class LazyWeekdata
+        implements Iterable<WeekdataProvider> {
+
+        //~ Methoden ------------------------------------------------------
+
+        @Override
+        public Iterator<WeekdataProvider> iterator() {
 
             return WeekdataHolder.ITERABLE.iterator();
 
@@ -240,8 +269,12 @@ public class AndroidResourceLoader
 
         //~ Statische Felder/Initialisierungen ----------------------------
 
-        private static final Iterable<WeekdataProviderSPI> ITERABLE =
-            Collections.singleton(new WeekdataProviderSPI());
+        private static final Iterable<WeekdataProvider> ITERABLE;
+
+        static {
+            WeekdataProvider provider = new WeekdataProviderSPI();
+            ITERABLE = Collections.singletonList(provider);
+        }
 
     }
 
@@ -311,12 +344,12 @@ public class AndroidResourceLoader
     }
 
     private static final class LazyPluraldata
-        implements Iterable<PluralProviderSPI> {
+        implements Iterable<PluralProvider> {
 
         //~ Methoden ------------------------------------------------------
 
         @Override
-        public Iterator<PluralProviderSPI> iterator() {
+        public Iterator<PluralProvider> iterator() {
 
             return PluraldataHolder.ITERABLE.iterator();
 
@@ -328,8 +361,12 @@ public class AndroidResourceLoader
 
         //~ Statische Felder/Initialisierungen ----------------------------
 
-        private static final Iterable<PluralProviderSPI> ITERABLE =
-            Collections.singleton(new PluralProviderSPI());
+        private static final Iterable<PluralProvider> ITERABLE;
+
+        static {
+            PluralProvider provider = new PluralProviderSPI();
+            ITERABLE = Collections.singleton(provider);
+        }
 
     }
 
