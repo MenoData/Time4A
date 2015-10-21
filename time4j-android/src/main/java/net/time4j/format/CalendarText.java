@@ -1099,13 +1099,21 @@ public final class CalendarText {
             if (c == ' ' && j + 1 < sb.length() && sb.charAt(j + 1) == ' ') {
                 sb.deleteCharAt(j);
                 j--;
-            } else if (c == '[' || c == ']' || c == '(' || c == ')') { // check locales es, fa, ps
+            } else if (c == '[' || c == ']' || c == '(' || c == ')') { // check locales es, fa, ps, uz
                 sb.deleteCharAt(j);
                 j--;
             }
         }
 
-        return sb.toString().trim();
+        String result = sb.toString().trim();
+
+        if (result.endsWith(" '")) { // special case for de, fr_BE
+            result = result.substring(0, result.length() - 2) + "'";
+        } else if (result.endsWith(",")) { // special case for hy
+            result = result.substring(0, result.length() - 1);
+        }
+
+        return result;
 
     }
 
