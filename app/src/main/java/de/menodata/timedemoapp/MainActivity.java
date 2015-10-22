@@ -10,6 +10,7 @@ import net.time4j.ClockUnit;
 import net.time4j.Duration;
 import net.time4j.Moment;
 import net.time4j.PlainTime;
+import net.time4j.PlainTimestamp;
 import net.time4j.PrettyTime;
 import net.time4j.SystemClock;
 import net.time4j.Weekmodel;
@@ -78,14 +79,16 @@ public class MainActivity extends Activity {
                 + "\n\tLocal timestamp: " + moment.toLocalTimestamp()
                 + "\n\tNext leap second: " + moment.with(Moment.nextLeapSecond())
                 + "\n\tWeek model: " + Weekmodel.ofSystem()
-                + "\n\tAktueller Moment: "
+                + "\n\tExample for Austrian timestamp: "
                 + ChronoFormatter.ofMomentPattern(
                     "d. MMMM uuuu GGGG HH:mm z",
                     PatternType.CLDR,
-                    Locale.GERMAN,
+                    new Locale("de", "AT"),
                     EUROPE.BERLIN
-                ).withAlternativeEraNames().format(moment)
-                + "\n\tDeutsche Uhrzeit: " + germanTime
+                )
+                .withAlternativeEraNames()
+                .format(PlainTimestamp.of(2015, 1, 27, 14, 15).inStdTimezone())
+                + "\n\tCurrent German time (full style): " + germanTime
                 + "\n\tTZDB-version: " + Timezone.getVersion("TZDB")
                 + "\n\tZONE-PROVIDERS: " + Timezone.getProviderInfo()
                 + "\n\tDuration=" + formattedDuration
