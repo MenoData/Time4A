@@ -1,4 +1,6 @@
 ## [v3.11-2015?] not yet released
+### Fixed
+- Arithmetic overflow in ChronoHistory [#391]
 
 ## [v3.10-2015g] published on 2015-10-22
 ### Added
