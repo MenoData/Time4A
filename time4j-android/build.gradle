@@ -61,6 +61,7 @@ task javadoc(type: Javadoc) {
     exclude "net/time4j/tz/spi/**"
     exclude "net/time4j/android/spi/**"
     exclude "net/time4j/i18n/**"
+    exclude "net/time4j/history/internal/**"
     exclude "net/time4j/calendar/service/**"
 
     options.memberLevel = JavadocMemberLevel.PUBLIC

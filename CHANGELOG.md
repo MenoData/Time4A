@@ -2,6 +2,12 @@
 ### Fixed
 - Arithmetic overflow in ChronoHistory [#391]
 
+
+### Changed
+
+- Hide internal format attributes of ChronoHistory [#394]
+
+
 ## [v3.10-2015g] published on 2015-10-22
 ### Added
 - New style-based factory methods for ChronoFormatter [#376], [#377]
