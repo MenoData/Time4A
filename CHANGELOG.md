@@ -1,4 +1,7 @@
 ## [v3.11-2015?] not yet released
+### Added
+- Support for triennal julian leap years [#393]
+
 ### Fixed
 - Arithmetic overflow in ChronoHistory [#391]
 
