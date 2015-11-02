@@ -1,5 +1,6 @@
 ## [v3.11-2015?] not yet released
 ### Added
+- Add Coptic calendar [#388]
 - Support for triennal julian leap years [#393]
 
 ### Fixed
