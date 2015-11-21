@@ -1,14 +1,19 @@
 ## [v3.11-2015?] not yet released
 ### Added
+- Add Ethiopian calendar and time [#389]
+- Enable formatting/parsing moments using another calendar [#399]
+- GeneralTimestamp should implement ChronoDisplay [#401]
 - Add Coptic calendar [#388]
 - Support for triennal julian leap years [#393]
 
 ### Fixed
+- Ensure that parsing raw data does not resolve anything [#400]
 - Compile problem with text elements in ChronoFormatter.Builder [#398]
 - plus/minus(CalendarDays) does not document any exception [#397]
 - Arithmetic overflow in ChronoHistory [#391]
 
-### Changed (removed/deprecated)
+### Changed (updated/removed/deprecated)
+- New method ChronoMerger.getDefaultStartOfDay() [#399]
 - Refactor handling of two exotic format attributes [#395]
 - Hide internal format attributes of ChronoHistory [#394]
 
