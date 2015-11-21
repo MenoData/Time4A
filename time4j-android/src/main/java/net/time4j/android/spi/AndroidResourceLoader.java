@@ -24,6 +24,7 @@ package net.time4j.android.spi;
 import android.app.Application;
 
 import net.time4j.base.ResourceLoader;
+import net.time4j.calendar.service.EthiopianExtension;
 import net.time4j.calendar.service.GenericTextProviderSPI;
 import net.time4j.engine.ChronoExtension;
 import net.time4j.format.FormatEngine;
@@ -83,7 +84,7 @@ public class AndroidResourceLoader
         tmp.put(TextProvider.class, new LazyTextdata());
         tmp.put(ZoneProvider.class, new LazyZoneData());
         tmp.put(LeapSecondProvider.class, new LazyLeapseconds());
-        tmp.put(ChronoExtension.class, Collections.singleton(new HistoricExtension()));
+        tmp.put(ChronoExtension.class, new LazyExtensions());
         tmp.put(FormatEngine.class, Collections.singleton(UltimateFormatEngine.INSTANCE));
         tmp.put(NumberSymbolProvider.class, Collections.singleton(new SymbolProviderSPI()));
         tmp.put(PluralProvider.class, new LazyPluraldata());
@@ -366,6 +367,34 @@ public class AndroidResourceLoader
         static {
             PluralProvider provider = new PluralProviderSPI();
             ITERABLE = Collections.singleton(provider);
+        }
+
+    }
+
+    private static final class LazyExtensions
+        implements Iterable<ChronoExtension> {
+
+        //~ Methoden ------------------------------------------------------
+
+        @Override
+        public Iterator<ChronoExtension> iterator() {
+
+            return ExtensionHolder.ITERABLE.iterator();
+
+        }
+
+    }
+
+    private static final class ExtensionHolder {
+
+        //~ Statische Felder/Initialisierungen ----------------------------
+
+        private static final Iterable<ChronoExtension> ITERABLE;
+
+        static {
+            ChronoExtension historic = new HistoricExtension();
+            ChronoExtension ethiopic = new EthiopianExtension();
+            ITERABLE = Collections.unmodifiableList(Arrays.asList(historic, ethiopic));
         }
 
     }
