@@ -14,6 +14,7 @@ import net.time4j.PlainTimestamp;
 import net.time4j.PrettyTime;
 import net.time4j.SystemClock;
 import net.time4j.Weekmodel;
+import net.time4j.calendar.EthiopianCalendar;
 import net.time4j.calendar.HijriCalendar;
 import net.time4j.calendar.PersianCalendar;
 import net.time4j.engine.StartOfDay;
@@ -24,6 +25,7 @@ import net.time4j.format.expert.PatternType;
 import net.time4j.tz.Timezone;
 import net.time4j.tz.olson.EUROPE;
 
+import java.text.ParseException;
 import java.util.Locale;
 
 
@@ -72,6 +74,16 @@ public class MainActivity extends Activity {
         String germanTime =
                 PlainTime.formatter(DisplayMode.FULL, Locale.GERMANY).format(
                         SystemClock.inLocalView().now().toTime());
+        ChronoFormatter<Moment> ef =
+                ChronoFormatter.setUpWithOverride(Locale.ENGLISH, EthiopianCalendar.axis())
+                        .addPattern("G, yyyy-MM-dd hh:mm a XXX", PatternType.CLDR)
+                        .build();
+        Moment ethio;
+        try {
+            ethio = ef.parse("Amete Mihret, 2008-03-09 03:45 PM +03:00");
+        } catch (ParseException pe) {
+            throw new IllegalStateException(pe);
+        }
 
         Moment moment = SystemClock.currentMoment();
         return "\tCurrent time (UTC): " + moment.toString()
@@ -94,7 +106,8 @@ public class MainActivity extends Activity {
                 + "\n\tDuration=" + formattedDuration
                 + "\n\tHijri-today=" + hijriDate
                 + "\n\tHijri-formatted=" + hf.format(hijriDate)
-                + "\n\tPersian-today=" + pf.format(hijriDate.transform(PersianCalendar.class));
+                + "\n\tPersian-today=" + pf.format(hijriDate.transform(PersianCalendar.class))
+                + "\n\tEthiopian moment (parsed)=" + ethio;
     }
 
 }
