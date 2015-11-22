@@ -1,4 +1,6 @@
-## [v3.11-2015?] not yet released
+## [v3.12-2015?] not yet released
+
+## [v3.11-2015g] published on 2015-11-22
 ### Added
 - Support for Sinhalese [#402]
 - Add Ethiopian calendar and time [#389]
