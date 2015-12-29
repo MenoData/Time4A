@@ -1,6 +1,7 @@
 ## [v3.13-2015?] not yet released
 ### Added
 - Fixed and flexible day periods with appropriate translations [#369]
+- Android: Be aware of user preference for 12/24-hour-format [#424]
 - Minguo calendar (Taiwan) [#390]
 - Enable localized digits in timezone offsets [#411]
 - New getters for day-of-week and day-of-year in PlainDate [#416]
@@ -13,6 +14,7 @@
 - Support for the languages Khmer and Lao [#419]
 
 ### Fixed
+- Android: Make app initialization thread-safe [#423]
 - Bidi literals (LRM, RLM, ALM) should be ignored in parsing [#418]
 - Formatting Ethiopian time with AM/PM-marker is not in western style [#413]
 - Parsing of Ethiopic tabot names broken if not at end of text [#412]
