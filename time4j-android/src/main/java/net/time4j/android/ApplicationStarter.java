@@ -54,6 +54,7 @@ public class ApplicationStarter {
 
     //~ Statische Felder/Initialisierungen --------------------------------
 
+    private static final AtomicBoolean PREPARED = new AtomicBoolean(false);
     private static final AtomicBoolean REGISTERED = new AtomicBoolean(false);
 
     //~ Konstruktoren -----------------------------------------------------
@@ -118,16 +119,20 @@ public class ApplicationStarter {
      */
     public static void prepareResources(Application application) {
 
-        System.setProperty(
-            "net.time4j.base.ResourceLoader",
-            "net.time4j.android.spi.AndroidResourceLoader");
-        ((AndroidResourceLoader) ResourceLoader.getInstance()).init(application);
+        if (!PREPARED.getAndSet(true)) {
+            System.setProperty(
+                    "net.time4j.base.ResourceLoader",
+                    "net.time4j.android.spi.AndroidResourceLoader");
+            ((AndroidResourceLoader) ResourceLoader.getInstance()).init(application);
+        }
 
     }
 
     //~ Innere Klassen ----------------------------------------------------
 
     private static class TimezoneChangedReceiver extends BroadcastReceiver {
+
+        //~ Methoden ------------------------------------------------------
 
         @Override
         public void onReceive(Context context, Intent intent) {
