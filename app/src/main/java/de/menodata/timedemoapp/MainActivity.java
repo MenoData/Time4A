@@ -1,7 +1,9 @@
 package de.menodata.timedemoapp;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -18,6 +20,7 @@ import net.time4j.calendar.EthiopianCalendar;
 import net.time4j.calendar.HijriCalendar;
 import net.time4j.calendar.PersianCalendar;
 import net.time4j.engine.StartOfDay;
+import net.time4j.format.CalendarText;
 import net.time4j.format.DisplayMode;
 import net.time4j.format.TextWidth;
 import net.time4j.format.expert.ChronoFormatter;
@@ -37,14 +40,15 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         this.setTitle("Time-Demo");
         final TextView tv = (TextView) this.findViewById(R.id.time_display);
-        tv.setText("\n\n\nHello Android =>\n" + getTimeInfo());
+        final Context context = this.getApplication();
+        tv.setText(getTimeInfo(context));
 
         Button button = (Button) this.findViewById(R.id.refresh_button);
         button.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        tv.setText("\n\n\nHello again Android =>\n" + getTimeInfo());
+                        tv.setText(getTimeInfo(context));
                     }
                 }
         );
@@ -53,10 +57,10 @@ public class MainActivity extends Activity {
     protected void onResume() {
         super.onResume();
         TextView tv = (TextView) this.findViewById(R.id.time_display);
-        tv.setText("\n\n\nResumed Android =>\n" + getTimeInfo());
+        tv.setText(getTimeInfo(this.getApplication()));
     }
 
-    private static String getTimeInfo() {
+    private static String getTimeInfo(Context context) {
         // PlainDate.of(2015, 0); // exception test observing debug output
         Duration<?> dur = Duration.of(337540, ClockUnit.SECONDS).with(Duration.STD_CLOCK_PERIOD);
         String formattedDuration = PrettyTime.of(Locale.FRANCE).print(dur, TextWidth.WIDE);
@@ -86,28 +90,42 @@ public class MainActivity extends Activity {
         }
 
         Moment moment = SystemClock.currentMoment();
-        return "\tCurrent time (UTC): " + moment.toString()
-                + "\n\tSystem timezone: " + Timezone.ofSystem().getID().canonical()
-                + "\n\tLocal timestamp: " + moment.toLocalTimestamp()
-                + "\n\tNext leap second: " + moment.with(Moment.nextLeapSecond())
-                + "\n\tWeek model: " + Weekmodel.ofSystem()
-                + "\n\tExample for Austrian timestamp: "
+        return "\n\n\n\n"
+                + "=> Current time (UTC): " + moment.toString()
+                + "\n"
+                + "\n=> System locale: " + Locale.getDefault()
+                + "\n=> System timezone: " + Timezone.ofSystem().getID().canonical()
+                + "\n=> Use 24-hour-format: " + DateFormat.is24HourFormat(context)
+                + "\n=> Time pattern for system locale: "
+                    + CalendarText.patternForTime(DisplayMode.FULL, Locale.getDefault())
+                + "\n"
+                + "\n=> Local timestamp: " + moment.toLocalTimestamp()
+                + "\n=> Next leap second: " + moment.with(Moment.nextLeapSecond())
+                + "\n"
+                + "\n=> Week model: " + Weekmodel.ofSystem()
+                + "\n"
+                + "\n=> Example for Austrian timestamp: "
                 + ChronoFormatter.ofMomentPattern(
-                    "d. MMMM uuuu GGGG HH:mm z",
+                    "d. MMMM uuuu GGGG h:mm BBBB z",
                     PatternType.CLDR,
                     new Locale("de", "AT"),
                     EUROPE.BERLIN
                 )
                 .withAlternativeEraNames()
                 .format(PlainTimestamp.of(2015, 1, 27, 14, 15).inStdTimezone())
-                + "\n\tCurrent German time (full style): " + germanTime
-                + "\n\tTZDB-version: " + Timezone.getVersion("TZDB")
-                + "\n\tZONE-PROVIDERS: " + Timezone.getProviderInfo()
-                + "\n\tDuration=" + formattedDuration
-                + "\n\tHijri-today=" + hijriDate
-                + "\n\tHijri-formatted=" + hf.format(hijriDate)
-                + "\n\tPersian-today=" + pf.format(hijriDate.transform(PersianCalendar.class))
-                + "\n\tEthiopian moment (parsed)=" + ethio;
+                + "\n"
+                + "\n=> Current German time (full style): " + germanTime
+                + "\n"
+                + "\n=> TZDB-version: " + Timezone.getVersion("TZDB")
+                + "\n=> ZONE-PROVIDERS: " + Timezone.getProviderInfo()
+                + "\n"
+                + "\n=> Duration=" + formattedDuration
+                + "\n"
+                + "\n=> Hijri-toString=" + hijriDate
+                + "\n=> Hijri-formatted=" + hf.format(hijriDate)
+                + "\n=> Persian-today=" + pf.format(hijriDate.transform(PersianCalendar.class))
+                + "\n=> Ethiopian moment"
+                + "\n(parsed from 'Amete Mihret, 2008-03-09 03:45 PM +03:00')=" + ethio;
     }
 
 }

@@ -22,11 +22,13 @@
 package net.time4j.android.spi;
 
 import android.app.Application;
+import android.text.format.DateFormat;
 
 import net.time4j.base.ResourceLoader;
 import net.time4j.calendar.service.EthiopianExtension;
 import net.time4j.calendar.service.GenericTextProviderSPI;
 import net.time4j.engine.ChronoExtension;
+import net.time4j.format.DisplayMode;
 import net.time4j.format.FormatEngine;
 import net.time4j.format.FormatPatternProvider;
 import net.time4j.format.NumberSymbolProvider;
@@ -34,6 +36,7 @@ import net.time4j.format.PluralProvider;
 import net.time4j.format.TextProvider;
 import net.time4j.format.UnitPatternProvider;
 import net.time4j.format.WeekdataProvider;
+import net.time4j.format.internal.ExtendedPatterns;
 import net.time4j.i18n.HistoricExtension;
 import net.time4j.i18n.IsoTextProviderSPI;
 import net.time4j.i18n.PluralProviderSPI;
@@ -59,14 +62,14 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 
 /**
- * <p>An Android-specific {@code ResourceLoader}-implementation. </p>
+ * <p>An Android-specific {@code ResourceLoader}-implementation for internal use only. </p>
  *
  * @author  Meno Hochschild
  * @since   3.5
@@ -86,11 +89,10 @@ public class AndroidResourceLoader
         tmp.put(LeapSecondProvider.class, new LazyLeapseconds());
         tmp.put(ChronoExtension.class, new LazyExtensions());
         tmp.put(FormatEngine.class, Collections.singleton(UltimateFormatEngine.INSTANCE));
-        tmp.put(NumberSymbolProvider.class, Collections.singleton(new SymbolProviderSPI()));
+        tmp.put(NumberSymbolProvider.class, new LazyNumberSymbols());
         tmp.put(PluralProvider.class, new LazyPluraldata());
         tmp.put(UnitPatternProvider.class, Collections.singleton(new UnitPatternProviderSPI()));
         tmp.put(WeekdataProvider.class, new LazyWeekdata());
-        tmp.put(FormatPatternProvider.class, new LazyFormatPatterns());
         tmp.put(TickProvider.class, Collections.singleton(new AndroidTickerSPI()));
         PROVIDERS = Collections.unmodifiableMap(tmp);
 
@@ -103,8 +105,8 @@ public class AndroidResourceLoader
 
     //~ Instanzvariablen --------------------------------------------------
 
-    private final AtomicBoolean initialized = new AtomicBoolean(false);
     private Application application = null;
+    private List<FormatPatternProvider> patterns = Collections.emptyList();
 
     //~ Methoden ----------------------------------------------------------
 
@@ -115,11 +117,10 @@ public class AndroidResourceLoader
      */
     public void init(Application application) {
 
-        if (this.initialized.getAndSet(true)) {
-            return;
-        }
-
         this.application = application;
+
+        FormatPatternProvider p = new AndroidFormatPatterns();
+        this.patterns = Collections.singletonList(p);
 
     }
 
@@ -181,10 +182,14 @@ public class AndroidResourceLoader
         Iterable<?> ret = PROVIDERS.get(serviceInterface);
 
         if (ret == null) {
-            return ServiceLoader.load(serviceInterface, serviceInterface.getClassLoader());
-        } else {
-            return cast(ret);
+            if (serviceInterface == FormatPatternProvider.class) {
+                ret = this.patterns;
+            } else {
+                return ServiceLoader.load(serviceInterface, serviceInterface.getClassLoader());
+            }
         }
+
+        return cast(ret);
 
     }
 
@@ -225,29 +230,138 @@ public class AndroidResourceLoader
 
     }
 
-    private static final class LazyFormatPatterns
-        implements Iterable<FormatPatternProvider> {
+    private class AndroidFormatPatterns
+        implements ExtendedPatterns {
+
+        //~ Instanzvariablen ----------------------------------------------
+
+        private final ExtendedPatterns delegate;
+
+        //~ Konstruktoren -------------------------------------------------
+
+        AndroidFormatPatterns() {
+            super();
+
+            this.delegate = new IsoTextProviderSPI();
+
+        }
 
         //~ Methoden ------------------------------------------------------
 
         @Override
-        public Iterator<FormatPatternProvider> iterator() {
+        public String getDatePattern(
+            DisplayMode mode,
+            Locale locale
+        ) {
 
-            return FormatPatternHolder.ITERABLE.iterator();
+            return this.delegate.getDatePattern(mode, locale);
 
         }
 
-    }
+        @Override
+        public String getTimePattern(
+            DisplayMode mode,
+            Locale locale
+        ) {
 
-    private static final class FormatPatternHolder {
+            return this.getTimePattern(mode, locale, false);
 
-        //~ Statische Felder/Initialisierungen ----------------------------
+        }
 
-        private static final Iterable<FormatPatternProvider> ITERABLE;
+        @Override
+        public String getTimePattern(
+            DisplayMode mode,
+            Locale locale,
+            boolean alt
+        ) {
 
-        static {
-            FormatPatternProvider provider = new IsoTextProviderSPI();
-            ITERABLE = Collections.singletonList(provider);
+            String pattern = this.delegate.getTimePattern(mode, locale, alt);
+
+            if (Locale.getDefault().equals(locale)) {
+                String testPattern = pattern;
+                if (mode != DisplayMode.SHORT) { // we assume that short style has no literals
+                    testPattern = this.delegate.getTimePattern(DisplayMode.SHORT, locale);
+                }
+                boolean has24HourFormat = (testPattern.indexOf('a') == -1);
+                boolean use24HourFormat = DateFormat.is24HourFormat(application);
+
+                if (use24HourFormat != has24HourFormat) {
+                    if (use24HourFormat) {
+                        return to24HourFormat(pattern).replace("  ", " ").trim();
+                    } else {
+                        switch (mode) { // let's choose a format pattern in English style
+                            case FULL:
+                                return "h:mm:ss a zzzz";
+                            case LONG:
+                                return "h:mm:ss a z";
+                            case MEDIUM:
+                                return "h:mm:ss a";
+                            default:
+                                return "h:mm a";
+                        }
+                    }
+                }
+            }
+
+            return pattern;
+
+        }
+
+        @Override
+        public String getDateTimePattern(
+            DisplayMode dateMode,
+            DisplayMode timeMode,
+            Locale locale
+        ) {
+
+            return this.delegate.getDateTimePattern(dateMode, timeMode, locale);
+
+        }
+
+        @Override
+        public String getIntervalPattern(Locale locale) {
+
+            return this.delegate.getIntervalPattern(locale);
+
+        }
+
+        private String to24HourFormat(String pattern) {
+
+            StringBuilder sb = new StringBuilder();
+            boolean literal = false;
+
+            for (int i = 0, n = pattern.length(); i < n; i++) {
+                char c = pattern.charAt(i);
+
+                if (c == '\'') {
+                    sb.append(c);
+                    i++;
+
+                    while (i < n) {
+                        c = pattern.charAt(i);
+                        if (c == '\'') {
+                            sb.append(c);
+                            if (
+                                (i + 1 < n)
+                                && (pattern.charAt(i + 1) == '\'')
+                            ) {
+                                i++;
+                            } else {
+                                break;
+                            }
+                        }
+                        sb.append(c);
+                        i++;
+                    }
+                } else if (c == 'h') {
+                    sb.append('H');
+                } else if (c != 'a') {
+                    sb.append(c);
+                }
+            }
+
+            return sb.toString();
+
         }
 
     }
@@ -366,6 +480,33 @@ public class AndroidResourceLoader
 
         static {
             PluralProvider provider = new PluralProviderSPI();
+            ITERABLE = Collections.singleton(provider);
+        }
+
+    }
+
+    private static final class LazyNumberSymbols
+            implements Iterable<NumberSymbolProvider> {
+
+        //~ Methoden ------------------------------------------------------
+
+        @Override
+        public Iterator<NumberSymbolProvider> iterator() {
+
+            return NumberSymbolHolder.ITERABLE.iterator();
+
+        }
+
+    }
+
+    private static final class NumberSymbolHolder {
+
+        //~ Statische Felder/Initialisierungen ----------------------------
+
+        private static final Iterable<NumberSymbolProvider> ITERABLE;
+
+        static {
+            NumberSymbolProvider provider = new SymbolProviderSPI();
             ITERABLE = Collections.singleton(provider);
         }
 
