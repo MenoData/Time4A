@@ -289,15 +289,16 @@ public class AndroidResourceLoader
                     if (use24HourFormat) {
                         return to24HourFormat(pattern).replace("  ", " ").trim();
                     } else {
-                        switch (mode) { // let's choose a format pattern in English style
+                        String dpSymbol = (locale.getLanguage().equals("en") ? "b" : "B");
+                        switch (mode) {
                             case FULL:
-                                return "h:mm:ss a zzzz";
+                                return "h:mm:ss " + dpSymbol + " zzzz";
                             case LONG:
-                                return "h:mm:ss a z";
+                                return "h:mm:ss " + dpSymbol + " z";
                             case MEDIUM:
-                                return "h:mm:ss a";
+                                return "h:mm:ss " + dpSymbol;
                             default:
-                                return "h:mm a";
+                                return "h:mm " + dpSymbol;
                         }
                     }
                 }

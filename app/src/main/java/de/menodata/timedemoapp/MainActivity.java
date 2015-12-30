@@ -97,7 +97,11 @@ public class MainActivity extends Activity {
                 + "\n=> System timezone: " + Timezone.ofSystem().getID().canonical()
                 + "\n=> Use 24-hour-format: " + DateFormat.is24HourFormat(context)
                 + "\n=> Time pattern for system locale: "
-                    + CalendarText.patternForTime(DisplayMode.FULL, Locale.getDefault())
+                    + CalendarText.patternForTime(DisplayMode.SHORT, Locale.getDefault())
+                + "\n=> Noon for system locale: "
+                    + ChronoFormatter.ofTimeStyle(DisplayMode.SHORT, Locale.getDefault()).format(PlainTime.of(12))
+                + "\n=> Evening for system locale: "
+                + ChronoFormatter.ofTimeStyle(DisplayMode.SHORT, Locale.getDefault()).format(PlainTime.of(19))
                 + "\n"
                 + "\n=> Local timestamp: " + moment.toLocalTimestamp()
                 + "\n=> Next leap second: " + moment.with(Moment.nextLeapSecond())
