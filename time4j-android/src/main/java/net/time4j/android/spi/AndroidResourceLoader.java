@@ -507,7 +507,7 @@ public class AndroidResourceLoader
         private static final Iterable<NumberSymbolProvider> ITERABLE;
 
         static {
-            NumberSymbolProvider provider = new SymbolProviderSPI();
+            NumberSymbolProvider provider = SymbolProviderSPI.INSTANCE;
             ITERABLE = Collections.singleton(provider);
         }
 
