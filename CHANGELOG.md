@@ -1,4 +1,6 @@
-## [v3.13-2015?] not yet released
+## [v3.14-2016a] not yet released
+
+## [v3.13-2015g] published on 2015-12-31
 ### Added
 - Fixed and flexible day periods with appropriate translations [#369]
 - Android: Be aware of user preference for 12/24-hour-format [#424]
