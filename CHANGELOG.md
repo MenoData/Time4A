@@ -1,4 +1,6 @@
 ## [v3.14-2016a] not yet released
+### Added
+- Dedicated MultiFormatParser [#426]
 
 ## [v3.13-2015g] published on 2015-12-31
 ### Added
