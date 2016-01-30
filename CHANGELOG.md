@@ -2,6 +2,9 @@
 ### Fixed
 - Code example in documentation of MultiFormatParser is incomplete [#446]
 
+### Changed
+- Update TZDB-repository to 2016a [#447]
+
 ## [v3.14-2015g] published on 2016-01-22
 ### Added
 - Two new approximation normalizers based on max unit only [#442]
