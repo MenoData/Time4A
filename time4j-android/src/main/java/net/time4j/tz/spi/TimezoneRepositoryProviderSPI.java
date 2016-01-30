@@ -26,7 +26,6 @@ import net.time4j.base.GregorianDate;
 import net.time4j.base.ResourceLoader;
 import net.time4j.scale.LeapSecondProvider;
 import net.time4j.tz.NameStyle;
-import net.time4j.tz.Timezone;
 import net.time4j.tz.TransitionHistory;
 import net.time4j.tz.ZoneProvider;
 
@@ -42,13 +41,11 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.TimeZone;
 
 
 /**
@@ -62,14 +59,6 @@ public class TimezoneRepositoryProviderSPI
     implements ZoneProvider, LeapSecondProvider {
 
     //~ Statische Felder/Initialisierungen --------------------------------
-
-    private static final Set<String> JDK_NAME_REFS;
-
-    static {
-        Set<String> jdkNameRefs = new HashSet<String>();
-        Collections.addAll(jdkNameRefs, TimeZone.getAvailableIDs());
-        JDK_NAME_REFS = Collections.unmodifiableSet(jdkNameRefs);
-    }
 
     private static final ZoneProvider NAME_PROVIDER = new ZoneNameProviderSPI();
 
@@ -245,13 +234,7 @@ public class TimezoneRepositoryProviderSPI
         Locale locale
     ) {
 
-
-        if (JDK_NAME_REFS.contains(tzid)) {
-            Timezone tz = Timezone.of("java.util.TimeZone~" + tzid);
-            return tz.getDisplayName(style, locale);
-        }
-
-        return tzid; // fallback if jdk-name-data are too old
+        return NAME_PROVIDER.getDisplayName(tzid, style, locale);
 
     }
 
@@ -377,7 +360,7 @@ public class TimezoneRepositoryProviderSPI
 
         if (Boolean.getBoolean("test.environment")) {
             try {
-                return Class.forName("net.time4j.tz.repository.RepositoryTest");
+                return Class.forName("net.time4j.tz.spi.RepositoryTest");
             } catch (ClassNotFoundException e) {
                 throw new AssertionError(e);
             }
