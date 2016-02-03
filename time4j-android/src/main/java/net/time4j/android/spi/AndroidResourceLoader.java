@@ -25,7 +25,6 @@ import android.app.Application;
 import android.text.format.DateFormat;
 
 import net.time4j.base.ResourceLoader;
-import net.time4j.calendar.service.EthiopianExtension;
 import net.time4j.calendar.service.GenericTextProviderSPI;
 import net.time4j.engine.ChronoExtension;
 import net.time4j.format.DisplayMode;
@@ -535,8 +534,7 @@ public class AndroidResourceLoader
 
         static {
             ChronoExtension historic = new HistoricExtension();
-            ChronoExtension ethiopic = new EthiopianExtension();
-            ITERABLE = Collections.unmodifiableList(Arrays.asList(historic, ethiopic));
+            ITERABLE = Collections.unmodifiableList(Arrays.asList(historic));
         }
 
     }
