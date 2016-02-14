@@ -1,5 +1,6 @@
 ## [v3.15-2016a] not yet released
 ### Added
+- Proleptic Julian calendar [#444]
 - Add Roman numerals [#443]
 
 ### Fixed
