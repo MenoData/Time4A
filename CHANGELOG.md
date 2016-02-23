@@ -1,4 +1,7 @@
 ## [v3.16-2016b] not yet released
+### Added
+- Add element support for historic day-of-year [#456]
+ 
 ### Fixed
 - Reduce array allocation during parsing [#455]
 
