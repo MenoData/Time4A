@@ -38,6 +38,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.net.URI;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -79,6 +81,7 @@ public class TimezoneRepositoryProviderSPI
         URI uri = null;
         InputStream is = null;
         DataInputStream dis = null;
+        IllegalStateException ise = null;
 
         String tmpVersion = "";
         String tmpLocation = "";
@@ -108,7 +111,7 @@ public class TimezoneRepositoryProviderSPI
         }
 
         try {
-            String path = null;
+            String path = "tzrepo/" + file;
 
             if (repositoryPath != null) {
                 File f = new File(repositoryPath, file);
@@ -117,20 +120,31 @@ public class TimezoneRepositoryProviderSPI
                     if (f.exists()) {
                         uri = f.toURI();
                     } else {
-                        throw new FileNotFoundException(
-                            "Path to tz-repository not found: " + f);
+                        throw new FileNotFoundException("Path to tz-repository not found: " + f);
                     }
                 } else {
-                    path = f.toString();
-                    uri = ResourceLoader.getInstance().locate("tzdata", getReference(), path);
+                    uri = ResourceLoader.getInstance().locate("tzdata", getReference(), f.toString());
                 }
             } else {
-                path = "tzrepo/" + file;
                 uri = ResourceLoader.getInstance().locate("tzdata", getReference(), path);
             }
 
             if (uri != null) {
                 is = ResourceLoader.getInstance().load(uri, true);
+
+                if (is == null) {
+                    // fallback if something has gone wrong (maybe invalid uri from protection domain etc.)
+                    URL url = getReference().getClassLoader().getResource(path);
+                    if (url == null) {
+                        throw new FileNotFoundException("Classloader cannot access tz-repository: " + path);
+                    } else {
+                        URLConnection conn = url.openConnection();
+                        conn.setUseCaches(false);
+                        conn.connect(); // explicit for clarity
+                        is = conn.getInputStream();
+                    }
+                }
+
                 dis = new DataInputStream(is);
                 tmpLocation = uri.toString();
                 checkMagicLabel(dis, tmpLocation);
@@ -188,8 +202,7 @@ public class TimezoneRepositoryProviderSPI
             }
 
         } catch (IOException ioe) {
-            System.out.println("Warning: TZ-repository not available. => " + ioe.getMessage());
-            ioe.printStackTrace(System.err);
+            ise = new IllegalStateException("[ERROR] TZ-repository not available. => " + ioe.getMessage(), ioe);
         } finally {
             if (is != null) {
                 try {
@@ -198,6 +211,10 @@ public class TimezoneRepositoryProviderSPI
                     // ignored
                 }
             }
+        }
+
+        if (ise != null) {
+            throw ise;
         }
 
         this.version = tmpVersion;
