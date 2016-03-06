@@ -1,6 +1,6 @@
 /*
  * -----------------------------------------------------------------------
- * Copyright © 2013-2015 Meno Hochschild, <http://www.menodata.de/>
+ * Copyright © 2013-2016 Meno Hochschild, <http://www.menodata.de/>
  * -----------------------------------------------------------------------
  * This file (TimezoneRepositoryProviderSPI.java) is part of project Time4J.
  *
@@ -80,7 +80,6 @@ public class TimezoneRepositoryProviderSPI
 
         URI uri = null;
         InputStream is = null;
-        DataInputStream dis = null;
         IllegalStateException ise = null;
 
         String tmpVersion = "";
@@ -131,75 +130,76 @@ public class TimezoneRepositoryProviderSPI
 
             if (uri != null) {
                 is = ResourceLoader.getInstance().load(uri, true);
-
-                if (is == null) {
-                    // fallback if something has gone wrong (maybe invalid uri from protection domain etc.)
-                    URL url = getReference().getClassLoader().getResource(path);
-                    if (url == null) {
-                        throw new FileNotFoundException("Classloader cannot access tz-repository: " + path);
-                    } else {
-                        URLConnection conn = url.openConnection();
-                        conn.setUseCaches(false);
-                        conn.connect(); // explicit for clarity
-                        is = conn.getInputStream();
-                    }
-                }
-
-                dis = new DataInputStream(is);
                 tmpLocation = uri.toString();
-                checkMagicLabel(dis, tmpLocation);
-                String v = dis.readUTF();
-                int sizeOfZones = dis.readInt();
+            }
 
-                List<String> zones = new ArrayList<String>(sizeOfZones);
-
-                for (int i = 0; i < sizeOfZones; i++) {
-                    String zoneID = dis.readUTF();
-                    int dataLen = dis.readInt();
-                    byte[] dataBuf = new byte[dataLen];
-                    int dataRead = 0;
-
-                    do {
-                        dataRead += dis.read(dataBuf, dataRead, dataLen - dataRead);
-                        if (dataRead == -1) {
-                            throw new EOFException("Incomplete data: " + zoneID);
-                        }
-                    } while (dataLen > dataRead);
-
-                    zones.add(zoneID);
-                    tmpData.put(zoneID, dataBuf);
+            if (is == null) {
+                // fallback if something has gone wrong (maybe invalid uri from protection domain etc.)
+                URL url = getReference().getClassLoader().getResource(path);
+                if (url == null) {
+                    throw new FileNotFoundException("Classloader cannot access tz-repository: " + path);
+                } else {
+                    URLConnection conn = url.openConnection();
+                    conn.setUseCaches(false);
+                    conn.connect(); // explicit for clarity
+                    is = conn.getInputStream();
+                    tmpLocation = url.toString();
                 }
+            }
 
-                int sizeOfLinks = dis.readShort();
+            DataInputStream dis = new DataInputStream(is);
+            checkMagicLabel(dis, tmpLocation);
+            String v = dis.readUTF();
+            int sizeOfZones = dis.readInt();
 
-                for (int i = 0; i < sizeOfLinks; i++) {
-                    String alias = dis.readUTF();
-                    String id = zones.get(dis.readShort());
-                    tmpAliases.put(alias, id);
-                }
+            List<String> zones = new ArrayList<String>(sizeOfZones);
 
-                if (!noLeaps) {
-                    int sizeOfLeaps = dis.readShort();
+            for (int i = 0; i < sizeOfZones; i++) {
+                String zoneID = dis.readUTF();
+                int dataLen = dis.readInt();
+                byte[] dataBuf = new byte[dataLen];
+                int dataRead = 0;
 
-                    for (int i = 0; i < sizeOfLeaps; i++) {
-                        int year = dis.readShort();
-                        int month = dis.readByte();
-                        int dom = dis.readByte();
-                        int shift = dis.readByte();
-
-                        this.leapsecs.put(
-                            PlainDate.of(year, month, dom),
-                            Integer.valueOf(shift));
+                do {
+                    dataRead += dis.read(dataBuf, dataRead, dataLen - dataRead);
+                    if (dataRead == -1) {
+                        throw new EOFException("Incomplete data: " + zoneID);
                     }
+                } while (dataLen > dataRead);
 
+                zones.add(zoneID);
+                tmpData.put(zoneID, dataBuf);
+            }
+
+            int sizeOfLinks = dis.readShort();
+
+            for (int i = 0; i < sizeOfLinks; i++) {
+                String alias = dis.readUTF();
+                String id = zones.get(dis.readShort());
+                tmpAliases.put(alias, id);
+            }
+
+            if (!noLeaps) {
+                int sizeOfLeaps = dis.readShort();
+
+                for (int i = 0; i < sizeOfLeaps; i++) {
                     int year = dis.readShort();
                     int month = dis.readByte();
                     int dom = dis.readByte();
-                    tmpExpires = PlainDate.of(year, month, dom);
+                    int shift = dis.readByte();
+
+                    this.leapsecs.put(
+                        PlainDate.of(year, month, dom),
+                        Integer.valueOf(shift));
                 }
 
-                tmpVersion = v; // here all is okay, so let us set the version
+                int year = dis.readShort();
+                int month = dis.readByte();
+                int dom = dis.readByte();
+                tmpExpires = PlainDate.of(year, month, dom);
             }
+
+            tmpVersion = v; // here all is okay, so let us set the version
 
         } catch (IOException ioe) {
             ise = new IllegalStateException("[ERROR] TZ-repository not available. => " + ioe.getMessage(), ioe);
