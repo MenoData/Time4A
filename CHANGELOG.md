@@ -1,4 +1,6 @@
-## [v3.16-2016b] not yet released
+## [v3.17-2016b] not yet released
+
+## [v3.16-2016a] published on 2016-03-07
 ### Added
 - Make ZonalDateTime easier for creation and comparison [#462]
 - Calculation of Easter (Computus) [#460]
