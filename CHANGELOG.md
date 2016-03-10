@@ -1,4 +1,7 @@
 ## [v3.17-2016b] not yet released
+### Added
+- More detailed error message when parsing ZonalDateTime [#467]
+
 ### Fixed
 - Calculus Pisanus does not work in parsing [#466]
 
