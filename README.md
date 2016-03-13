@@ -23,7 +23,8 @@ the Android OS-version is. Furthermore, even the newest Android platform does no
 quality of i18n-translations (an example is missing support for localized plural rules in formatting of durations).
 Time4A closes this big gap **supporting actually 71 languages** and has more features than any other date and time
 library available for the Android platform. Of course, Time4A also supports the **newest timezone data** available
-at [IANA](http://www.iana.org/time-zones). On the other side: If you really want you can even use the platform timezone data in parallel. Time4A gives you the freedom which timezone data to use.
+at [IANA](http://www.iana.org/time-zones). On the other side: If you really want you can even use the platform timezone
+data in parallel. Time4A gives you the freedom which timezone data to use.
 
 ## Usage
 Only two steps are required before coding against the API of Time4A.
