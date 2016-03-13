@@ -1,10 +1,15 @@
-## [v3.17-2016b] not yet released
+## [v3.18-2016c] not yet released
+
+## [v3.17-2016b] published on 2016-03-07
 ### Added
 - More detailed error message when parsing ZonalDateTime [#467]
 
 ### Fixed
 - Make resolving zone names more robust [#469]
 - Calculus Pisanus does not work in parsing [#466]
+
+### Changed
+- Update TZDB-repository to 2016b [#68]
 
 ## [v3.16-2016a] published on 2016-03-07
 ### Added
