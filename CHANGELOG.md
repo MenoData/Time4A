@@ -9,7 +9,7 @@
 - Calculus Pisanus does not work in parsing [#466]
 
 ### Changed
-- Update TZDB-repository to 2016b [#68]
+- Update TZDB-repository to 2016b [#468]
 
 ## [v3.16-2016a] published on 2016-03-07
 ### Added
