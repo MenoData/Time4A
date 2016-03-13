@@ -1,6 +1,6 @@
 ## [v3.18-2016c] not yet released
 
-## [v3.17-2016b] published on 2016-03-07
+## [v3.17-2016b] published on 2016-03-13
 ### Added
 - More detailed error message when parsing ZonalDateTime [#467]
 
