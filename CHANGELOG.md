@@ -1,5 +1,6 @@
 ## [v3.18-2016c] not yet released
 ### Added
+- Add SQL-support (from misc-module of Time4J) [#471]
 - Historic year definition (example Easter style in France) [#473]
 
 ## [v3.17-2016b] published on 2016-03-13
