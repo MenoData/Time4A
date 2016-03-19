@@ -2,6 +2,7 @@
 ### Added
 - Add SQL-support (from misc-module of Time4J) [#471]
 - Historic year definition (example Easter style in France) [#473]
+- Support for Kirghiz [#474]
 
 ## [v3.17-2016b] published on 2016-03-13
 ### Added
