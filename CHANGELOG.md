@@ -1,5 +1,6 @@
 ## [v3.18-2016c] not yet released
 ### Added
+- Enable unparseable characters to be skipped when parsing [#476]
 - Add SQL-support (from misc-module of Time4J) [#471]
 - Historic year definition (example Easter style in France) [#473]
 - Support for Kirghiz [#474]
