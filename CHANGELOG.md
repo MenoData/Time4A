@@ -6,6 +6,9 @@
 - Historic year definition (example Easter style in France) [#473]
 - Support for Kirghiz [#474]
 
+### Changed
+- Update TZDB-repository to version 2016c [#477]
+
 ## [v3.17-2016b] published on 2016-03-13
 ### Added
 - More detailed error message when parsing ZonalDateTime [#467]
