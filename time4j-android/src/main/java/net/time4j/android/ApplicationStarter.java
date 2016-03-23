@@ -1,6 +1,6 @@
 /*
  * -----------------------------------------------------------------------
- * Copyright © 2013-2015 Meno Hochschild, <http://www.menodata.de/>
+ * Copyright © 2013-2016 Meno Hochschild, <http://www.menodata.de/>
  * -----------------------------------------------------------------------
  * This file (ApplicationStarter.java) is part of project Time4J.
  *
@@ -28,11 +28,16 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.util.Log;
 
+import net.time4j.SystemClock;
 import net.time4j.android.spi.AndroidResourceLoader;
 import net.time4j.base.ResourceLoader;
+import net.time4j.format.DisplayMode;
+import net.time4j.format.expert.ChronoFormatter;
 import net.time4j.tz.TZID;
 import net.time4j.tz.Timezone;
 
+import java.util.Locale;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 
@@ -54,6 +59,8 @@ public class ApplicationStarter {
 
     //~ Statische Felder/Initialisierungen --------------------------------
 
+    private static final String TIME4A = "time4a";
+
     private static final AtomicBoolean PREPARED = new AtomicBoolean(false);
     private static final AtomicBoolean REGISTERED = new AtomicBoolean(false);
 
@@ -66,21 +73,83 @@ public class ApplicationStarter {
     //~ Methoden ----------------------------------------------------------
 
     /**
-     * <p>General purpose initialization. </p>
+     * <p>Equivalent to {@code initialize(application, false)}. </p>
      *
      * @param   application     Android app
      * @since   3.5
      */
     /*[deutsch]
-     * <p>Allgemein verwendbare Initialisierung. </p>
+     * <p>&Auml;quivalent zu {@code initialize(application, false)}. </p>
      *
      * @param   application     Android app
      * @since   3.5
      */
     public static void initialize(Application application) {
 
-        prepareResources(application);
-        registerReceiver(application.getApplicationContext());
+        initialize(application, false);
+
+    }
+
+    /**
+     * <p>General purpose initialization. </p>
+     *
+     * @param   context     Android context
+     * @param   prefetch    Getting standard data on background thread?
+     * @since   3.18
+     */
+    /*[deutsch]
+     * <p>Allgemein verwendbare Initialisierung. </p>
+     *
+     * @param   context     Android context
+     * @param   prefetch    Getting standard data on background thread?
+     * @since   3.18
+     */
+    public static void initialize(
+        Context context,
+        boolean prefetch
+    ) {
+
+//        if (BuildConfig.DEBUG) {
+//            StrictMode.setThreadPolicy(
+//                new StrictMode.ThreadPolicy.Builder()
+//                .detectDiskReads()
+//                .detectDiskWrites()
+//                .detectNetwork()
+//                .penaltyLog()
+//                .build());
+//        }
+
+        long start = System.nanoTime();
+        Context ctx = context.getApplicationContext();
+        prepareAssets(ctx);
+        registerReceiver(ctx);
+
+        if (prefetch) {
+            final long start2 = System.nanoTime();
+            Runnable runnable =
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        DisplayMode style = DisplayMode.FULL;
+                        TZID tzid = Timezone.ofSystem().getID();
+                        Log.i(
+                            TIME4A,
+                            ChronoFormatter.ofMomentStyle(
+                                style,
+                                style,
+                                Locale.getDefault(),
+                                tzid
+                            ).format(SystemClock.currentMoment())
+                        );
+                        long delta = (System.nanoTime() - start2) / 1000000;
+                        Log.i(TIME4A, "Prefetch-Thread consumed in ms: " + delta);
+                    }
+                };
+            Executors.defaultThreadFactory().newThread(runnable).start();
+        }
+
+        long delta = (System.nanoTime() - start) / 1000000;
+        Log.i(TIME4A, "Main-Thread consumed in ms: " + delta);
 
     }
 
@@ -98,7 +167,7 @@ public class ApplicationStarter {
     public static void registerReceiver(Context context) {
 
         if (!REGISTERED.getAndSet(true)) {
-            context.getApplicationContext().registerReceiver(
+            context.registerReceiver(
                 new TimezoneChangedReceiver(),
                 new IntentFilter(Intent.ACTION_TIMEZONE_CHANGED));
         }
@@ -119,11 +188,17 @@ public class ApplicationStarter {
      */
     public static void prepareResources(Application application) {
 
+        prepareAssets(application);
+
+    }
+
+    private static void prepareAssets(Context context) {
+
         if (!PREPARED.getAndSet(true)) {
             System.setProperty(
-                    "net.time4j.base.ResourceLoader",
-                    "net.time4j.android.spi.AndroidResourceLoader");
-            ((AndroidResourceLoader) ResourceLoader.getInstance()).init(application);
+                "net.time4j.base.ResourceLoader",
+                "net.time4j.android.spi.AndroidResourceLoader");
+            ((AndroidResourceLoader) ResourceLoader.getInstance()).init(context);
         }
 
     }
@@ -143,7 +218,7 @@ public class ApplicationStarter {
                 Timezone.Cache.refresh();
 
                 Log.i(
-                    "time4j-android",
+                    TIME4A,
                     "Event ACTION_TIMEZONE_CHANGED received, system timezone changed to: ["
                         + tzid.canonical()
                         + "]. Changed android timezone was: ["
@@ -151,7 +226,7 @@ public class ApplicationStarter {
                         + "]");
             } catch (IllegalArgumentException iae) {
                 Log.e(
-                    "time4j-android",
+                    TIME4A,
                     "Could not recognize timezone id: [" + ref + "]", iae);
             }
         }

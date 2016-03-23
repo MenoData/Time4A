@@ -1,6 +1,6 @@
 /*
  * -----------------------------------------------------------------------
- * Copyright © 2013-2015 Meno Hochschild, <http://www.menodata.de/>
+ * Copyright © 2013-2016 Meno Hochschild, <http://www.menodata.de/>
  * -----------------------------------------------------------------------
  * This file (AndroidResourceLoader.java) is part of project Time4J.
  *
@@ -21,7 +21,7 @@
 
 package net.time4j.android.spi;
 
-import android.app.Application;
+import android.content.Context;
 import android.text.format.DateFormat;
 
 import net.time4j.base.ResourceLoader;
@@ -104,7 +104,7 @@ public class AndroidResourceLoader
 
     //~ Instanzvariablen --------------------------------------------------
 
-    private Application application = null;
+    private Context context = null;
     private List<FormatPatternProvider> patterns = Collections.emptyList();
 
     //~ Methoden ----------------------------------------------------------
@@ -112,11 +112,11 @@ public class AndroidResourceLoader
     /**
      * Sets the application context.
      *
-     * @param   application     Android app
+     * @param   context     Android app or context
      */
-    public void init(Application application) {
+    public void init(Context context) {
 
-        this.application = application;
+        this.context = context;
 
         FormatPatternProvider p = new AndroidFormatPatterns();
         this.patterns = Collections.singletonList(p);
@@ -162,12 +162,12 @@ public class AndroidResourceLoader
         try {
             if (uri == null) {
                 return null;
-            } else if (uri.isAbsolute() || (this.application == null)) {
+            } else if (uri.isAbsolute() || (this.context == null)) {
                 URLConnection conn = uri.toURL().openConnection();
                 conn.setUseCaches(false);
                 return conn.getInputStream();
             } else {
-                return this.application.getAssets().open(uri.toString());
+                return this.context.getAssets().open(uri.toString());
             }
         } catch (IOException ioe) {
             return null;
@@ -201,49 +201,8 @@ public class AndroidResourceLoader
 
     //~ Innere Klassen ----------------------------------------------------
 
-    private static final class LazyTextdata
-        implements Iterable<TextProvider> {
-
-        //~ Methoden ------------------------------------------------------
-
-        @Override
-        public Iterator<TextProvider> iterator() {
-
-            return TextdataHolder.ITERABLE.iterator();
-
-        }
-
-    }
-
-    private static final class TextdataHolder {
-
-        //~ Statische Felder/Initialisierungen ----------------------------
-
-        private static final Iterable<TextProvider> ITERABLE;
-
-        static {
-            List<TextProvider> providers =
-                Arrays.asList(new IsoTextProviderSPI(), new GenericTextProviderSPI());
-            ITERABLE = Collections.unmodifiableList(providers);
-        }
-
-    }
-
     private class AndroidFormatPatterns
         implements ExtendedPatterns {
-
-        //~ Instanzvariablen ----------------------------------------------
-
-        private final ExtendedPatterns delegate;
-
-        //~ Konstruktoren -------------------------------------------------
-
-        AndroidFormatPatterns() {
-            super();
-
-            this.delegate = new IsoTextProviderSPI();
-
-        }
 
         //~ Methoden ------------------------------------------------------
 
@@ -253,7 +212,7 @@ public class AndroidResourceLoader
             Locale locale
         ) {
 
-            return this.delegate.getDatePattern(mode, locale);
+            return this.getDelegate().getDatePattern(mode, locale);
 
         }
 
@@ -274,15 +233,15 @@ public class AndroidResourceLoader
             boolean alt
         ) {
 
-            String pattern = this.delegate.getTimePattern(mode, locale, alt);
+            String pattern = this.getDelegate().getTimePattern(mode, locale, alt);
 
             if (Locale.getDefault().equals(locale)) {
                 String testPattern = pattern;
                 if (mode != DisplayMode.SHORT) { // we assume that short style has no literals
-                    testPattern = this.delegate.getTimePattern(DisplayMode.SHORT, locale);
+                    testPattern = this.getDelegate().getTimePattern(DisplayMode.SHORT, locale);
                 }
                 boolean has24HourFormat = (testPattern.indexOf('a') == -1);
-                boolean use24HourFormat = DateFormat.is24HourFormat(application);
+                boolean use24HourFormat = DateFormat.is24HourFormat(context);
 
                 if (use24HourFormat != has24HourFormat) {
                     if (use24HourFormat) {
@@ -314,14 +273,14 @@ public class AndroidResourceLoader
             Locale locale
         ) {
 
-            return this.delegate.getDateTimePattern(dateMode, timeMode, locale);
+            return this.getDelegate().getDateTimePattern(dateMode, timeMode, locale);
 
         }
 
         @Override
         public String getIntervalPattern(Locale locale) {
 
-            return this.delegate.getIntervalPattern(locale);
+            return this.getDelegate().getIntervalPattern(locale);
 
         }
 
@@ -364,6 +323,26 @@ public class AndroidResourceLoader
 
         }
 
+        private ExtendedPatterns getDelegate() {
+
+            return Iterables.ISODATA;
+
+        }
+
+    }
+
+    private static final class LazyTextdata
+            implements Iterable<TextProvider> {
+
+        //~ Methoden ------------------------------------------------------
+
+        @Override
+        public Iterator<TextProvider> iterator() {
+
+            return Iterables.TEXTDATA.iterator();
+
+        }
+
     }
 
     private static final class LazyWeekdata
@@ -374,21 +353,8 @@ public class AndroidResourceLoader
         @Override
         public Iterator<WeekdataProvider> iterator() {
 
-            return WeekdataHolder.ITERABLE.iterator();
+            return Iterables.WEEKDATA.iterator();
 
-        }
-
-    }
-
-    private static final class WeekdataHolder {
-
-        //~ Statische Felder/Initialisierungen ----------------------------
-
-        private static final Iterable<WeekdataProvider> ITERABLE;
-
-        static {
-            WeekdataProvider provider = new WeekdataProviderSPI();
-            ITERABLE = Collections.singletonList(provider);
         }
 
     }
@@ -401,22 +367,8 @@ public class AndroidResourceLoader
         @Override
         public Iterator<ZoneProvider> iterator() {
 
-            return ZoneDataHolder.ITERABLE.iterator();
+            return Iterables.ZONEDATA.iterator();
 
-        }
-
-    }
-
-    private static final class ZoneDataHolder {
-
-        //~ Statische Felder/Initialisierungen ----------------------------
-
-        private static final Iterable<ZoneProvider> ITERABLE;
-
-        static {
-            ZoneProvider tzdb = new TimezoneRepositoryProviderSPI();
-            ZoneProvider tznames = new ZoneNameProviderSPI();
-            ITERABLE = Collections.unmodifiableList(Arrays.asList(tzdb, tznames));
         }
 
     }
@@ -429,31 +381,8 @@ public class AndroidResourceLoader
         @Override
         public Iterator<LeapSecondProvider> iterator() {
 
-            return LeapsecondHolder.ITERABLE.iterator();
+            return Iterables.LEAPSECONDS.iterator();
 
-        }
-
-    }
-
-    private static final class LeapsecondHolder {
-
-        //~ Statische Felder/Initialisierungen ----------------------------
-
-        private static final Iterable<LeapSecondProvider> ITERABLE;
-
-        static {
-            LeapSecondProvider provider = null;
-            for (ZoneProvider zp : ZoneDataHolder.ITERABLE) {
-                if (zp instanceof LeapSecondProvider) {
-                    provider = LeapSecondProvider.class.cast(zp);
-                    break;
-                }
-            }
-            if (provider == null) {
-                ITERABLE = Collections.emptyList();
-            } else {
-                ITERABLE = Collections.singleton(provider);
-            }
         }
 
     }
@@ -466,21 +395,8 @@ public class AndroidResourceLoader
         @Override
         public Iterator<PluralProvider> iterator() {
 
-            return PluraldataHolder.ITERABLE.iterator();
+            return Iterables.PLURALS.iterator();
 
-        }
-
-    }
-
-    private static final class PluraldataHolder {
-
-        //~ Statische Felder/Initialisierungen ----------------------------
-
-        private static final Iterable<PluralProvider> ITERABLE;
-
-        static {
-            PluralProvider provider = new PluralProviderSPI();
-            ITERABLE = Collections.singleton(provider);
         }
 
     }
@@ -493,21 +409,8 @@ public class AndroidResourceLoader
         @Override
         public Iterator<NumberSymbolProvider> iterator() {
 
-            return NumberSymbolHolder.ITERABLE.iterator();
+            return Iterables.SYMBOLS.iterator();
 
-        }
-
-    }
-
-    private static final class NumberSymbolHolder {
-
-        //~ Statische Felder/Initialisierungen ----------------------------
-
-        private static final Iterable<NumberSymbolProvider> ITERABLE;
-
-        static {
-            NumberSymbolProvider provider = SymbolProviderSPI.INSTANCE;
-            ITERABLE = Collections.singleton(provider);
         }
 
     }
@@ -520,21 +423,58 @@ public class AndroidResourceLoader
         @Override
         public Iterator<ChronoExtension> iterator() {
 
-            return ExtensionHolder.ITERABLE.iterator();
+            return Iterables.EXTENSIONS.iterator();
 
         }
 
     }
 
-    private static final class ExtensionHolder {
+    private static final class Iterables { // lazy class loading finally triggers disc access here
 
         //~ Statische Felder/Initialisierungen ----------------------------
 
-        private static final Iterable<ChronoExtension> ITERABLE;
+        private static final IsoTextProviderSPI ISODATA = new IsoTextProviderSPI();
+
+        private static final Iterable<NumberSymbolProvider> SYMBOLS;
+        private static final Iterable<PluralProvider> PLURALS;
+        private static final Iterable<ChronoExtension> EXTENSIONS;
+        private static final Iterable<WeekdataProvider> WEEKDATA;
+        private static final Iterable<TextProvider> TEXTDATA;
+        private static final Iterable<ZoneProvider> ZONEDATA;
+        private static final Iterable<LeapSecondProvider> LEAPSECONDS;
 
         static {
+            NumberSymbolProvider symbolProvider = SymbolProviderSPI.INSTANCE;
+            SYMBOLS = Collections.singleton(symbolProvider);
+
+            PluralProvider pluralProvider = new PluralProviderSPI();
+            PLURALS = Collections.singleton(pluralProvider);
+
             ChronoExtension historic = new HistoricExtension();
-            ITERABLE = Collections.unmodifiableList(Arrays.asList(historic));
+            EXTENSIONS = Collections.singleton(historic);
+
+            WeekdataProvider weekdataProvider = new WeekdataProviderSPI();
+            WEEKDATA = Collections.singletonList(weekdataProvider);
+
+            List<TextProvider> textProviders = Arrays.asList(ISODATA, new GenericTextProviderSPI());
+            TEXTDATA = Collections.unmodifiableList(textProviders);
+
+            ZoneProvider tzdb = new TimezoneRepositoryProviderSPI();
+            ZoneProvider tznames = new ZoneNameProviderSPI();
+            ZONEDATA = Collections.unmodifiableList(Arrays.asList(tzdb, tznames));
+
+            LeapSecondProvider leapSecondProvider = null;
+            for (ZoneProvider zp : ZONEDATA) {
+                if (zp instanceof LeapSecondProvider) {
+                    leapSecondProvider = LeapSecondProvider.class.cast(zp);
+                    break;
+                }
+            }
+            if (leapSecondProvider == null) {
+                LEAPSECONDS = Collections.emptyList();
+            } else {
+                LEAPSECONDS = Collections.singleton(leapSecondProvider);
+            }
         }
 
     }

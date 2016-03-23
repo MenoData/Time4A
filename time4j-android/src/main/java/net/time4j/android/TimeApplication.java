@@ -1,6 +1,6 @@
 /*
  * -----------------------------------------------------------------------
- * Copyright © 2013-2015 Meno Hochschild, <http://www.menodata.de/>
+ * Copyright © 2013-2016 Meno Hochschild, <http://www.menodata.de/>
  * -----------------------------------------------------------------------
  * This file (TimeApplication.java) is part of project Time4J.
  *
@@ -24,13 +24,13 @@ import android.app.Application;
 
 
 /**
- * <p>Serves as super class for any time-based android application using Time4J. </p>
+ * <p>Serves as super class for any time-based android application using Time4A. </p>
  *
  * @author      Meno Hochschild
  * @since       3.2
  */
 /*[deutsch]
- * <p>Dient als Superklasse f&uuml;r eine beliebige zeitbasierte Android-App, die Time4J nutzt. </p>
+ * <p>Dient als Superklasse f&uuml;r eine beliebige zeitbasierte Android-App, die Time4A nutzt. </p>
  *
  * @author      Meno Hochschild
  * @since       3.2
@@ -44,7 +44,7 @@ public abstract class TimeApplication
     public void onCreate() {
         super.onCreate();
 
-        ApplicationStarter.initialize(this);
+        ApplicationStarter.initialize(this, true);
 
     }
 
