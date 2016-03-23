@@ -1,4 +1,6 @@
-## [v3.18-2016c] not yet released
+## [v3.19-2016?] not yet released
+
+## [v3.18-2016c] published on 2016-03-23
 ### Added
 - Starting Time4A as background process [#475]
 - Enable unparseable characters to be skipped when parsing [#476]
