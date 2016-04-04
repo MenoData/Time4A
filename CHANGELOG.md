@@ -3,6 +3,9 @@
 - Fine-tuning of historization [#479]
 - Document that PlainDate is historizable [#448]
 
+### Deprecated
+- Deprecate usage of CalendarEra.getValue() [#480]
+
 ## [v3.18-2016c] published on 2016-03-23
 ### Added
 - Starting Time4A as background process [#475]
