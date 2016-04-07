@@ -2741,15 +2741,17 @@ public final class ChronoFormatter<T extends ChronoEntity<T>>
                 int section = step.getSection();
                 int last = index;
 
-                for (int j = index + 1; j < len; j++) {
-                    FormatStep test = this.steps.get(j);
-                    if (test.isNewOrBlockStarted() && (test.getSection() == section)) {
-                        last = j;
-                        break;
+                if (!step.isNewOrBlockStarted()) {
+                    for (int j = index + 1; j < len; j++) {
+                        FormatStep test = this.steps.get(j);
+                        if (test.isNewOrBlockStarted() && (test.getSection() == section)) {
+                            last = j;
+                            break;
+                        }
                     }
                 }
 
-                if (last > index) {
+                if ((last > index) || step.isNewOrBlockStarted()) {
                     // wenn gefunden, zum nächsten oder-Block springen
                     if (data != null) {
                         values = data.pop();
@@ -4104,6 +4106,9 @@ public final class ChronoFormatter<T extends ChronoEntity<T>>
          *
          * <p>Note: This method is only relevant for parsing. During printing, this method does nothing. </p>
          *
+         * <p><strong>Specification:</strong> The first condition argument must be immutable or stateless
+         * (for example a lambda expression). </p>
+         *
          * @param   unparseableCondition    condition which marks accepted characters as unparseable
          * @param   maxIterations           maximum count of invocations on given condition
          * @return  this instance for method chaining
@@ -4120,6 +4125,9 @@ public final class ChronoFormatter<T extends ChronoEntity<T>>
          * liefert, dann stellt {@code maxIterations} effektiv eine feste Breite von zu entfernenden Zeichen dar. </p>
          *
          * <p>Hinweis: Diese Methode ist nur beim Parsen relevant, in der Textausgabe macht die Methode nichts. </p>
+         *
+         * <p><strong>Specification:</strong> Das erste Bedingungsargument mu&szlig; <i>immutable</i> oder
+         * zustandslos sein (zum Beispiel ein Lambda-Ausdruck). </p>
          *
          * @param   unparseableCondition    condition which marks accepted characters as unparseable
          * @param   maxIterations           maximum count of invocations on given condition
