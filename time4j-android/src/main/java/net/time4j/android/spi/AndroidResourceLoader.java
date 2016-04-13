@@ -325,21 +325,21 @@ public class AndroidResourceLoader
 
         private ExtendedPatterns getDelegate() {
 
-            return Iterables.ISODATA;
+            return I18nDataHolder.ISODATA;
 
         }
 
     }
 
-    private static final class LazyTextdata
-            implements Iterable<TextProvider> {
+    private static final class LazyNumberSymbols
+        implements Iterable<NumberSymbolProvider> {
 
         //~ Methoden ------------------------------------------------------
 
         @Override
-        public Iterator<TextProvider> iterator() {
+        public Iterator<NumberSymbolProvider> iterator() {
 
-            return Iterables.TEXTDATA.iterator();
+            return I18nDataHolder.SYMBOLS.iterator();
 
         }
 
@@ -353,7 +353,21 @@ public class AndroidResourceLoader
         @Override
         public Iterator<WeekdataProvider> iterator() {
 
-            return Iterables.WEEKDATA.iterator();
+            return I18nDataHolder.WEEKDATA.iterator();
+
+        }
+
+    }
+
+    private static final class LazyTextdata
+        implements Iterable<TextProvider> {
+
+        //~ Methoden ------------------------------------------------------
+
+        @Override
+        public Iterator<TextProvider> iterator() {
+
+            return I18nDataHolder.TEXTDATA.iterator();
 
         }
 
@@ -367,7 +381,7 @@ public class AndroidResourceLoader
         @Override
         public Iterator<ZoneProvider> iterator() {
 
-            return Iterables.ZONEDATA.iterator();
+            return ZoneDataHolder.ZONEDATA.iterator();
 
         }
 
@@ -381,7 +395,7 @@ public class AndroidResourceLoader
         @Override
         public Iterator<LeapSecondProvider> iterator() {
 
-            return Iterables.LEAPSECONDS.iterator();
+            return ZoneDataHolder.LEAPSECONDS.iterator();
 
         }
 
@@ -395,21 +409,7 @@ public class AndroidResourceLoader
         @Override
         public Iterator<PluralProvider> iterator() {
 
-            return Iterables.PLURALS.iterator();
-
-        }
-
-    }
-
-    private static final class LazyNumberSymbols
-            implements Iterable<NumberSymbolProvider> {
-
-        //~ Methoden ------------------------------------------------------
-
-        @Override
-        public Iterator<NumberSymbolProvider> iterator() {
-
-            return Iterables.SYMBOLS.iterator();
+            return StatelessIterables.PLURALS.iterator();
 
         }
 
@@ -423,42 +423,46 @@ public class AndroidResourceLoader
         @Override
         public Iterator<ChronoExtension> iterator() {
 
-            return Iterables.EXTENSIONS.iterator();
+            return StatelessIterables.EXTENSIONS.iterator();
 
         }
 
     }
 
-    private static final class Iterables { // lazy class loading finally triggers disc access here
+    // lazy class loading finally triggers disc access for i18n-resources here
+    private static final class I18nDataHolder {
 
         //~ Statische Felder/Initialisierungen ----------------------------
 
-        private static final IsoTextProviderSPI ISODATA = new IsoTextProviderSPI();
-
+        private static final IsoTextProviderSPI ISODATA;
         private static final Iterable<NumberSymbolProvider> SYMBOLS;
-        private static final Iterable<PluralProvider> PLURALS;
-        private static final Iterable<ChronoExtension> EXTENSIONS;
         private static final Iterable<WeekdataProvider> WEEKDATA;
         private static final Iterable<TextProvider> TEXTDATA;
-        private static final Iterable<ZoneProvider> ZONEDATA;
-        private static final Iterable<LeapSecondProvider> LEAPSECONDS;
 
         static {
+            ISODATA = new IsoTextProviderSPI();
+
             NumberSymbolProvider symbolProvider = SymbolProviderSPI.INSTANCE;
             SYMBOLS = Collections.singleton(symbolProvider);
-
-            PluralProvider pluralProvider = new PluralProviderSPI();
-            PLURALS = Collections.singleton(pluralProvider);
-
-            ChronoExtension historic = new HistoricExtension();
-            EXTENSIONS = Collections.singleton(historic);
 
             WeekdataProvider weekdataProvider = new WeekdataProviderSPI();
             WEEKDATA = Collections.singletonList(weekdataProvider);
 
             List<TextProvider> textProviders = Arrays.asList(ISODATA, new GenericTextProviderSPI());
             TEXTDATA = Collections.unmodifiableList(textProviders);
+        }
 
+    }
+
+    // lazy class loading finally triggers disc access for tz repository here
+    private static final class ZoneDataHolder {
+
+        //~ Statische Felder/Initialisierungen ----------------------------
+
+        private static final Iterable<ZoneProvider> ZONEDATA;
+        private static final Iterable<LeapSecondProvider> LEAPSECONDS;
+
+        static {
             ZoneProvider tzdb = new TimezoneRepositoryProviderSPI();
             ZoneProvider tznames = new ZoneNameProviderSPI();
             ZONEDATA = Collections.unmodifiableList(Arrays.asList(tzdb, tznames));
@@ -475,6 +479,23 @@ public class AndroidResourceLoader
             } else {
                 LEAPSECONDS = Collections.singleton(leapSecondProvider);
             }
+        }
+
+    }
+
+    private static final class StatelessIterables {
+
+        //~ Statische Felder/Initialisierungen ----------------------------
+
+        private static final Iterable<PluralProvider> PLURALS;
+        private static final Iterable<ChronoExtension> EXTENSIONS;
+
+        static {
+            PluralProvider pluralProvider = new PluralProviderSPI();
+            PLURALS = Collections.singleton(pluralProvider);
+
+            ChronoExtension historic = new HistoricExtension();
+            EXTENSIONS = Collections.singleton(historic);
         }
 
     }

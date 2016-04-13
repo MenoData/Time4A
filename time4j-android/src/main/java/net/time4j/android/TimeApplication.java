@@ -21,16 +21,23 @@
 package net.time4j.android;
 
 import android.app.Application;
+import android.content.Context;
 
 
 /**
  * <p>Serves as super class for any time-based android application using Time4A. </p>
+ *
+ * <p>Uses {@link ApplicationStarter#initialize(Context, boolean)
+ * ApplicationStarter.initialize(this, false)}. </p>
  *
  * @author      Meno Hochschild
  * @since       3.2
  */
 /*[deutsch]
  * <p>Dient als Superklasse f&uuml;r eine beliebige zeitbasierte Android-App, die Time4A nutzt. </p>
+ *
+ * <p>Nutzt {@link ApplicationStarter#initialize(Context, boolean)
+ * ApplicationStarter.initialize(this, false)}. </p>
  *
  * @author      Meno Hochschild
  * @since       3.2
@@ -44,7 +51,7 @@ public abstract class TimeApplication
     public void onCreate() {
         super.onCreate();
 
-        ApplicationStarter.initialize(this, true);
+        ApplicationStarter.initialize(this, false);
 
     }
 

@@ -28,6 +28,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.util.Log;
 
+import net.time4j.PlainDate;
 import net.time4j.SystemClock;
 import net.time4j.android.spi.AndroidResourceLoader;
 import net.time4j.base.ResourceLoader;
@@ -59,6 +60,10 @@ public class ApplicationStarter {
 
     //~ Statische Felder/Initialisierungen --------------------------------
 
+    private static final String VERSION = "v3.19-2016d";
+    private static final int RELEASE_YEAR = 2016;
+    private static final int RELEASE_MONTH = 4;
+    private static final int RELEASE_DAY = 15;
     private static final String TIME4A = "time4a";
 
     private static final AtomicBoolean PREPARED = new AtomicBoolean(false);
@@ -121,7 +126,12 @@ public class ApplicationStarter {
 
         long start = System.nanoTime();
         Context ctx = context.getApplicationContext();
-        prepareAssets(ctx);
+        prepareAssets(ctx); // initialize the class AndroidResourceLoader (must be called first)
+
+        // ensures that class PlainDate is loaded before any further initialization
+        PlainDate releaseDate = PlainDate.of(RELEASE_YEAR, RELEASE_MONTH, RELEASE_DAY);
+        Log.i(TIME4A, "Starting Time4A (" + VERSION + " published on " + releaseDate +")");
+
         registerReceiver(ctx);
 
         if (prefetch) {

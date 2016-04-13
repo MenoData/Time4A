@@ -41,7 +41,6 @@ public class MainActivity extends Activity {
         this.setTitle("Time-Demo");
         final TextView tv = (TextView) this.findViewById(R.id.time_display);
         final Context context = this.getApplication();
-        tv.setText(getTimeInfo(context));
 
         Button button = (Button) this.findViewById(R.id.refresh_button);
         button.setOnClickListener(
@@ -61,7 +60,7 @@ public class MainActivity extends Activity {
     }
 
     private static String getTimeInfo(Context context) {
-        // PlainDate.of(2015, 0); // exception test observing debug output
+
         Duration<?> dur = Duration.of(337540, ClockUnit.SECONDS).with(Duration.STD_CLOCK_PERIOD);
         String formattedDuration = PrettyTime.of(Locale.FRANCE).print(dur, TextWidth.WIDE);
 
