@@ -7,6 +7,7 @@
 - Document that PlainDate is historizable [#448]
 
 ### Fixed
+- 3.18-2016c appears to make testing difficult (Android) [#483]
 - OR-operator logic in ChronoFormatter sometimes broken [#482]
 - Fix and improve documentation of era manipulations [#481]
 
