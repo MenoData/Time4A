@@ -1,4 +1,6 @@
-## [v3.19-2016?] not yet released
+## [v3.19-2016d] not yet released
+
+## [v3.19-2016c] published on 2016-04-18
 ### Added
 - Add Thai solar calendar (Suriyakati) [#478]
 - Fine-tuning of historization [#479]
