@@ -33,7 +33,7 @@ Only two steps are required before coding against the API of Time4A.
 
 ```groovy
 dependencies {
-    compile group: 'net.time4j', name: 'time4j-android', version: '3.19-2016c'
+    compile group: 'net.time4j', name: 'time4j-android', version: '3.19-2016d'
 }
 ```
 
@@ -52,6 +52,7 @@ public class MyApplication extends Application {
 - Time4A registers a specialized `BroadcastReceiver` in order to track any change to the system timezone.
 - The Android version of `TickProvider` deploys the best available clock using `android.os.SystemClock.elapsedRealtimeNanos()`.
 - Time-specific format patterns are aware of the user-preference for 12/24-hour-format if the system locale is chosen.
+- Proguard is strongly recommended to shrink the size of Time4A.
 
 ## Feedback
 Feedback is welcome. You can best use the issue-tracker of the main project Time4J for feedback:
