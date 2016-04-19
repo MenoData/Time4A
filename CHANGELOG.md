@@ -1,4 +1,8 @@
-## [v3.19-2016d] not yet released
+## [v3.19-2016e] not yet released
+
+## [v3.19-2016d] published on 2016-04-19
+### Changed
+- Update TZDB-repository to 2016d [#484]
 
 ## [v3.19-2016c] published on 2016-04-18
 ### Added
