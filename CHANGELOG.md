@@ -1,4 +1,6 @@
-## [v3.19-2016e] not yet released
+## [v3.20-2016e] not yet released
+### Changed
+- Update to CLDR version 29 [#492]
 
 ## [v3.19-2016d] published on 2016-04-19
 ### Changed
