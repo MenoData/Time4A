@@ -1,5 +1,6 @@
 ## [v3.20-2016e] not yet released
 ### Added
+- Related gregorian year for non-gregorian calendars [#370]
 - Modern-coverage of languages defined in CLDR [#367]
 - Support for Uyghur [#496]
 - Support for Malayalam [#493]
