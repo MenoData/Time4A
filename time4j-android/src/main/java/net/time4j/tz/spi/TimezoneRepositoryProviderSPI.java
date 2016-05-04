@@ -25,9 +25,9 @@ import net.time4j.PlainDate;
 import net.time4j.base.GregorianDate;
 import net.time4j.base.ResourceLoader;
 import net.time4j.scale.LeapSecondProvider;
-import net.time4j.tz.NameStyle;
 import net.time4j.tz.TransitionHistory;
-import net.time4j.tz.ZoneProvider;
+import net.time4j.tz.ZoneModelProvider;
+import net.time4j.tz.ZoneNameProvider;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
@@ -45,7 +45,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -58,11 +57,7 @@ import java.util.Set;
  * @since   1.0
  */
 public class TimezoneRepositoryProviderSPI
-    implements ZoneProvider, LeapSecondProvider {
-
-    //~ Statische Felder/Initialisierungen --------------------------------
-
-    private static final ZoneProvider NAME_PROVIDER = new ZoneNameProviderSPI();
+    implements ZoneModelProvider, LeapSecondProvider {
 
     //~ Instanzvariablen --------------------------------------------------
 
@@ -235,27 +230,6 @@ public class TimezoneRepositoryProviderSPI
     }
 
     @Override
-    public Set<String> getPreferredIDs(
-        Locale locale,
-        boolean smart
-    ) {
-
-        return NAME_PROVIDER.getPreferredIDs(locale, smart);
-
-    }
-
-    @Override
-    public String getDisplayName(
-        String tzid,
-        NameStyle style,
-        Locale locale
-    ) {
-
-        return NAME_PROVIDER.getDisplayName(tzid, style, locale);
-
-    }
-
-    @Override
     public Map<String, String> getAliases() {
 
         return this.aliases;
@@ -306,6 +280,13 @@ public class TimezoneRepositoryProviderSPI
     public String getVersion() {
 
         return this.version;
+
+    }
+
+    @Override
+    public ZoneNameProvider getSpecificZoneNameRepository() {
+
+        return null;
 
     }
 

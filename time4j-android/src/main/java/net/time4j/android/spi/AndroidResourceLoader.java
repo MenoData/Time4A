@@ -45,7 +45,8 @@ import net.time4j.i18n.UnitPatternProviderSPI;
 import net.time4j.i18n.WeekdataProviderSPI;
 import net.time4j.scale.LeapSecondProvider;
 import net.time4j.scale.TickProvider;
-import net.time4j.tz.ZoneProvider;
+import net.time4j.tz.ZoneModelProvider;
+import net.time4j.tz.ZoneNameProvider;
 import net.time4j.tz.spi.TimezoneRepositoryProviderSPI;
 import net.time4j.tz.spi.ZoneNameProviderSPI;
 
@@ -84,7 +85,8 @@ public class AndroidResourceLoader
     static {
         Map<Class<?>, Iterable<?>> tmp = new HashMap<Class<?>, Iterable<?>>();
         tmp.put(TextProvider.class, new LazyTextdata());
-        tmp.put(ZoneProvider.class, new LazyZoneData());
+        tmp.put(ZoneModelProvider.class, new LazyZoneRules());
+        tmp.put(ZoneNameProvider.class, new LazyZoneNames());
         tmp.put(LeapSecondProvider.class, new LazyLeapseconds());
         tmp.put(ChronoExtension.class, new LazyExtensions());
         tmp.put(FormatEngine.class, Collections.singleton(UltimateFormatEngine.INSTANCE));
@@ -373,15 +375,29 @@ public class AndroidResourceLoader
 
     }
 
-    private static final class LazyZoneData
-        implements Iterable<ZoneProvider> {
+    private static final class LazyZoneRules
+        implements Iterable<ZoneModelProvider> {
 
         //~ Methoden ------------------------------------------------------
 
         @Override
-        public Iterator<ZoneProvider> iterator() {
+        public Iterator<ZoneModelProvider> iterator() {
 
-            return ZoneDataHolder.ZONEDATA.iterator();
+            return ZoneDataHolder.RULES.iterator();
+
+        }
+
+    }
+
+    private static final class LazyZoneNames
+        implements Iterable<ZoneNameProvider> {
+
+        //~ Methoden ------------------------------------------------------
+
+        @Override
+        public Iterator<ZoneNameProvider> iterator() {
+
+            return ZoneDataHolder.NAMES.iterator();
 
         }
 
@@ -459,16 +475,19 @@ public class AndroidResourceLoader
 
         //~ Statische Felder/Initialisierungen ----------------------------
 
-        private static final Iterable<ZoneProvider> ZONEDATA;
+        private static final Iterable<ZoneModelProvider> RULES;
+        private static final Iterable<ZoneNameProvider> NAMES;
         private static final Iterable<LeapSecondProvider> LEAPSECONDS;
 
         static {
-            ZoneProvider tzdb = new TimezoneRepositoryProviderSPI();
-            ZoneProvider tznames = new ZoneNameProviderSPI();
-            ZONEDATA = Collections.unmodifiableList(Arrays.asList(tzdb, tznames));
+            ZoneModelProvider tzdb = new TimezoneRepositoryProviderSPI();
+            RULES = Collections.singleton(tzdb);
+
+            ZoneNameProvider provider = new ZoneNameProviderSPI();
+            NAMES = Collections.singleton(provider);
 
             LeapSecondProvider leapSecondProvider = null;
-            for (ZoneProvider zp : ZONEDATA) {
+            for (ZoneModelProvider zp : RULES) {
                 if (zp instanceof LeapSecondProvider) {
                     leapSecondProvider = LeapSecondProvider.class.cast(zp);
                     break;
