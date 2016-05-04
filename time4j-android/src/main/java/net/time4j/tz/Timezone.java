@@ -1034,17 +1034,59 @@ public abstract class Timezone
         Locale locale
     ) {
 
-        String tzid = this.getID().canonical();
-        int index = tzid.indexOf('~');
+        return getDisplayName(this.getID(), style, locale);
+
+    }
+
+    /**
+     * <p>Returns the name of a timezone suitable for presentation to
+     * users in given style and locale. </p>
+     *
+     * <p>If the name is not available then this method will yield the canonical
+     * ID of given timezone identifier. </p>
+     *
+     * @param   tzid                timezone id
+     * @param   style               name style
+     * @param   locale              language setting
+     * @return  localized timezone name for display purposes
+     * @see     java.util.TimeZone#getDisplayName(boolean,int,Locale)
+     *          java.util.TimeZone.getDisplayName(boolean,int,Locale)
+     * @see     Locale#getDefault()
+     * @see     #getID()
+     * @since   3.20/4.16
+     */
+    /*[deutsch]
+     * <p>Liefert den anzuzeigenden Zeitzonennamen. </p>
+     *
+     * <p>Ist der Zeitzonenname nicht ermittelbar, wird die ID der Zeitzone geliefert. </p>
+     *
+     * @param   tzid                timezone id
+     * @param   style               name style
+     * @param   locale              language setting
+     * @return  localized timezone name for display purposes
+     * @see     java.util.TimeZone#getDisplayName(boolean,int,Locale)
+     *          java.util.TimeZone.getDisplayName(boolean,int,Locale)
+     * @see     Locale#getDefault()
+     * @see     #getID()
+     * @since   3.20/4.16
+     */
+    public static String getDisplayName(
+        TZID tzid,
+        NameStyle style,
+        Locale locale
+    ) {
+
+        String canonical = tzid.canonical();
+        int index = canonical.indexOf('~');
         ZoneModelProvider provider = DEFAULT_PROVIDER;
-        String zoneID = tzid;
+        String zoneID = canonical;
 
         if (index >= 0) {
-            String pname = tzid.substring(0, index);
+            String pname = canonical.substring(0, index);
             if (!pname.equals(NAME_DEFAULT)) {
                 provider = PROVIDERS.get(pname);
             }
-            zoneID = tzid.substring(index + 1);
+            zoneID = canonical.substring(index + 1);
         }
 
         ZoneNameProvider np = provider.getSpecificZoneNameRepository();
@@ -1059,7 +1101,7 @@ public abstract class Timezone
             if (np != NAME_PROVIDER) {
                 name = NAME_PROVIDER.getDisplayName(zoneID, style, locale);
             }
-            name = (name.isEmpty() ? tzid : name);
+            name = (name.isEmpty() ? canonical : name);
         }
 
         return name;
@@ -1509,8 +1551,7 @@ public abstract class Timezone
          * make the performance worse especially if the underlying {@code ZoneModelProvider}
          * itself has no cache. </p>
          *
-         * @param   active  {@code true} if chache shall be active
-         *                  else {@code false}
+         * @param   active  {@code true} if cache shall be active else {@code false}
          */
         /*[deutsch]
          * <p>Aktiviert oder deaktiviert den internen Cache. </p>
@@ -1519,8 +1560,7 @@ public abstract class Timezone
          * Cache kann die Performance insbesondere dann verschlechtern, wenn der
          * zugrundeliegende {@code ZoneModelProvider} selbst keinen Cache hat. </p>
          *
-         * @param   active  {@code true} if chache shall be active
-         *                  else {@code false}
+         * @param   active  {@code true} if cache shall be active else {@code false}
          */
         public static void setCacheActive(boolean active) {
 
