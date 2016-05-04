@@ -1,4 +1,4 @@
-## [v3.20-2016e] not yet released
+## [v3.20-2016d] not yet released
 ### Added
 - Related gregorian year for non-gregorian calendars [#370]
 - Modern-coverage of languages defined in CLDR [#367]
@@ -11,6 +11,7 @@
 - Clarify format behaviour if zoneless types are combined with zone names [#490]
 
 ### Changed
+- Replace `ZoneProvider` by `ZoneModelProvider` and `ZoneNameProvider` [#498]
 - Update to CLDR version 29 [#492]
 
 ## [v3.19-2016d] published on 2016-04-19
