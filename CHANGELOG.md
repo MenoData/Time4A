@@ -1,4 +1,6 @@
-## [v3.20-2016d] not yet released
+## [v3.21-2016e] not yet released
+
+## [v3.20-2016d] published on 2016-05-07
 ### Added
 - Related gregorian year for non-gregorian calendars [#370]
 - Modern-coverage of languages defined in CLDR [#367]
@@ -8,6 +10,7 @@
 - Support for Esperanto [#495]
 
 ### Fixed
+- Make alias zone identifiers always parseable [#500]
 - Improve performance of parsing timezone names [#499]
 - Clarify format behaviour if zoneless types are combined with zone names [#490]
 
