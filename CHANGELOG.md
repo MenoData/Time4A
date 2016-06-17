@@ -5,6 +5,9 @@
 ### Fixed
 - Zone offset without sign - should be parseable in lax mode [#502]
 
+### Changed
+- Update TZDATA to version 2016e #[512]
+
 ## [v3.20-2016d] published on 2016-05-07
 ### Added
 - Related gregorian year for non-gregorian calendars [#370]
