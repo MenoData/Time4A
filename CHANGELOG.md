@@ -1,4 +1,6 @@
-## [v3.21-2016e] not yet released
+## [v3.22-2016e] not yet released
+
+## [v3.21-2016e] published on 2016-06-20
 ### Added
 - Better support for week-based durations and units [#509]
 
