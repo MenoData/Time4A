@@ -21,8 +21,8 @@
 
 package net.time4j.history.internal;
 
-import net.time4j.engine.BasicElement;
 import net.time4j.engine.ChronoElement;
+import net.time4j.format.DisplayElement;
 import net.time4j.format.NumericalElement;
 
 import java.io.ObjectStreamException;
@@ -35,7 +35,7 @@ import java.io.ObjectStreamException;
  * @since   3.16/4.13
  */
 public class StdHistoricalElement
-    extends BasicElement<Integer>
+    extends DisplayElement<Integer>
     implements NumericalElement<Integer> {
 
     //~ Statische Felder/Initialisierungen --------------------------------

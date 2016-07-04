@@ -29,6 +29,7 @@ import net.time4j.engine.ChronoOperator;
 import net.time4j.engine.Chronology;
 import net.time4j.engine.EpochDays;
 import net.time4j.engine.StdOperator;
+import net.time4j.format.DisplayElement;
 
 import java.io.InvalidObjectException;
 import java.io.ObjectStreamException;
@@ -58,7 +59,7 @@ import java.io.ObjectStreamException;
  * @since   3.5/4.3
  */
 public abstract class StdDateElement<V extends Comparable<V>, T extends ChronoEntity<T>>
-    extends BasicElement<V>
+    extends DisplayElement<V>
     implements StdCalendarElement<V, T> {
 
     //~ Instanzvariablen --------------------------------------------------
