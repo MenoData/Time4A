@@ -1,4 +1,6 @@
 ## [v3.22-2016e] not yet released
+### Added
+- Add localized display names for `ChronoElement` [#515]
 
 ## [v3.21-2016e] published on 2016-06-20
 ### Added
