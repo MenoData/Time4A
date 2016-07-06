@@ -1,6 +1,11 @@
-## [v3.22-2016e] not yet released
+## [v3.23-2016?] not yet released
+
+## [v3.22-2016f] published on 2016-07-06
 ### Added
 - Add localized display names for `ChronoElement` [#515]
+
+### Changed
+- Update TZDATA to version 2016f #[516]
 
 ## [v3.21-2016e] published on 2016-06-20
 ### Added
