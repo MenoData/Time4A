@@ -1,4 +1,6 @@
 ## [v3.23-2016?] not yet released
+### Added
+- Improved documentation of HijriCalendar [#518]
 
 ## [v3.22-2016f] published on 2016-07-06
 ### Added
