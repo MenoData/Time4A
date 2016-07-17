@@ -1,6 +1,7 @@
-## [v3.22-2016?] not yet released
+## [v3.22.1-2016?] not yet released
 ### Added
 - Improved documentation of HijriCalendar [#518]
+- Iso8601Format....WALL_TIME now understands T17:45 [#521]
 
 ### Changed
 - Make fractional second parser more tolerant [#519]
