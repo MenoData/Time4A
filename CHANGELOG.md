@@ -2,6 +2,7 @@
 ### Added
 - Improved documentation of HijriCalendar [#518]
 - Iso8601Format....WALL_TIME now understands T17:45 [#521]
+- Embedded formatter should know outer format attributes and defaults [#522]
 
 ### Changed
 - Make fractional second parser more tolerant [#519]
