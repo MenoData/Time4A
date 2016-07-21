@@ -3,9 +3,13 @@
 - Improved documentation of HijriCalendar [#518]
 - Iso8601Format....WALL_TIME now understands T17:45 [#521]
 - Embedded formatter should know outer format attributes and defaults [#522]
+- Add method findPreviousTransiton(UnixTime) to TransitionHistory [#523]
 
 ### Changed
 - Make fractional second parser more tolerant [#519]
+
+### Deprecated
+- 3 methods in TransitionHistory deprecated and replaced by new better named methods [#523]
 
 ## [v3.22-2016f] published on 2016-07-06
 ### Added
