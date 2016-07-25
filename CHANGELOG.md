@@ -1,6 +1,7 @@
 ## [v3.22.1-2016?] not yet released
 ### Added
 - Improved documentation of HijriCalendar [#518]
+- Add general parse methods for dates in ISO-8601-format [#520]
 - Iso8601Format....WALL_TIME now understands T17:45 [#521]
 - Embedded formatter should know outer format attributes and defaults [#522]
 - Add method findPreviousTransiton(UnixTime) to TransitionHistory [#523]
