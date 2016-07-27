@@ -11,9 +11,10 @@
 
 ### Changed
 - Make fractional second parser more tolerant [#519]
-- TextProvider-interface with new method [#529]
+- TextProvider-interface and TransitionHistory-interface with new methods [#523]+[#529]
 
 ### Deprecated
+- 1 method in TextProvider deprecated due to missing output context [#529]
 - 3 methods in TransitionHistory deprecated and replaced by new better named methods [#523]
 
 ## [v3.22-2016f] published on 2016-07-06
