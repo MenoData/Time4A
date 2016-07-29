@@ -7,6 +7,7 @@
 - Add method findPreviousTransiton(UnixTime) to TransitionHistory [#523]
 
 ### Fixed
+- ISO ordinal date format not correct for big year numbers [#530]
 - AM/PM-element not sensible for output context [#529]
 
 ### Changed
