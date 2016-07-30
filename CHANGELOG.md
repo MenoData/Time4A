@@ -5,6 +5,7 @@
 - Iso8601Format....WALL_TIME now understands T17:45 [#521]
 - Embedded formatter should know outer format attributes and defaults [#522]
 - Add method findPreviousTransiton(UnixTime) to TransitionHistory [#523]
+- ChronoFormatter.Builder should define default values and global attributes [#531]
 
 ### Fixed
 - ISO ordinal date format not correct for big year numbers [#530]
