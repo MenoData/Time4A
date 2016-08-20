@@ -6,6 +6,7 @@
 - Embedded formatter should know outer format attributes and defaults [#522]
 - Add method findPreviousTransiton(UnixTime) to TransitionHistory [#523]
 - ChronoFormatter.Builder should define default values and global attributes [#531]
+- Determine first moment for given calendar date in time zone [#539]
 
 ### Fixed
 - ISO ordinal date format not correct for big year numbers [#530]
