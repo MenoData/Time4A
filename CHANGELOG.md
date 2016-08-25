@@ -11,6 +11,7 @@
 ### Fixed
 - ISO ordinal date format not correct for big year numbers [#530]
 - AM/PM-element not sensible for output context [#529]
+- Inconsistent exception handling of with()-methods [#541]
 
 ### Changed
 - Make fractional second parser more tolerant [#519]
