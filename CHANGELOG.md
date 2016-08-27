@@ -4,7 +4,6 @@
 - Add general parse methods for dates in ISO-8601-format [#520]
 - Iso8601Format....WALL_TIME now understands T17:45 [#521]
 - Embedded formatter should know outer format attributes and defaults [#522]
-- Add method findPreviousTransiton(UnixTime) to TransitionHistory [#523]
 - ChronoFormatter.Builder should define default values and global attributes [#531]
 - Determine first moment for given calendar date in time zone [#539]
 
@@ -19,7 +18,7 @@
 
 ### Deprecated
 - 1 method in TextProvider deprecated due to missing output context [#529]
-- 3 methods in TransitionHistory deprecated and replaced by new better named methods [#523]
+- 1 method in TransitionHistory marked as deprecated (for future migration) [#523]
 
 ## [v3.22-2016f] published on 2016-07-06
 ### Added
