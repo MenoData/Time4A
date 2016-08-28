@@ -1,4 +1,4 @@
-## [v3.22.1-2016?] not yet released
+## [v3.22.1-2016f] not yet released
 ### Added
 - Improved documentation of HijriCalendar [#518]
 - Add general parse methods for dates in ISO-8601-format [#520]
@@ -6,6 +6,7 @@
 - Embedded formatter should know outer format attributes and defaults [#522]
 - ChronoFormatter.Builder should define default values and global attributes [#531]
 - Determine first moment for given calendar date in time zone [#539]
+- Enable parsing of literals with leading digits after numerical elements [#544]
 
 ### Fixed
 - ISO ordinal date format not correct for big year numbers [#530]
@@ -14,7 +15,7 @@
 
 ### Changed
 - Make fractional second parser more tolerant [#519]
-- TextProvider-interface and TransitionHistory-interface with new methods [#523]+[#529]
+- TextProvider-SPI-interface with new method [#529]
 
 ### Deprecated
 - 1 method in TextProvider deprecated due to missing output context [#529]
