@@ -1,4 +1,6 @@
-## [v3.22.1-2016f] not yet released
+## [v3.23-2016?] not yet released
+
+## [v3.22.1-2016f] published on 2016-08-28
 ### Added
 - Improved documentation of HijriCalendar [#518]
 - Add general parse methods for dates in ISO-8601-format [#520]
