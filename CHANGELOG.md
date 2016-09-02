@@ -1,4 +1,6 @@
 ## [v3.23-2016?] not yet released
+### Added
+- Add historic centuries [#507]
 
 ## [v3.22.1-2016f] published on 2016-08-28
 ### Added
