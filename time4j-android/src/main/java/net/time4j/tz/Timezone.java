@@ -1,4 +1,4 @@
-/*
+﻿/*
  * -----------------------------------------------------------------------
  * Copyright © 2013-2016 Meno Hochschild, <http://www.menodata.de/>
  * -----------------------------------------------------------------------
@@ -1086,6 +1086,9 @@ public abstract class Timezone
             String pname = canonical.substring(0, index);
             if (!pname.equals(NAME_DEFAULT)) {
                 provider = PROVIDERS.get(pname);
+                if (provider == null) {
+                    return canonical;
+                }
             }
             zoneID = canonical.substring(index + 1);
         }
