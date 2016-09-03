@@ -2,6 +2,9 @@
 ### Added
 - Add historic centuries [#507]
 
+### Fixed
+- NPE in Timezone.getDisplayName(...) [#548]
+
 ## [v3.22.1-2016f] published on 2016-08-28
 ### Added
 - Improved documentation of HijriCalendar [#518]
