@@ -4,6 +4,10 @@
 
 ### Fixed
 - NPE in Timezone.getDisplayName(...) [#548]
+- Improved literal parsing in localized tz-offset [#549]
+
+### Changed
+- New method in ZoneNameProvider-interface [#549]
 
 ## [v3.22.1-2016f] published on 2016-08-28
 ### Added
