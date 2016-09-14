@@ -1,6 +1,7 @@
 ## [v3.23-2016?] not yet released
 ### Added
 - Add historic centuries [#507]
+- Add some alternative numbering systems [#550]
 
 ### Fixed
 - NPE in Timezone.getDisplayName(...) [#548]
