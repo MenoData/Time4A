@@ -6,6 +6,7 @@
 ### Fixed
 - NPE in Timezone.getDisplayName(...) [#548]
 - Improved literal parsing in localized tz-offset [#549]
+- Byte-order-marks in UTF8-resources not recognized [#551]
 
 ### Changed
 - New method in ZoneNameProvider-interface [#549]
