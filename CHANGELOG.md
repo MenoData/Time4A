@@ -1,7 +1,8 @@
-## [v3.23-2016?] not yet released
+## [v3.23-2016g] not yet released
 ### Added
 - Add historic centuries [#507]
 - Add some alternative numbering systems [#550]
+- Add convenient methods to determine current system time [#553]
 
 ### Fixed
 - NPE in Timezone.getDisplayName(...) [#548]
