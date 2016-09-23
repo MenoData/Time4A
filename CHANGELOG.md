@@ -1,4 +1,6 @@
-## [v3.23-2016g] not yet released
+## [v3.24-2016?] not yet released
+
+## [v3.23-2016g] published on 2016-09-23
 ### Added
 - Add historic centuries [#507]
 - Add some alternative numbering systems [#550]
@@ -11,6 +13,7 @@
 
 ### Changed
 - New method in ZoneNameProvider-interface [#549]
+- Update TZDATA to version 2016g [#554]
 
 ## [v3.22.1-2016f] published on 2016-08-28
 ### Added
