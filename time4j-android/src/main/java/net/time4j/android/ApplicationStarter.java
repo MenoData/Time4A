@@ -60,10 +60,10 @@ public class ApplicationStarter {
 
     //~ Statische Felder/Initialisierungen --------------------------------
 
-    private static final String VERSION = "v3.19-2016f";
+    private static final String VERSION = "v3.23-2016g";
     private static final int RELEASE_YEAR = 2016;
-    private static final int RELEASE_MONTH = 7;
-    private static final int RELEASE_DAY = 6;
+    private static final int RELEASE_MONTH = 9;
+    private static final int RELEASE_DAY = 23;
     private static final String TIME4A = "time4a";
 
     private static final AtomicBoolean PREPARED = new AtomicBoolean(false);
