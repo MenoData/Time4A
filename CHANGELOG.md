@@ -1,5 +1,6 @@
 ## [v3.24-2016?] not yet released
 ### Added
+- Week calculations for non-ISO calendars [#562]
 - Add convenient methods to PrettyTime [#559]
 
 ### Fixed
