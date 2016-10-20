@@ -1,10 +1,14 @@
 ## [v3.24-2016?] not yet released
 ### Added
+- Open ChronoFormatter for external types [#556]
 - Week calculations for non-ISO calendars [#562]
 - Add convenient methods to PrettyTime [#559]
 
 ### Fixed
 - Document pattern order in case of or-logic applied [#558]
+
+### Changed
+- Update TZDATA to version 2016h [#564]
 
 ## [v3.23-2016g] published on 2016-09-23
 ### Added
