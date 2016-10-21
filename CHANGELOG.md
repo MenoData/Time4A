@@ -9,6 +9,7 @@
 
 ### Changed
 - Update TZDATA to version 2016h [#564]
+- Add simple sanity checks for cldr-format patterns [#565]
 
 ## [v3.23-2016g] published on 2016-09-23
 ### Added
