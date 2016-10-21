@@ -5,6 +5,7 @@
 - Add convenient methods to PrettyTime [#559]
 
 ### Fixed
+- Years in far future should not require a positive sign [#569]
 - Document pattern order in case of or-logic applied [#558]
 
 ### Changed
