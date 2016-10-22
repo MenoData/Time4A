@@ -10,6 +10,7 @@
 
 ### Changed
 - Update TZDATA to version 2016h [#564]
+- Update resources to CLDR v30.0.2 [#570]
 - Add simple sanity checks for cldr-format patterns [#565]
 
 ## [v3.23-2016g] published on 2016-09-23
