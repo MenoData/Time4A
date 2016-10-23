@@ -105,7 +105,8 @@ public class MainActivity extends Activity {
                 + "\n=> Local timestamp: " + moment.toLocalTimestamp()
                 + "\n=> Next leap second: " + moment.with(Moment.nextLeapSecond())
                 + "\n"
-                + "\n=> Week model: " + Weekmodel.ofSystem()
+                + "\n=> Week model (system): " + Weekmodel.ofSystem()
+                + "\n=> Week model (Afghanistan): " + Weekmodel.of(new Locale("fa", "AF"))
                 + "\n"
                 + "\n=> Example for Austrian timestamp: "
                 + ChronoFormatter.ofMomentPattern(
