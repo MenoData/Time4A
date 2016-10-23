@@ -1,4 +1,6 @@
-## [v3.24-2016h] not yet released
+## [v3.25-2016?] not yet released
+
+## [v3.24-2016h] published on 2016-10-23
 ### Added
 - Open ChronoFormatter for external types [#556]
 - Week calculations for non-ISO calendars [#562]
