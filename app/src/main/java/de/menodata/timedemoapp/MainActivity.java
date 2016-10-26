@@ -89,6 +89,7 @@ public class MainActivity extends Activity {
         }
 
         Moment moment = SystemClock.currentMoment();
+
         return "\n\n\n\n"
                 + "=> Current time (UTC): " + moment.toString()
                 + "\n"
