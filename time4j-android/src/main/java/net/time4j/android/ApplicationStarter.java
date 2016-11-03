@@ -63,7 +63,7 @@ public class ApplicationStarter {
     private static final String VERSION = "v3.24-2016i";
     private static final int RELEASE_YEAR = 2016;
     private static final int RELEASE_MONTH = 11;
-    private static final int RELEASE_DAY = 03;
+    private static final int RELEASE_DAY = 3;
     private static final String TIME4A = "time4a";
 
     private static final AtomicBoolean PREPARED = new AtomicBoolean(false);
