@@ -1,5 +1,9 @@
 ## [v3.25-2016?] not yet released
 
+## [v3.24-2016i] published on 2016-11-03
+### Changed
+- Update TZDATA to version 2016i [#573]
+
 ## [v3.24-2016h] published on 2016-10-23
 ### Added
 - Open ChronoFormatter for external types [#556]
