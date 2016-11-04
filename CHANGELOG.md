@@ -1,4 +1,6 @@
 ## [v3.25-2016?] not yet released
+### Fixed
+- Unicode-BIDI-chars should not be parsed in context of ISO [#574]
 
 ## [v3.24-2016i] published on 2016-11-03
 ### Changed
