@@ -1,4 +1,7 @@
-## [v3.25-2016?] not yet released
+## [v3.25-2016j] not yet released
+### Changed
+- Update TZDB-repository to 2016j [#579]
+
 ### Fixed
 - Ambivalence parsing check sometimes faulty [#577]
 - Unicode-BIDI-chars should not be parsed in context of ISO [#574]
