@@ -1,5 +1,6 @@
 ## [v3.25-2016j] not yet released
 ### Changed
+- Simplify parsing of trailing characters [#576]
 - Update TZDB-repository to 2016j [#579]
 
 ### Fixed
