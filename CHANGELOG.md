@@ -4,6 +4,7 @@
 - Update TZDB-repository to 2016j [#579]
 
 ### Fixed
+- Regression: Misleading error message [#581]
 - Clarify documentation of AdjustableElement.atFloor() and .atCeiling() [#580]
 - Ambivalence parsing check sometimes faulty [#577]
 - Unicode-BIDI-chars should not be parsed in context of ISO [#574]
