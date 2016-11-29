@@ -2791,7 +2791,7 @@ public final class Moment
                 return context.inZonalView(tzid);
             }
 
-            return context;
+            throw new IllegalArgumentException("Cannot print moment without timezone.");
 
         }
 
@@ -2836,6 +2836,13 @@ public final class Moment
             } catch (ArithmeticException iae) {
                 return null; // out of range
             }
+
+        }
+
+        @Override
+        public int compare(Moment m1, Moment m2) {
+
+            return m1.compareTo(m2);
 
         }
 
