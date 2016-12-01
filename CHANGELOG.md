@@ -4,6 +4,7 @@
 - Update TZDB-repository to 2016j [#579]
 
 ### Fixed
+- Fix for pattern sanity check [#583]
 - Regression: Misleading error message [#581]
 - Clarify documentation of AdjustableElement.atFloor() and .atCeiling() [#580]
 - Ambivalence parsing check sometimes faulty [#577]
