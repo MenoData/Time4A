@@ -60,10 +60,10 @@ public class ApplicationStarter {
 
     //~ Statische Felder/Initialisierungen --------------------------------
 
-    private static final String VERSION = "v3.24-2016i";
+    private static final String VERSION = "v3.25-2016j";
     private static final int RELEASE_YEAR = 2016;
-    private static final int RELEASE_MONTH = 11;
-    private static final int RELEASE_DAY = 3;
+    private static final int RELEASE_MONTH = 12;
+    private static final int RELEASE_DAY = 4;
     private static final String TIME4A = "time4a";
 
     private static final AtomicBoolean PREPARED = new AtomicBoolean(false);
@@ -125,14 +125,13 @@ public class ApplicationStarter {
 //        }
 
         long start = System.nanoTime();
-        Context ctx = context.getApplicationContext();
-        prepareAssets(ctx); // initialize the class AndroidResourceLoader (must be called first)
+
+        prepareAssets(context); // initialize the class AndroidResourceLoader (must be called first)
+        registerReceiver(context.getApplicationContext()); // includes NPE-check
 
         // ensures that class PlainDate is loaded before any further initialization
         PlainDate releaseDate = PlainDate.of(RELEASE_YEAR, RELEASE_MONTH, RELEASE_DAY);
         Log.i(TIME4A, "Starting Time4A (" + VERSION + " published on " + releaseDate +")");
-
-        registerReceiver(ctx);
 
         if (prefetch) {
             final long start2 = System.nanoTime();
@@ -164,28 +163,10 @@ public class ApplicationStarter {
     }
 
     /**
-     * <p>Registers a timezone-change-receiver on given app context. </p>
-     *
-     * @param   context     application context
-     */
-    /*[deutsch]
-     * <p>Registriert einen {@code BroadcastReceiver} f&uuml;r Zeitzonen&auml;nderungen
-     * auf dem angegebenen Anwendungskontext. </p>
-     *
-     * @param   context     application context
-     */
-    public static void registerReceiver(Context context) {
-
-        if (!REGISTERED.getAndSet(true)) {
-            context.registerReceiver(
-                new TimezoneChangedReceiver(),
-                new IntentFilter(Intent.ACTION_TIMEZONE_CHANGED));
-        }
-
-    }
-
-    /**
      * <p>Prepares and optimizes the access to all internal resource files. </p>
+     *
+     * <p>The application parameter should be specified otherwise Time4A will try to
+     * find the assets via the classloader and is likely to fail. </p>
      *
      * @param   application     Android app
      * @since   3.5
@@ -193,12 +174,47 @@ public class ApplicationStarter {
     /*[deutsch]
      * <p>Bereitet den allgemeinen Ressourcenzugriff vor und optimiert ihn. </p>
      *
+     * <p>Der Anwendungskontext sollte angegeben werden, sonst versucht Time4A
+     * die Ressourcen &uuml;ber den {@code Classloader} zu finden, was wahrscheinlich
+     * scheitert. </p>
+     *
      * @param   application     Android app
      * @since   3.5
      */
     public static void prepareResources(Application application) {
 
         prepareAssets(application);
+
+    }
+
+    /**
+     * <p>Registers a timezone-change-receiver on given app context. </p>
+     *
+     * <p>If the context parameter is {@code null} then this method does nothing.
+     * In this case, any change of the system timezone will not be tracked. </p>
+     *
+     * @param   context     application context
+     */
+    /*[deutsch]
+     * <p>Registriert einen {@code BroadcastReceiver} f&uuml;r Zeitzonen&auml;nderungen
+     * auf dem angegebenen Anwendungskontext. </p>
+     *
+     * <p>Wenn der &uuml;bergebene context-Parameter {@code null} ist, macht diese
+     * Methode nichts. Eine &Auml;nderung der System-Zeitzone wird dann nicht
+     * &uuml;berwacht. </p>
+     *
+     * @param   context     application context
+     */
+    public static void registerReceiver(Context context) {
+
+        if ((context != null) && !REGISTERED.getAndSet(true)) {
+            System.setProperty(
+                "net.time4j.allow.system.tz.override",
+                "true");
+            context.registerReceiver(
+                new TimezoneChangedReceiver(),
+                new IntentFilter(Intent.ACTION_TIMEZONE_CHANGED));
+        }
 
     }
 
@@ -221,24 +237,19 @@ public class ApplicationStarter {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            String ref = intent.getStringExtra("time-zone");
 
-            try {
-                TZID tzid = Timezone.of(ref).getID();
-                Timezone.Cache.refresh();
+            // makes Timezone.ofSystem() sensible for updates
+            Timezone.Cache.refresh();
 
-                Log.i(
-                    TIME4A,
-                    "Event ACTION_TIMEZONE_CHANGED received, system timezone changed to: ["
-                        + tzid.canonical()
-                        + "]. Changed android timezone was: ["
-                        + ref
-                        + "]");
-            } catch (IllegalArgumentException iae) {
-                Log.e(
-                    TIME4A,
-                    "Could not recognize timezone id: [" + ref + "]", iae);
-            }
+            // logging
+            Log.i(
+                TIME4A,
+                "Event ACTION_TIMEZONE_CHANGED received, system timezone changed to: ["
+                    + Timezone.ofSystem().getID().canonical()
+                    + "]. Original tz-id reported by Android: ["
+                    + intent.getStringExtra("time-zone")
+                    + "]");
+
         }
 
     }
