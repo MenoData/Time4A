@@ -66,8 +66,8 @@ package net.time4j.tz;
  * zu einem gegebenen Zeitpunkt schon bekannt ist. </p>
  *
  * <p><strong>Provider-spezifische Schl&uuml;ssel</strong> haben den
- * {@link ZoneModelProvider#getName() Namen} des {@code ZoneModelProvider}
- * gefolgt von der Tilde &quot;~&quot; und der normalen kanonischen ID. Diese
+ * {@link ZoneModelProvider#getName() Namen} des {@code ZoneModelProvider} gefolgt
+ * von der Tilde &quot;~&quot; und der normalen kanonischen ID. Diese
  * Form kann verwendet werden, wenn ein registrierter benutzerdefinierter
  * {@link ZoneModelProvider} an Stelle des Standard-Provider f&uuml;r die
  * Suche nach den Zeitzonendaten herangezogen werden soll. Zum Beispiel
