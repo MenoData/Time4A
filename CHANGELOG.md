@@ -1,4 +1,6 @@
-## [v3.25-2016j] not yet released
+## [v3.26-2016?] not yet released
+
+## [v3.25-2016j] published on 2016-12-02
 ### Changed
 - Simplify parsing of trailing characters [#576]
 - Update TZDB-repository to 2016j [#579]
