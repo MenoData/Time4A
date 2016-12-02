@@ -4,11 +4,11 @@
 ### Changed
 - Simplify parsing of trailing characters [#576]
 - Update TZDB-repository to 2016j [#579]
+- Use Android-context directly for resource access [#582]
 
 ### Fixed
 - Error receiving broadcast Intent [#585]
 - Fix for pattern sanity check [#583]
-- Use Android-context directly for resource access [#582]
 - Regression: Misleading error message [#581]
 - Clarify documentation of AdjustableElement.atFloor() and .atCeiling() [#580]
 - Ambivalence parsing check sometimes faulty [#577]
