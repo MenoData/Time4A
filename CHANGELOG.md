@@ -1,4 +1,6 @@
-## [v3.26-2016j] not yet released
+## [v3.26-2017a] not yet released
+
+## [v3.26-2016j] published on 2017-01-03
 ### Added
 - Enable or-logic when parsing durations [#592]
 - Ensure 4 digit-years in date style patterns [#591]
