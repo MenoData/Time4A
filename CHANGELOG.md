@@ -1,7 +1,8 @@
-## [v3.26-2016?] not yet released
+## [v3.26-2016j] not yet released
 ### Added
 - Enable or-logic when parsing durations [#592]
 - Ensure 4 digit-years in date style patterns [#591]
+- Dozenal numbering system [#596]
 - Document how to handle wrong platform tz-data on Android [#589]
 - Make styled formatters sensible for change of locale [#586]
 
