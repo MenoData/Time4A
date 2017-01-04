@@ -1,4 +1,6 @@
-## [v3.26-2017a] not yet released
+## [v3.27-2016j] not yet released
+### Fixed
+- ChronoFormatter.formatToBuffer() should be optimized [#597]
 
 ## [v3.26-2016j] published on 2017-01-03
 ### Added
