@@ -21,7 +21,7 @@ from the Android platform they fail to hold their own i18n-resources. But real-w
 Android platform often use very different text resources and data for world languages, dependent on how up-to-date
 the Android OS-version is. Furthermore, even the newest Android platform does not offer the best available 
 quality of i18n-translations (an example is missing support for localized plural rules in formatting of durations).
-Time4A closes this big gap **supporting actually 80 languages** and has more features than any other date and time
+Time4A closes this big gap **supporting actually 85 languages** and has more features than any other date and time
 library available for the Android platform. Of course, Time4A also supports the **newest timezone data** available
 at [IANA](http://www.iana.org/time-zones). On the other side: If you really want you can even use the platform timezone
 data in parallel. Time4A gives you the freedom which timezone data to use.
@@ -38,7 +38,7 @@ Only two steps are required before coding against the API of Time4A.
 
 ```groovy
 dependencies {
-    compile group: 'net.time4j', name: 'time4j-android', version: '3.26-2016j'
+    compile group: 'net.time4j', name: 'time4j-android', version: '3.27-2016j'
 }
 ```
 
