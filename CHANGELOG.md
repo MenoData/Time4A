@@ -1,4 +1,6 @@
-## [v3.27-2016j] not yet released
+## [v3.27-2017a] not yet released
+
+## [v3.27-2016j] published on 2017-01-08
 ### Added
 - Support for Breton (br), Faroese (fo), Western Frisian (fy), Scottish Gaelic (gd), Luxembourgish (lb) [#599]
 - Reduce buffer allocation when printing numbers [#598]
