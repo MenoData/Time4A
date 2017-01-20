@@ -1,4 +1,6 @@
-## [v3.27-2017a] not yet released
+## [v3.28-2017a] not yet released
+### Added
+- Make parsing of ambivalent zone informations easier [#603]
 
 ## [v3.27-2016j] published on 2017-01-08
 ### Added
