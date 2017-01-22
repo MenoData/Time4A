@@ -2,6 +2,9 @@
 ### Added
 - Make parsing of ambivalent zone informations easier [#603]
 
+### Fixed
+- equals-contract for ChronoFormatter including zone elements broken [#604]
+
 ## [v3.27-2016j] published on 2017-01-08
 ### Added
 - Support for Breton (br), Faroese (fo), Western Frisian (fy), Scottish Gaelic (gd), Luxembourgish (lb) [#599]
