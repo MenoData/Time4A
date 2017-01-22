@@ -1,5 +1,6 @@
 ## [v3.28-2017a] not yet released
 ### Added
+- Duration conversion to clock units including days [#605]
 - Make parsing of ambivalent zone informations easier [#603]
 
 ### Fixed
