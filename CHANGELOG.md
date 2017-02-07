@@ -1,5 +1,8 @@
 ## [v3.28-2017a] not yet released
+
+## [v3.28-2016j] published on 2017-02-07
 ### Added
+- New counting method for class LeapSeconds [#608]
 - Support different time-scales in formatting and parsing moments [#607]
 - Duration conversion to clock units including days [#605]
 - Make parsing of ambivalent zone informations easier [#603]
