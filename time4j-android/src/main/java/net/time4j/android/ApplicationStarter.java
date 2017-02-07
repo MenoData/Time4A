@@ -60,10 +60,10 @@ public class ApplicationStarter {
 
     //~ Statische Felder/Initialisierungen --------------------------------
 
-    private static final String VERSION = "v3.27-2016j";
+    private static final String VERSION = "v3.28-2016j";
     private static final int RELEASE_YEAR = 2017;
-    private static final int RELEASE_MONTH = 1;
-    private static final int RELEASE_DAY = 8;
+    private static final int RELEASE_MONTH = 2;
+    private static final int RELEASE_DAY = 7;
     private static final String TIME4A = "time4a";
 
     private static final AtomicBoolean PREPARED = new AtomicBoolean(false);
@@ -126,7 +126,7 @@ public class ApplicationStarter {
 
         long start = System.nanoTime();
 
-        prepareAssets(context); // initialize the class AndroidResourceLoader (must be called first)
+        prepareAssets(context, null); // initialize AndroidResourceLoader (must be called first)
         registerReceiver(context.getApplicationContext()); // includes NPE-check
 
         // ensures that class PlainDate is loaded before any further initialization
@@ -170,6 +170,7 @@ public class ApplicationStarter {
      *
      * @param   application     Android app
      * @since   3.5
+     * @deprecated  Use {@link #prepareAssets(Context, AssetLocation)}
      */
     /*[deutsch]
      * <p>Bereitet den allgemeinen Ressourcenzugriff vor und optimiert ihn. </p>
@@ -180,10 +181,46 @@ public class ApplicationStarter {
      *
      * @param   application     Android app
      * @since   3.5
+     * @deprecated  Use {@link #prepareAssets(Context, AssetLocation)}
      */
+    @Deprecated
     public static void prepareResources(Application application) {
 
-        prepareAssets(application);
+        prepareAssets(application, null);
+
+    }
+
+    /**
+     * <p>Prepares and optimizes the access to all internal asset files. </p>
+     *
+     * <p>The context parameter must be specified while the second parameter
+     * is optional. </p>
+     *
+     * @param   context         Android context
+     * @param   assetLocation   environment of assets (optional, maybe {@code null})
+     * @since   3.28
+     */
+    /*[deutsch]
+     * <p>Bereitet den allgemeinen <i>asset</i>-Zugriff vor und optimiert ihn. </p>
+     *
+     * <p>Der Android-Kontext mu&szlig; angegeben werden, w&auml;hrend der zweite
+     * Parameter optional ist. </p>
+     *
+     * @param   context         Android context
+     * @param   assetLocation   environment of assets (optional, maybe {@code null})
+     * @since   3.28
+     */
+    public static void prepareAssets(
+        Context context,
+        AssetLocation assetLocation
+    ) {
+
+        if (!PREPARED.getAndSet(true)) {
+            System.setProperty(
+                "net.time4j.base.ResourceLoader",
+                "net.time4j.android.spi.AndroidResourceLoader");
+            ((AndroidResourceLoader) ResourceLoader.getInstance()).init(context, assetLocation);
+        }
 
     }
 
@@ -214,17 +251,6 @@ public class ApplicationStarter {
             context.registerReceiver(
                 new TimezoneChangedReceiver(),
                 new IntentFilter(Intent.ACTION_TIMEZONE_CHANGED));
-        }
-
-    }
-
-    private static void prepareAssets(Context context) {
-
-        if (!PREPARED.getAndSet(true)) {
-            System.setProperty(
-                "net.time4j.base.ResourceLoader",
-                "net.time4j.android.spi.AndroidResourceLoader");
-            ((AndroidResourceLoader) ResourceLoader.getInstance()).init(context);
         }
 
     }

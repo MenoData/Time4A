@@ -1,6 +1,6 @@
 /*
  * -----------------------------------------------------------------------
- * Copyright © 2013-2016 Meno Hochschild, <http://www.menodata.de/>
+ * Copyright © 2013-2017 Meno Hochschild, <http://www.menodata.de/>
  * -----------------------------------------------------------------------
  * This file (AndroidResourceLoader.java) is part of project Time4J.
  *
@@ -24,6 +24,7 @@ package net.time4j.android.spi;
 import android.content.Context;
 import android.text.format.DateFormat;
 
+import net.time4j.android.AssetLocation;
 import net.time4j.base.ResourceLoader;
 import net.time4j.calendar.service.GenericTextProviderSPI;
 import net.time4j.engine.ChronoExtension;
@@ -107,18 +108,28 @@ public class AndroidResourceLoader
     //~ Instanzvariablen --------------------------------------------------
 
     private Context context = null;
+    private AssetLocation assetLocation = null;
     private List<FormatPatternProvider> patterns = Collections.emptyList();
 
     //~ Methoden ----------------------------------------------------------
 
     /**
-     * Sets the application context.
+     * Sets the application context and the asset environment.
      *
-     * @param   context     Android app or context
+     * @param   context         Android app or context
+     * @param   assetLocation   asset environment (optional)
      */
-    public void init(Context context) {
+    public void init(
+        Context context,
+        AssetLocation assetLocation
+    ) {
+
+        if (context == null) {
+            throw new NullPointerException("Missing Android-context.");
+        }
 
         this.context = context;
+        this.assetLocation = assetLocation;
 
         FormatPatternProvider p = new AndroidFormatPatterns();
         this.patterns = Collections.singletonList(p);
@@ -164,10 +175,15 @@ public class AndroidResourceLoader
         try {
             if (uri == null) {
                 return null;
-            } else if (uri.isAbsolute() || (this.context == null)) {
+            } else if (uri.isAbsolute()) {
                 URLConnection conn = uri.toURL().openConnection();
                 conn.setUseCaches(false);
                 return conn.getInputStream();
+            } else if (this.assetLocation != null) {
+                return this.assetLocation.open(uri.toString());
+            } else if (context == null) {
+                throw new IllegalStateException(
+                    "'ApplicationStarter.initialize(context)' must be called first at app start.");
             } else {
                 return this.context.getAssets().open(uri.toString());
             }
