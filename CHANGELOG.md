@@ -1,4 +1,6 @@
-## [v3.28-2017a] not yet released
+## [v3.29-2017a] not yet released
+### Added
+- More convenient access to platform timezone data [#616]
 
 ## [v3.28-2016j] published on 2017-02-07
 ### Added
