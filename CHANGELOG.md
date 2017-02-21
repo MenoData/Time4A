@@ -2,6 +2,9 @@
 ### Added
 - More convenient access to platform timezone data [#616]
 
+### Fixed
+- Improve and fix parsing of decimal elements [#617]
+
 ## [v3.28-2016j] published on 2017-02-07
 ### Added
 - New counting method for class LeapSeconds [#608]
