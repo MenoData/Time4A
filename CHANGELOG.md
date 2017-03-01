@@ -1,9 +1,14 @@
-## [v3.29-2017a] not yet released
+## [v3.30-2017?] not yet released
+
+## [v3.29-2017a] published on 2017-03-01
 ### Added
 - More convenient access to platform timezone data [#616]
 
 ### Fixed
 - Improve and fix parsing of decimal elements [#617]
+
+### Changed
+- Update TZDATA to version 2017a [#619]
 
 ## [v3.28-2016j] published on 2017-02-07
 ### Added
