@@ -13,7 +13,7 @@ ext {
     siteUrl = 'https://github.com/menodata/Time4A'
     gitUrl = 'https://github.com/menodata/Time4A.git'
 
-    libraryVersion = '3.28-2016j'
+    libraryVersion = '3.29-2017a'
 
     developerId = 'mhochschild'
     developerName = 'Meno Hochschild'
