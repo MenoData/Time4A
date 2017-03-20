@@ -7,6 +7,9 @@
 ### Fixed
 - ZonalDateTime.toString() should not contain UTC-literal [#623]
 
+### Changed
+- Update TZDATA to 2017b [#624]
+
 ## [v3.29-2017a] published on 2017-03-01
 ### Added
 - More convenient access to platform timezone data [#616]
