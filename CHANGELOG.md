@@ -1,4 +1,6 @@
-## [v3.30-2017b] not yet released
+## [v3.31-2017?] not yet released
+
+## [v3.30-2017b] published on 2017-03-21
 ### Added
 - Make zone offset calculation for geo-longitude more precise [#622]
 - Enable text-lookup for non-enum elements in formatting [#618]
