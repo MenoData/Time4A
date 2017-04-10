@@ -1,5 +1,6 @@
 ## [v3.31-2017?] not yet released
 ### Fixed
+- Clarify usage of Ethiopian eras [#636]
 - Roundtrip of print/parse during zone offset overlap fails [#635]
 - Converting geo longitude to ZonalOffset crashes [#632]
 
