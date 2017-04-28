@@ -18,6 +18,7 @@ import net.time4j.SystemClock;
 import net.time4j.Weekmodel;
 import net.time4j.calendar.EthiopianCalendar;
 import net.time4j.calendar.HijriCalendar;
+import net.time4j.calendar.JapaneseCalendar;
 import net.time4j.calendar.PersianCalendar;
 import net.time4j.engine.StartOfDay;
 import net.time4j.format.CalendarText;
@@ -67,6 +68,9 @@ public class MainActivity extends Activity {
         ChronoFormatter<PersianCalendar> pf =
                 ChronoFormatter.setUp(PersianCalendar.class, Locale.ENGLISH)
                         .addPattern("MMMM d, yyyy G", PatternType.NON_ISO_DATE).build();
+        ChronoFormatter<JapaneseCalendar> jf =
+                ChronoFormatter.setUp(JapaneseCalendar.class, Locale.ENGLISH)
+                        .addPattern("MMMM d, G y", PatternType.NON_ISO_DATE).build();
         ChronoFormatter<HijriCalendar> hf =
                 ChronoFormatter.setUp(HijriCalendar.class, Locale.ENGLISH)
                 .addPattern("MM/dd/yyyy", PatternType.NON_ISO_DATE).build();
@@ -129,6 +133,7 @@ public class MainActivity extends Activity {
                 + "\n=> Hijri-toString=" + hijriDate
                 + "\n=> Hijri-formatted=" + hf.format(hijriDate)
                 + "\n=> Persian-today=" + pf.format(hijriDate.transform(PersianCalendar.class))
+                + "\n=> Japanese-today=" + jf.format(hijriDate.transform(JapaneseCalendar.class))
                 + "\n=> Ethiopian moment"
                 + "\n(parsed from 'Amete Mihret, 2008-03-09 03:45 PM +03:00')=" + ethio;
     }
