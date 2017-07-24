@@ -24,6 +24,7 @@ package net.time4j.format.expert;
 import net.time4j.engine.AttributeQuery;
 import net.time4j.engine.ChronoDisplay;
 import net.time4j.engine.ChronoElement;
+import net.time4j.engine.ChronoException;
 
 import java.io.IOException;
 import java.util.Set;
@@ -49,10 +50,12 @@ interface FormatProcessor<V> {
      * @param   attributes      control attributes including sectional attributes
      * @param   positions       positions of elements in text (optional)
      * @param   quickPath       hint for using quick path
+     * @return  count of printed characters or {@code Integer.MAX_VALUE} if unknown or {@code -1} if not successful
      * @throws  IllegalArgumentException if the object is not formattable
+     * @throws  ChronoException if the object does not contain the element in question
      * @throws  IOException if writing into buffer fails
      */
-    void print( // TODO: return count of printed characters???
+    int print(
         ChronoDisplay formattable,
         Appendable buffer,
         AttributeQuery attributes,
