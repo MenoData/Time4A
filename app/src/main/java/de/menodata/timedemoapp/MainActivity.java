@@ -11,6 +11,7 @@ import android.widget.TextView;
 import net.time4j.ClockUnit;
 import net.time4j.Duration;
 import net.time4j.Moment;
+import net.time4j.PlainDate;
 import net.time4j.PlainTime;
 import net.time4j.PlainTimestamp;
 import net.time4j.PrettyTime;
@@ -20,6 +21,8 @@ import net.time4j.calendar.EthiopianCalendar;
 import net.time4j.calendar.HijriCalendar;
 import net.time4j.calendar.JapaneseCalendar;
 import net.time4j.calendar.PersianCalendar;
+import net.time4j.calendar.frenchrev.FrenchRepublicanCalendar;
+import net.time4j.engine.CalendarDays;
 import net.time4j.engine.StartOfDay;
 import net.time4j.format.CalendarText;
 import net.time4j.format.DisplayMode;
@@ -67,13 +70,13 @@ public class MainActivity extends Activity {
 
         ChronoFormatter<PersianCalendar> pf =
                 ChronoFormatter.setUp(PersianCalendar.class, Locale.ENGLISH)
-                        .addPattern("MMMM d, yyyy G", PatternType.NON_ISO_DATE).build();
+                        .addPattern("MMMM d, yyyy G", PatternType.CLDR_DATE).build();
         ChronoFormatter<JapaneseCalendar> jf =
                 ChronoFormatter.setUp(JapaneseCalendar.class, Locale.ENGLISH)
-                        .addPattern("MMMM d, G y", PatternType.NON_ISO_DATE).build();
+                        .addPattern("MMMM d, G y", PatternType.CLDR_DATE).build();
         ChronoFormatter<HijriCalendar> hf =
                 ChronoFormatter.setUp(HijriCalendar.class, Locale.ENGLISH)
-                .addPattern("MM/dd/yyyy", PatternType.NON_ISO_DATE).build();
+                .addPattern("MM/dd/yyyy", PatternType.CLDR_DATE).build();
         HijriCalendar hijriDate =
                 SystemClock.inLocalView().now(
                         HijriCalendar.family(), HijriCalendar.VARIANT_ICU4J, StartOfDay.EVENING
@@ -91,6 +94,14 @@ public class MainActivity extends Activity {
         } catch (ParseException pe) {
             throw new IllegalStateException(pe);
         }
+        ChronoFormatter<FrenchRepublicanCalendar> ff =
+                ChronoFormatter.ofPattern(
+                        "D. MMMM', an 'Y|SSSS', an 'Y",
+                        PatternType.DYNAMIC,
+                        Locale.FRENCH,
+                        FrenchRepublicanCalendar.axis());
+        FrenchRepublicanCalendar fcal =
+                PlainDate.of(2018, 9, 23).transform(FrenchRepublicanCalendar.class);
 
         Moment moment = SystemClock.currentMoment();
 
@@ -135,7 +146,10 @@ public class MainActivity extends Activity {
                 + "\n=> Persian-today=" + pf.format(hijriDate.transform(PersianCalendar.class))
                 + "\n=> Japanese-today=" + jf.format(hijriDate.transform(JapaneseCalendar.class))
                 + "\n=> Ethiopian moment"
-                + "\n(parsed from 'Amete Mihret, 2008-03-09 03:45 PM +03:00')=" + ethio;
+                + "\n(parsed from 'Amete Mihret, 2008-03-09 03:45 PM +03:00')=" + ethio
+                + "\n=> French-revolutionary (2018-09-23)=" + ff.format(fcal)
+                + "\n=> French-revolutionary (2018-09-22)=" + ff.format(fcal.minus(CalendarDays.ONE))
+                ;
     }
 
 }
