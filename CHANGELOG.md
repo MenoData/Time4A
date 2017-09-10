@@ -1,4 +1,6 @@
-## [v3.34-2017?] not yet released
+## [v3.3?-2017?] not yet released
+
+## [v3.34-2017b] published on 2017-09-10
 ### Added
 - Support for sunrise / sunset - calculations [#663]
 - Static validation methods for calendars [#666]
