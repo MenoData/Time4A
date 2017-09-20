@@ -1,4 +1,7 @@
 ## [v3.35-2017?] not yet released
+### Changed
+- Changes to CalendarUnit.keepingEndOfMonth() and atEndOfMonth() [#679]
+
 ### Fixed
 - Duration parser tolerates trailing chars [#682]
 
