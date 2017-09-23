@@ -3,6 +3,7 @@
 - Changes to CalendarUnit.keepingEndOfMonth() and atEndOfMonth() [#679]
 
 ### Fixed
+- Zone name parsing should use string-prefix-matching [#686]
 - Duration parser tolerates trailing chars [#682]
 
 ## [v3.34-2017b] published on 2017-09-10
