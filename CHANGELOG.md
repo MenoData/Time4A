@@ -1,4 +1,7 @@
 ## [v3.35-2017?] not yet released
+### Added
+- Unit simulating Joda-behaviour for month-based durations [#687]
+
 ### Changed
 - Changes to CalendarUnit.keepingEndOfMonth() and atEndOfMonth() [#679]
 
