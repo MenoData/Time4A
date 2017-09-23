@@ -3,6 +3,7 @@
 - Unit simulating Joda-behaviour for month-based durations [#687]
 
 ### Changed
+- Parsing of "AM" or "PM" for all locales [#684]
 - Changes to CalendarUnit.keepingEndOfMonth() and atEndOfMonth() [#679]
 
 ### Fixed
