@@ -1,6 +1,7 @@
 ## [v3.36-2017?] not yet released
 ### Added
 - Moon phases [#676]
+- Static factory ChronoHistory.from(variantString) [#697]
 - Julian centuries with J2000-epoch [#693]
 
 ### Changed
