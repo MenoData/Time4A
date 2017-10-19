@@ -2,6 +2,7 @@
 ### Added
 - Moon phases [#676]
 - Historic calendar [#698]
+- New SolarTime.Calculator based on Dershowitz/Reingold [#701]
 - Static factory ChronoHistory.from(variantString) [#697]
 - Julian centuries with J2000-epoch [#693]
 
