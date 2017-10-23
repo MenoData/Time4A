@@ -1,4 +1,6 @@
-## [v3.36-2017c] not yet released
+## [v3.37-2017?] not yet released
+
+## [v3.36-2017c] published on 2017-10-23
 ### Added
 - Moon phases [#676]
 - Illumination of moon [#702]
@@ -8,6 +10,7 @@
 - Julian centuries with J2000-epoch [#693]
 
 ### Changed
+- Update to TZDB-version 2017c [#703]
 - TimeLine-enhancement [#675]
 - German names of French Republican calendar months [#692]
 - Prevent calling some SolarTime.Builder-methods twice [#691]
