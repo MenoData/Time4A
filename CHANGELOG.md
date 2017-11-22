@@ -8,6 +8,9 @@
 - More flexible numberings of enums in formatting [#706]
 - Update to CLDR v32 [#690]
 
+### Fixed
+- Fix and optimize proguard configuration [#710]
+
 ## [v3.36-2017c] published on 2017-10-23
 ### Added
 - Moon phases [#676]
