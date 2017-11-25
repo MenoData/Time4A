@@ -9,6 +9,9 @@
 - Update to CLDR v32 [#690]
 - Conversions to/from old java.util.Calendar + java.util.TimeZone [#705]
 
+### Changed
+- Optimize ZoneNameProviderSPI [#713]
+
 ### Fixed
 - Fix and optimize proguard configuration [#710]
 
