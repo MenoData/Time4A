@@ -14,7 +14,13 @@
 -keepnames class net.time4j.tz.olson.INDIAN
 -keepnames class net.time4j.tz.olson.PACIFIC
 
--keep class **.SPX
+-keep class net.time4j.SPX
+-keep class net.time4j.tz.SPX
+-keep class net.time4j.tz.model.SPX
+-keepnames class net.time4j.history.SPX
+-keepnames class net.time4j.calendar.SPX
+-keepnames class net.time4j.calendar.frenchrev.SPX
+
 -keepclassmembers class * implements java.io.Serializable {
     static final long serialVersionUID;
     !static !transient <fields>;
