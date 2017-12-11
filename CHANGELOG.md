@@ -1,5 +1,6 @@
 ## [v3.38-2017?] not yet released
 ### Added
+- Positions of Sun and Moon in terms of right ascension and declination [#716]
 - Make right ascension of sun accessible [#715]
 
 ### Changed/Deprecated
