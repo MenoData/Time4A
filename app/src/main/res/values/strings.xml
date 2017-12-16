@@ -1,8 +1,0 @@
-<resources>
-    <string name="app_name">TimeDemoApp</string>
-    <string name="title_activity_main">Time-Demo</string>
-
-    <string name="hello_world">\n\n\nHello world!</string>
-    <string name="action_settings">Settings</string>
-    <string name="refresh">Refresh</string>
-</resources>
