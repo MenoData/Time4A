@@ -11,8 +11,10 @@
 - Four methods in SolarTime loose the day information [#724]
 
 ### Fixed
+- Duplicate Android resource @string/app_name and application@label [#726]
 - StdSolarCalculator.CC has integer-division-error [#725]
 - Class SolarTime normally expects LMT-dates not zoned dates [#719]
+- JulianDay misses definition of serialVersionUID [#727]
 
 ## [v3.37-2017c] published on 2017-11-26
 ### Added
