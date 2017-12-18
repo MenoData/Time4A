@@ -1,4 +1,6 @@
-## [v3.38-2017?] not yet released
+## [v3.39-2017?] not yet released
+
+## [v3.38-2017c] published on 2017-12-18
 ### Added
 - Moon rise/set [#704]
 - Calculation for azimuth/elevation of Sun and Moon [#723]

@@ -19,6 +19,8 @@ import net.time4j.calendar.HebrewCalendar;
 import net.time4j.calendar.HijriCalendar;
 import net.time4j.calendar.JapaneseCalendar;
 import net.time4j.calendar.PersianCalendar;
+import net.time4j.calendar.astro.LunarTime;
+import net.time4j.calendar.astro.SolarTime;
 import net.time4j.calendar.frenchrev.FrenchRepublicanCalendar;
 import net.time4j.engine.CalendarDays;
 import net.time4j.engine.StartOfDay;
@@ -27,6 +29,7 @@ import net.time4j.format.DisplayMode;
 import net.time4j.format.TextWidth;
 import net.time4j.format.expert.ChronoFormatter;
 import net.time4j.format.expert.PatternType;
+import net.time4j.tz.TZID;
 import net.time4j.tz.Timezone;
 import net.time4j.tz.olson.EUROPE;
 
@@ -97,6 +100,20 @@ public class TimeDemoApp
                         HebrewCalendar.axis());
 
         Moment moment = SystemClock.currentMoment();
+        TZID hhZone = Timezone.of("Europe/Berlin").getID();
+        PlainDate today = moment.toZonalTimestamp(hhZone).getCalendarDate();
+        SolarTime.Sunshine hhSun =
+                SolarTime.ofLocation()
+                        .northernLatitude(53, 33, 0)
+                        .easternLongitude(10, 0, 0)
+                        .build()
+                        .sunshine(hhZone).apply(today);
+        LunarTime.Moonlight hhMoon =
+                LunarTime.ofLocation(hhZone)
+                        .northernLatitude(53, 33, 0)
+                        .easternLongitude(10, 0, 0)
+                        .build()
+                        .on(today);
 
         return "\n\n\n\n"
                 + "=> Current time (UTC): " + moment.toString()
@@ -119,11 +136,11 @@ public class TimeDemoApp
                 + "\n"
                 + "\n=> Example for Austrian timestamp: "
                 + ChronoFormatter.ofMomentPattern(
-                "d. MMMM uuuu GGGG h:mm BBBB z",
-                PatternType.CLDR,
-                new Locale("de", "AT"),
-                EUROPE.BERLIN
-        )
+                        "d. MMMM uuuu GGGG h:mm BBBB z",
+                        PatternType.CLDR,
+                        new Locale("de", "AT"),
+                        EUROPE.BERLIN
+                )
                 .withAlternativeEraNames()
                 .format(PlainTimestamp.of(2015, 1, 27, 14, 15).inStdTimezone())
                 + "\n"
@@ -131,6 +148,10 @@ public class TimeDemoApp
                 + "\n"
                 + "\n=> TZDB-version: " + Timezone.getVersion("TZDB")
                 + "\n=> ZONE-PROVIDERS: " + Timezone.getProviderInfo()
+                + "\n=> sunrise (HH): " + hhSun.startLocal()
+                + "\n=> sunset (HH): " + hhSun.endLocal()
+                + "\n=> moonrise (HH): " + hhMoon.moonriseLocal()
+                + "\n=> moonset (HH): " + hhMoon.moonsetLocal()
                 + "\n"
                 + "\n=> Duration=" + formattedDuration
                 + "\n"
