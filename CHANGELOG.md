@@ -1,7 +1,10 @@
-## [v3.39-2017?] not yet released
+## [v3.39-2018a] not yet released
 ### Added
 - Extra features for StdSolarCalculator.CC [#731]
 - Search for moon phase at or after a moment [#730]
+
+### Changed
+- Allow negative DST-offsets [#735]
 
 ### Fixed
 - date.getMaximum(<week-related-element>) can crash near end of timeline [#732]
