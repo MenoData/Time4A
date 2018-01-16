@@ -1,9 +1,12 @@
-## [v3.39-2018a] not yet released
+## [v3.40-2018?] not yet released
+
+## [v3.39-2018a] published on 2018-01-16
 ### Added
 - Extra features for StdSolarCalculator.CC [#731]
 - Search for moon phase at or after a moment [#730]
 
 ### Changed
+- Update timezone-data to v2018a [#736]
 - Allow negative DST-offsets [#735]
 
 ### Fixed

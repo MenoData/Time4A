@@ -1,6 +1,6 @@
 /*
  * -----------------------------------------------------------------------
- * Copyright © 2013-2017 Meno Hochschild, <http://www.menodata.de/>
+ * Copyright © 2013-2018 Meno Hochschild, <http://www.menodata.de/>
  * -----------------------------------------------------------------------
  * This file (ApplicationStarter.java) is part of project Time4J.
  *
@@ -60,10 +60,10 @@ public class ApplicationStarter {
 
     //~ Statische Felder/Initialisierungen --------------------------------
 
-    private static final String VERSION = "v3.38-2017c";
-    private static final int RELEASE_YEAR = 2017;
-    private static final int RELEASE_MONTH = 12;
-    private static final int RELEASE_DAY = 18;
+    private static final String VERSION = "v3.39-2018a";
+    private static final int RELEASE_YEAR = 2018;
+    private static final int RELEASE_MONTH = 1;
+    private static final int RELEASE_DAY = 16;
     private static final String TIME4A = "time4a";
 
     private static final AtomicBoolean PREPARED = new AtomicBoolean(false);

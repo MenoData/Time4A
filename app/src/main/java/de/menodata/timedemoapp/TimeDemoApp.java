@@ -148,6 +148,7 @@ public class TimeDemoApp
                 + "\n"
                 + "\n=> TZDB-version: " + Timezone.getVersion("TZDB")
                 + "\n=> ZONE-PROVIDERS: " + Timezone.getProviderInfo()
+                + "\n=> Europe/Dublin-DST: " + Timezone.of("Europe/Dublin").getDaylightSavingOffset(moment)
                 + "\n=> sunrise (HH): " + hhSun.startLocal()
                 + "\n=> sunset (HH): " + hhSun.endLocal()
                 + "\n=> moonrise (HH): " + hhMoon.moonriseLocal()
