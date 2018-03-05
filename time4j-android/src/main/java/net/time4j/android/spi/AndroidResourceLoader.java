@@ -27,6 +27,7 @@ import android.text.format.DateFormat;
 import net.time4j.android.AssetLocation;
 import net.time4j.base.ResourceLoader;
 import net.time4j.calendar.service.GenericTextProviderSPI;
+import net.time4j.calendar.service.KoreanExtension;
 import net.time4j.engine.ChronoExtension;
 import net.time4j.format.DisplayMode;
 import net.time4j.format.FormatEngine;
@@ -529,8 +530,7 @@ public class AndroidResourceLoader
             PluralProvider pluralProvider = new PluralProviderSPI();
             PLURALS = Collections.singleton(pluralProvider);
 
-            ChronoExtension historic = new HistoricExtension();
-            EXTENSIONS = Collections.singleton(historic);
+            EXTENSIONS = Arrays.asList(new HistoricExtension(), new KoreanExtension());
         }
 
     }

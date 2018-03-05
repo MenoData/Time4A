@@ -14,10 +14,12 @@ import net.time4j.PrettyTime;
 import net.time4j.SystemClock;
 import net.time4j.Weekmodel;
 import net.time4j.android.TimeApplication;
+import net.time4j.calendar.ChineseCalendar;
 import net.time4j.calendar.EthiopianCalendar;
 import net.time4j.calendar.HebrewCalendar;
 import net.time4j.calendar.HijriCalendar;
 import net.time4j.calendar.JapaneseCalendar;
+import net.time4j.calendar.KoreanCalendar;
 import net.time4j.calendar.PersianCalendar;
 import net.time4j.calendar.astro.LunarTime;
 import net.time4j.calendar.astro.SolarTime;
@@ -57,6 +59,7 @@ public class TimeDemoApp
         Duration<?> dur = Duration.of(337540, ClockUnit.SECONDS).with(Duration.STD_CLOCK_PERIOD);
         String formattedDuration = PrettyTime.of(Locale.FRANCE).print(dur, TextWidth.WIDE);
 
+        int dangiYear = PlainDate.of(2018, 1, 1).get(KoreanCalendar.YEAR_OF_ERA);
         ChronoFormatter<PersianCalendar> pf =
                 ChronoFormatter.setUp(PersianCalendar.class, Locale.ENGLISH)
                         .addPattern("MMMM d, yyyy G", PatternType.CLDR_DATE).build();
@@ -98,6 +101,9 @@ public class TimeDemoApp
                         PatternType.CLDR_DATE,
                         Locale.US,
                         HebrewCalendar.axis());
+
+        ChronoFormatter<ChineseCalendar> fc = // example: 2018戊戌年正月15星期五
+                ChronoFormatter.ofStyle(DisplayMode.FULL, Locale.CHINESE, ChineseCalendar.axis());
 
         Moment moment = SystemClock.currentMoment();
         TZID hhZone = Timezone.of("Europe/Berlin").getID();
@@ -165,6 +171,8 @@ public class TimeDemoApp
                 + "\n(parsed from 'Amete Mihret, 2008-03-09 03:45 PM +03:00')=" + ethio
                 + "\n=> French-revolutionary (2018-09-23)=" + ff.format(fcal)
                 + "\n=> French-revolutionary (2018-09-22)=" + ff.format(fcal.minus(CalendarDays.ONE))
+                + "\n=> Dangi year (2018)=" + dangiYear
+                + "\n=> Chinese-today=" + fc.format(ChineseCalendar.nowInSystemTime())
                 ;
     }
 
