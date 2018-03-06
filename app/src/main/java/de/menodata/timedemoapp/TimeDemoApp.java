@@ -60,6 +60,12 @@ public class TimeDemoApp
         String formattedDuration = PrettyTime.of(Locale.FRANCE).print(dur, TextWidth.WIDE);
 
         int dangiYear = PlainDate.of(2018, 1, 1).get(KoreanCalendar.YEAR_OF_ERA);
+        ChronoFormatter<PlainDate> gregKorean =
+                ChronoFormatter.setUp(PlainDate.axis(), Locale.ROOT)
+                        .addPattern("dd.MM.yyyy (", PatternType.CLDR)
+                        .addFixedInteger(KoreanCalendar.YEAR_OF_ERA, 4) // extension test
+                        .addLiteral(")")
+                        .build();
         ChronoFormatter<PersianCalendar> pf =
                 ChronoFormatter.setUp(PersianCalendar.class, Locale.ENGLISH)
                         .addPattern("MMMM d, yyyy G", PatternType.CLDR_DATE).build();
@@ -172,6 +178,7 @@ public class TimeDemoApp
                 + "\n=> French-revolutionary (2018-09-23)=" + ff.format(fcal)
                 + "\n=> French-revolutionary (2018-09-22)=" + ff.format(fcal.minus(CalendarDays.ONE))
                 + "\n=> Dangi year (2018)=" + dangiYear
+                + "\n=> Gregorian/Dangi date=" + gregKorean.format(PlainDate.nowInSystemTime())
                 + "\n=> Chinese-today=" + fc.format(ChineseCalendar.nowInSystemTime())
                 ;
     }
