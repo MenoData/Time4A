@@ -1,6 +1,6 @@
 /*
  * -----------------------------------------------------------------------
- * Copyright © 2013-2017 Meno Hochschild, <http://www.menodata.de/>
+ * Copyright © 2013-2018 Meno Hochschild, <http://www.menodata.de/>
  * -----------------------------------------------------------------------
  * This file (JulianDay.java) is part of project Time4J.
  *
@@ -22,10 +22,12 @@
 package net.time4j.calendar.astro;
 
 import net.time4j.Moment;
+import net.time4j.PlainDate;
 import net.time4j.PlainTime;
 import net.time4j.base.MathUtils;
 import net.time4j.engine.CalendarDate;
 import net.time4j.engine.EpochDays;
+import net.time4j.scale.LeapSeconds;
 import net.time4j.scale.TimeScale;
 import net.time4j.tz.ZonalOffset;
 
@@ -522,9 +524,21 @@ public final class JulianDay
     public Moment toMoment() {
 
         double secs = this.value * DAY_IN_SECONDS;
-        long elapsed = (long) secs;
+        TimeScale ts = this.scale;
+
+        if (!LeapSeconds.getInstance().isEnabled() && (ts != TimeScale.POSIX)) {
+            if (ts == TimeScale.TT) {
+                PlainDate d = PlainDate.of((long) Math.floor(this.getMJD()), EpochDays.MODIFIED_JULIAN_DATE);
+                secs -= TimeScale.deltaT(d.getYear(), d.getMonth());
+            }
+            secs += (DAY_IN_SECONDS * 730);
+            ts = TimeScale.POSIX;
+        }
+
+        long elapsed = MathUtils.safeSubtract((long) secs, jdOffset(ts));
         int nano = (int) ((secs - Math.floor(secs)) * MRD);
-        return Moment.of(MathUtils.safeSubtract(elapsed, jdOffset(this.scale)), nano, this.scale);
+
+        return Moment.of(elapsed, nano, ts);
 
     }
 
