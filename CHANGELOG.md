@@ -1,8 +1,11 @@
-## [v3.41-2018?] not yet released
+## [v3.41-2018d] not yet released
 ### Added
 - Normalization of timezone identifiers [#756]
 - Support Asturian language (ISO-639: ast) [#757]
 - Convenience week elements for Hebrew calendar [#758]
+
+### Changed
+- Update to TZDB-version 2018d [#762]
 
 ### Fixed
 - Make astronomical calculations possible with leap seconds disabled [#761]
