@@ -1,4 +1,6 @@
-## [v3.41-2018d] not yet released
+## [v3.42-2018?] not yet released
+
+## [v3.41-2018d] published on 2018-03-25
 ### Added
 - Normalization of timezone identifiers [#756]
 - Support Asturian language (ISO-639: ast) [#757]
