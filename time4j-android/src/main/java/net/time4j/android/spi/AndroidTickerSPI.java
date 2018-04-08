@@ -1,6 +1,6 @@
 /*
  * -----------------------------------------------------------------------
- * Copyright © 2013-2015 Meno Hochschild, <http://www.menodata.de/>
+ * Copyright © 2013-2018 Meno Hochschild, <http://www.menodata.de/>
  * -----------------------------------------------------------------------
  * This file (AndroidTickerSPI.java) is part of project Time4J.
  *
@@ -42,7 +42,7 @@ class AndroidTickerSPI
     private static final Class[] EMPTY_PARAMS = new Class[0];
     private static final Object[] EMPTY_ARGS = new Object[0];
 
-    private static final Method ANDROID;
+    private static final Method ANDROID; // available if API level is 17 or higher
 
     static {
         Method method;
