@@ -1,4 +1,6 @@
 ## [v3.42-2018?] not yet released
+### Added
+- New interface describing equatorial coordinates [#764]
 
 ## [v3.41-2018d] published on 2018-03-25
 ### Added
