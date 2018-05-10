@@ -1,7 +1,10 @@
-## [v3.42-2018?] not yet released
+## [v3.42-2018e] not yet released
 ### Added
 - Zodiac constellations and signs [#765]
 - New interface describing equatorial coordinates [#764]
+
+### Changed
+- Update to TZDB-version 2018e [#773]
 
 ### Deprecated
 - Replace/Remove `SolarTime.Calculator.declination(double)` [#772]
