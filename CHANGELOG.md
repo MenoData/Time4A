@@ -1,6 +1,13 @@
 ## [v3.42-2018?] not yet released
 ### Added
+- Zodiac constellations and signs [#765]
 - New interface describing equatorial coordinates [#764]
+
+### Deprecated
+- Replace/Remove `SolarTime.Calculator.declination(double)` [#772]
+
+### Fixed
+- Right ascension of moon position should be in range 0-360 [#770]
 
 ## [v3.41-2018d] published on 2018-03-25
 ### Added
