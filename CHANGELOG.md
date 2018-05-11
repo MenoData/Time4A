@@ -1,4 +1,6 @@
-## [v3.42-2018e] not yet released
+## [v3.43-2018?] not yet released
+
+## [v3.42-2018e] published on 2018-05-11
 ### Added
 - Zodiac constellations and signs [#765]
 - New interface describing equatorial coordinates [#764]
