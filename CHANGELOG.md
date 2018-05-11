@@ -5,6 +5,7 @@
 
 ### Changed
 - Update to TZDB-version 2018e [#773]
+- Update some resources to CLDR 33 [#774]
 
 ### Deprecated
 - Replace/Remove `SolarTime.Calculator.declination(double)` [#772]
