@@ -141,12 +141,14 @@ public class ApplicationStarter {
                     public void run() {
                         DisplayMode style = DisplayMode.FULL;
                         TZID tzid = Timezone.ofSystem().getID();
+                        Locale sysloc = Locale.getDefault();
+                        Log.i(TIME4A, "System locale at start: " + sysloc);
                         Log.i(
                             TIME4A,
                             ChronoFormatter.ofMomentStyle(
                                 style,
                                 style,
-                                Locale.getDefault(),
+                                sysloc,
                                 tzid
                             ).format(SystemClock.currentMoment())
                         );
