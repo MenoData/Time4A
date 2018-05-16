@@ -2251,8 +2251,7 @@ public enum PatternType
                         builder.addFixedNumerical(enumElement, 2);
                     }
                 } else {
-                    builder.startSection(
-                        DualFormatElement.COUNT_OF_PATTERN_SYMBOLS, Integer.valueOf(count));
+                    builder.startSection(DualFormatElement.COUNT_OF_PATTERN_SYMBOLS, count);
                     builder.addText(textElement);
                     builder.endSection();
                 }
