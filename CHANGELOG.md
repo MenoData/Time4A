@@ -2,6 +2,7 @@
 ### Fixed
 - `java.util.Locale.getScript()` unknown for Java-API-level 6 [#780]
 - Arithmetic overflow of int-results in JulianCalendar.Unit.between(...) [#775]
+- Incorrect translation of "M" pattern in JulianCalendar formatter [#776]
 - Same exit and arrival of sun/moon in sign of Scorpius [#778]
 
 ## [v3.42-2018e] published on 2018-05-11
