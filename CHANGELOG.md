@@ -1,5 +1,6 @@
 ## [v3.43-2018?] not yet released
 ### Fixed
+- `java.util.Locale.getScript()` unknown for Java-API-level 6 [#780]
 - Arithmetic overflow of int-results in JulianCalendar.Unit.between(...) [#775]
 - Same exit and arrival of sun/moon in sign of Scorpius [#778]
 
