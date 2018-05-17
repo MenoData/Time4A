@@ -1,4 +1,7 @@
 ## [v3.43-2018?] not yet released
+### Added
+- Show tomorrow and yesterday words in PrettyTime [#781]
+
 ### Fixed
 - `java.util.Locale.getScript()` unknown for Java-API-level 6 [#780]
 - Arithmetic overflow of int-results in JulianCalendar.Unit.between(...) [#775]
