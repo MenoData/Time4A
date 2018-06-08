@@ -1,4 +1,5 @@
 ## [v3.44-2018?] not yet released
+### Added
 - Resolve locale no-NO-NY to nynorsk [#788]
 
 ## [v3.43-2018e] published on 2018-05-18
