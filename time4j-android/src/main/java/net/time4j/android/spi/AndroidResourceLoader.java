@@ -182,7 +182,7 @@ public class AndroidResourceLoader
                 return conn.getInputStream();
             } else if (this.assetLocation != null) {
                 return this.assetLocation.open(uri.toString());
-            } else if (context == null) {
+            } else if (this.context == null) {
                 throw new IllegalStateException(
                     "'ApplicationStarter.initialize(context)' must be called first at app start.");
             } else {
