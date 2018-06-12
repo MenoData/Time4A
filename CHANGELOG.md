@@ -2,6 +2,9 @@
 ### Added
 - Resolve locale no-NO-NY to nynorsk [#788]
 
+### Fixed
+- Wrong days-since-UTC after transform in Hijri adjustment [#789]
+
 ## [v3.43-2018e] published on 2018-05-18
 ### Added
 - Support Kabyle language [#782]
