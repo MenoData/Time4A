@@ -102,6 +102,7 @@ public class AndroidResourceLoader
         Set<String> set = new HashSet<String>();
         set.add("i18n");
         set.add("calendar");
+        set.add("olson");
         set.add("tzdata");
         MODULES = Collections.unmodifiableSet(set);
     }
