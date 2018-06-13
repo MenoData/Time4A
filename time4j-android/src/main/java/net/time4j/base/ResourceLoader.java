@@ -1,6 +1,6 @@
 /*
  * -----------------------------------------------------------------------
- * Copyright © 2013-2016 Meno Hochschild, <http://www.menodata.de/>
+ * Copyright © 2013-2018 Meno Hochschild, <http://www.menodata.de/>
  * -----------------------------------------------------------------------
  * This file (ResourceLoader.java) is part of project Time4J.
  *
@@ -60,7 +60,7 @@ public abstract class ResourceLoader {
      *
      * <p>Time4J will throw an {@code Error} if the configuration entry is wrong. </p>
      */
-    /**
+    /*[deutsch]
      * <p>Name der <i>system property</i>, &uuml;ber die eine externe Instanz mittels eines vollst&auml;ndig
      * qualifizierten Klassennamens verwendet wird. </p>
      *
@@ -77,7 +77,7 @@ public abstract class ResourceLoader {
      *
      * @since   3.16/4.13
      */
-    /**
+    /*[deutsch]
      * <p>Name der <i>system property</i>, die kontrolliert, ob nur der <i>Classloader</i> statt einer
      * URI-Konstruktion verwendet werden soll. </p>
      *
@@ -274,7 +274,7 @@ public abstract class ResourceLoader {
 
         //~ Konstruktoren -------------------------------------------------
 
-        protected StdResourceLoader() {
+        StdResourceLoader() {
             super();
 
             if (ANDROID) {
