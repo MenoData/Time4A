@@ -160,6 +160,7 @@ public class ApplicationStarter {
                                     + tzid.canonical()
                                     + ", locale=" + sysloc + "!",
                                 re);
+                            throw re; // rethrow for Google Play Store etc.
                         }
                         long delta = (System.nanoTime() - start2) / 1000000;
                         Log.i(TIME4A, "Prefetch thread consumed (in ms): " + delta);
