@@ -1,5 +1,6 @@
 ## [v3.44-2018?] not yet released
 ### Added
+- New class `AnnualDate` in main package [#787]
 - Resolve locale no-NO-NY to nynorsk [#788]
 
 ### Fixed
