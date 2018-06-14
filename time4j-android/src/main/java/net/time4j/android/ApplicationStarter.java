@@ -142,18 +142,27 @@ public class ApplicationStarter {
                         DisplayMode style = DisplayMode.FULL;
                         TZID tzid = Timezone.ofSystem().getID();
                         Locale sysloc = Locale.getDefault();
-                        Log.i(TIME4A, "System locale at start: " + sysloc);
-                        Log.i(
-                            TIME4A,
-                            ChronoFormatter.ofMomentStyle(
-                                style,
-                                style,
-                                sysloc,
-                                tzid
-                            ).format(SystemClock.currentMoment())
-                        );
+                        Log.i(TIME4A, "System time zone at start: [" + tzid.canonical() + "]");
+                        Log.i(TIME4A, "System locale at start: [" + sysloc.toString() + "]");
+                        try {
+                            String currentTime =
+                                ChronoFormatter.ofMomentStyle(
+                                    style,
+                                    style,
+                                    sysloc,
+                                    tzid
+                                ).format(SystemClock.currentMoment());
+                            Log.i(TIME4A, currentTime);
+                        } catch (RuntimeException re) {
+                            Log.e(
+                                TIME4A,
+                                "Error on prefetch thread with: time zone="
+                                    + tzid.canonical()
+                                    + ", locale=" + sysloc + "!",
+                                re);
+                        }
                         long delta = (System.nanoTime() - start2) / 1000000;
-                        Log.i(TIME4A, "Prefetch-Thread consumed in ms: " + delta);
+                        Log.i(TIME4A, "Prefetch thread consumed (in ms): " + delta);
                     }
                 };
             Executors.defaultThreadFactory().newThread(runnable).start();
