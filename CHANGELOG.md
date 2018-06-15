@@ -1,6 +1,7 @@
 ## [v3.44-2018?] not yet released
 ### Added
 - New class `AnnualDate` in main package [#787]
+- New class `MachineTime` in main package [#609]
 - Resolve locale no-NO-NY to nynorsk [#788]
 
 ### Fixed
