@@ -1,6 +1,6 @@
 /*
  * -----------------------------------------------------------------------
- * Copyright © 2013-2017 Meno Hochschild, <http://www.menodata.de/>
+ * Copyright © 2013-2018 Meno Hochschild, <http://www.menodata.de/>
  * -----------------------------------------------------------------------
  * This file (Moment.java) is part of project Time4J.
  *
@@ -42,7 +42,6 @@ import net.time4j.engine.DisplayStyle;
 import net.time4j.engine.ElementRule;
 import net.time4j.engine.EpochDays;
 import net.time4j.engine.FlagElement;
-import net.time4j.engine.RealTime;
 import net.time4j.engine.StartOfDay;
 import net.time4j.engine.Temporal;
 import net.time4j.engine.TimeAxis;
@@ -1429,7 +1428,7 @@ public final class Moment
      * @throws  ArithmeticException in case of overflow
      * @since   3.23/4.19
      */
-    public Moment plus(RealTime<SI> realTime) {
+    public Moment plus(MachineTime<SI> realTime) {
 
         return this.plus(realTime.getSeconds(), SI.SECONDS).plus(realTime.getFraction(), SI.NANOSECONDS);
 
@@ -1482,7 +1481,7 @@ public final class Moment
      * @throws  ArithmeticException in case of overflow
      * @since   3.23/4.19
      */
-    public Moment minus(RealTime<SI> realTime) {
+    public Moment minus(MachineTime<SI> realTime) {
 
         return this.minus(realTime.getSeconds(), SI.SECONDS).minus(realTime.getFraction(), SI.NANOSECONDS);
 
@@ -2355,7 +2354,7 @@ public final class Moment
      * Serialisierungsmethode.
      *
      * @param   out         output stream
-     * @throws  IOException
+     * @throws  IOException in case of I/O-errors
      */
     void writeTimestamp(DataOutput out)
         throws IOException {
@@ -2388,7 +2387,7 @@ public final class Moment
      * @param   in          input stream
      * @param   positiveLS  positive leap second indicated?
      * @return  deserialized instance
-     * @throws  IOException
+     * @throws  IOException in case of I/O-errors
      */
     static Moment readTimestamp(
         DataInput in,
