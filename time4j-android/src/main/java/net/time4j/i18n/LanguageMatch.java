@@ -21,8 +21,6 @@
 
 package net.time4j.i18n;
 
-import net.time4j.format.internal.FormatUtils;
-
 import java.util.Locale;
 
 
@@ -64,7 +62,7 @@ public enum LanguageMatch {
 
         String key = desired.getLanguage();
 
-        if (key.equals("no") && desired.getVariant().equals("NY") && FormatUtils.getRegion(desired).equals("NO")) {
+        if (key.equals("no") && desired.getVariant().equals("NY") && desired.getCountry().equals("NO")) {
             return "nn";
         }
 
