@@ -5,6 +5,7 @@
 - Resolve locale no-NO-NY to nynorsk [#788]
 
 ### Fixed
+- Rethrow undocumented ArithmeticException as IllegalArgumentException [#791]
 - Wrong days-since-UTC after transform in Hijri adjustment [#789]
 
 ## [v3.43-2018e] published on 2018-05-18
