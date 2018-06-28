@@ -3812,11 +3812,11 @@ public final class ChronoFormatter<T>
          * SignPolicy.SHOW_NEVER}. </p>
          *
          * @param   element         chronological element
-         * @param   minDigits       minimum count of digits in range 1-9
-         * @param   maxDigits       maximum count of digits in range 1-9
+         * @param   minDigits       minimum count of digits in range 1-10
+         * @param   maxDigits       maximum count of digits in range 1-10
          * @return  this instance for method chaining
          * @throws  IllegalArgumentException if any of {@code minDigits} and
-         *          {@code maxDigits} are out of range {@code 1-9} or if
+         *          {@code maxDigits} are out of range {@code 1-10} or if
          *          {@code maxDigits < minDigits} or if given element is
          *          not supported by chronology or its preparser
          * @throws  IllegalStateException if a numerical element is added
@@ -3833,11 +3833,11 @@ public final class ChronoFormatter<T>
          * SignPolicy.SHOW_NEVER}. </p>
          *
          * @param   element         chronological element
-         * @param   minDigits       minimum count of digits in range 1-9
-         * @param   maxDigits       maximum count of digits in range 1-9
+         * @param   minDigits       minimum count of digits in range 1-10
+         * @param   maxDigits       maximum count of digits in range 1-10
          * @return  this instance for method chaining
          * @throws  IllegalArgumentException if any of {@code minDigits} and
-         *          {@code maxDigits} are out of range {@code 1-9} or if
+         *          {@code maxDigits} are out of range {@code 1-10} or if
          *          {@code maxDigits < minDigits} or if given element is
          *          not supported by chronology or its preparser
          * @throws  IllegalStateException if a numerical element is added
@@ -3881,7 +3881,7 @@ public final class ChronoFormatter<T>
          * interpreted as digits. If there are less than {@code minDigits}
          * then the text input will be invalid. Note: If there is no
          * strict or smart mode (lax) then the parser will always assume
-         * {@code minDigits == 0} and {@code maxDigits = 9}. </li></ol>
+         * {@code minDigits == 0} and {@code maxDigits = 10}. </li></ol>
          *
          * <p>Note: The arguments {@code minDigits} and {@code maxDigits} will only be taken into account
          * if a decimal number system is used. </p>
@@ -3906,12 +3906,12 @@ public final class ChronoFormatter<T>
          * </pre>
          *
          * @param   element         chronological element
-         * @param   minDigits       minimum count of digits in range 1-9
-         * @param   maxDigits       maximum count of digits in range 1-9
+         * @param   minDigits       minimum count of digits in range 1-10
+         * @param   maxDigits       maximum count of digits in range 1-10
          * @param   signPolicy      controls output of numeric sign
          * @return  this instance for method chaining
          * @throws  IllegalArgumentException if any of {@code minDigits} and
-         *          {@code maxDigits} are out of range {@code 1-9} or if
+         *          {@code maxDigits} are out of range {@code 1-10} or if
          *          {@code maxDigits < minDigits} or if given element is
          *          not supported by chronology or its preparser
          * @throws  IllegalStateException if a numerical element is added
@@ -3939,7 +3939,7 @@ public final class ChronoFormatter<T>
          * Stellen, wird die Texteingabe als ung&uuml;ltig angesehen. Zu
          * beachten: Ist ein laxer Parse-Modus angegeben, dann wird
          * unabh&auml;ngig von den hier angegebenen Argumenten stets
-         * {@code minDigits == 0} und die Obergrenze von {@code maxDigits = 9}
+         * {@code minDigits == 0} und die Obergrenze von {@code maxDigits = 10}
          * angenommen. </li></ol>
          *
          * <p>Hinweis: Die Argumente {@code minDigits} und {@code maxDigits} werden nur dann ber&uuml;cksichtigt,
@@ -3965,12 +3965,12 @@ public final class ChronoFormatter<T>
          * </pre>
          *
          * @param   element         chronological element
-         * @param   minDigits       minimum count of digits in range 1-9
-         * @param   maxDigits       maximum count of digits in range 1-9
+         * @param   minDigits       minimum count of digits in range 1-10
+         * @param   maxDigits       maximum count of digits in range 1-10
          * @param   signPolicy      controls output of numeric sign
          * @return  this instance for method chaining
          * @throws  IllegalArgumentException if any of {@code minDigits} and
-         *          {@code maxDigits} are out of range {@code 1-9} or if
+         *          {@code maxDigits} are out of range {@code 1-10} or if
          *          {@code maxDigits < minDigits} or if given element is
          *          not supported by chronology or its preparser
          * @throws  IllegalStateException if a numerical element is added
@@ -4066,10 +4066,10 @@ public final class ChronoFormatter<T>
          * digits (<i>adjacent digit parsing</i>). </p>
          *
          * @param   element         chronological element
-         * @param   digits          fixed count of digits in range 1-9
+         * @param   digits          fixed count of digits in range 1-10
          * @return  this instance for method chaining
          * @throws  IllegalArgumentException if {@code digits} is out of
-         *          range {@code 1-9} or if given element is not supported
+         *          range {@code 1-10} or if given element is not supported
          *          by chronology or its preparser
          * @see     Chronology#isSupported(ChronoElement)
          * @see     SignPolicy#SHOW_NEVER
@@ -4089,10 +4089,10 @@ public final class ChronoFormatter<T>
          * Ziffern interpretieren (<i>adjacent digit parsing</i>). </p>
          *
          * @param   element         chronological element
-         * @param   digits          fixed count of digits in range 1-9
+         * @param   digits          fixed count of digits in range 1-10
          * @return  this instance for method chaining
          * @throws  IllegalArgumentException if {@code digits} is out of
-         *          range {@code 1-9} or if given element is not supported
+         *          range {@code 1-10} or if given element is not supported
          *          by chronology
          * @see     Chronology#isSupported(ChronoElement)
          * @see     SignPolicy#SHOW_NEVER
