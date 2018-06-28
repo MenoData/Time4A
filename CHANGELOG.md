@@ -2,6 +2,7 @@
 ### Added
 - New class `AnnualDate` in main package [#787]
 - New class `MachineTime` in main package [#609]
+- Extend formattability of extreme integer element values [#797]
 - Resolve locale no-NO-NY to nynorsk [#788]
 
 ### Fixed
