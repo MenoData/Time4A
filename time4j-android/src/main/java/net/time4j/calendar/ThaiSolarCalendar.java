@@ -82,6 +82,8 @@ import java.util.Set;
  * <p>This class supports the calendar reform of 1940/41 after that the begin of year moved from 1st of April
  * to 1st of January. See also: <a href="https://en.wikipedia.org/wiki/Thai_solar_calendar">Wikipedia</a>. </p>
  *
+ * <p style="text-align:center;"><img src="doc-files/thai-anomaly.png" alt="Anomaly of 1940/41"></p>
+ *
  * <p>Following elements which are declared as constants are registered by
  * this class: </p>
  *
@@ -118,6 +120,8 @@ import java.util.Set;
  * <p>Diese Klasse unterst&uuml;tzt die Kalenderreform von 1940/41, als der Beginn des Jahres vom ersten
  * April auf den ersten Januar vorverlegt wurde. Siehe auch:
  * <a href="https://en.wikipedia.org/wiki/Thai_solar_calendar">Wikipedia</a>. </p>
+ *
+ * <p style="text-align:center;"><img src="doc-files/thai-anomaly.png" alt="Anomalie von 1940/41"></p>
  *
  * <p>Registriert sind folgende als Konstanten deklarierte Elemente: </p>
  *
