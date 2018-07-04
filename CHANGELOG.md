@@ -1,4 +1,6 @@
-## [v3.44-2018?] not yet released
+## [v3.45-2018?] not yet released
+
+## [v3.44-2018e] published on 2018-07-04
 ### Added
 - New class `AnnualDate` in main package [#787]
 - New class `MachineTime` in main package [#609]
