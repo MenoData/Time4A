@@ -1,3 +1,5 @@
+-useuniqueclassmembernames
+
 -keep class net.time4j.android.spi.AndroidResourceLoader
 
 -keepnames class net.time4j.tz.olson.AFRICA
