@@ -1,4 +1,6 @@
 ## [v3.45-2018?] not yet released
+### Fixed
+- Wrong day-of-year in HebrewCalendar [#800]
 
 ## [v3.44-2018e] published on 2018-07-04
 ### Added
