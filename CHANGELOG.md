@@ -1,5 +1,9 @@
 ## [v3.45-2018?] not yet released
 
+## [v3.44.2-2018e] published on 2018-07-22
+### Fixed
+- NPE-Fix for loading time zone based on system time zone identifier [#803]
+
 ## [v3.44.1-2018e] published on 2018-07-20
 ### Fixed
 - NPE-Fix for premature assignment of system time zone [#802]
