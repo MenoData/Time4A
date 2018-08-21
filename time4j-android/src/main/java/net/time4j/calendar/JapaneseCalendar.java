@@ -2308,12 +2308,12 @@ public final class JapaneseCalendar
                             m = EastAsianMonth.valueOf(value);
                         } else {
                             byte b = LEAP_INDICATORS[context.relgregyear - 701];
-                            if (value == b) {
-                                m = EastAsianMonth.valueOf(value - 1).withLeap();
-                            } else if (value > b) {
-                                m = EastAsianMonth.valueOf(value - 1);
-                            } else {
+                            if ((b == 0) || (b > value)) {
                                 m = EastAsianMonth.valueOf(value);
+                            } else if (value == b) {
+                                m = EastAsianMonth.valueOf(value - 1).withLeap();
+                            } else { // if (value > b) {
+                                m = EastAsianMonth.valueOf(value - 1);
                             }
                         }
                         return context.with(MONTH_OF_YEAR, m);
