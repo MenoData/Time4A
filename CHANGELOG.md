@@ -1,4 +1,6 @@
-## [v3.44.3-2018?] not yet released
+## [v3.45-2018?] not yet released
+
+## [v3.44.3-2018e] published on 2018-08-29
 ### Fixed
 - Fix for changing `JapaneseCalendar.MONTH_AS_ORDINAL` [#807]
 

@@ -26,8 +26,7 @@ want you can even use the platform timezone data in parallel. Time4A gives you t
 
 ## Any disadvantages?
 Yes, Time4A is rather big in terms of method count and size due to a lot of features (although still much smaller than ICU4J).
-However, you can apply Proguard to strongly shrink the size. And future versions of Time4A might be modularized allowing you
-to only install the parts you needed.
+However, you can apply Proguard to strongly shrink the size.
 
 ## Usage
 Only two steps are required before coding against the API of Time4A.
@@ -36,7 +35,7 @@ Only two steps are required before coding against the API of Time4A.
 
 ```groovy
 dependencies {
-    compile group: 'net.time4j', name: 'time4j-android', version: '3.44.2-2018e'
+    compile group: 'net.time4j', name: 'time4j-android', version: '3.44.3-2018e'
 }
 ```
 
