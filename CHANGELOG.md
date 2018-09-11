@@ -1,4 +1,6 @@
 ## [v3.45-2018?] not yet released
+### Fixed
+- Fix for narrow era names which had been incomplete [#809]
 
 ## [v3.44.3-2018e] published on 2018-08-29
 ### Fixed
