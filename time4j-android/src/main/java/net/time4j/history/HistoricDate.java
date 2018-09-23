@@ -124,8 +124,8 @@ public final class HistoricDate
      * more than 9 digits. </p>
      *
      * @param   era             historic era
-     * @param   yearOfEra       year of era which will be interpreted according to given year definition
-     *                          ({@code 1 <= yearOfEra <= 999,999,999})
+     * @param   yearOfEra       year of era which will be interpreted according to given year definition,
+     *                          usually ({@code 1 <= yearOfEra <= 999,999,999})
      * @param   month           historic month (1-12)
      * @param   dom             historic day of month (1-31)
      * @param   yearDefinition  defines a strategy how to interprete year of era
@@ -142,8 +142,8 @@ public final class HistoricDate
      * der {@code ChronoHistory}. Der Parameter year-of-era darf nicht mehr als 9 Ziffern haben. </p>
      *
      * @param   era             historic era
-     * @param   yearOfEra       year of era which will be interpreted according to given year definition
-     *                          ({@code 1 <= yearOfEra <= 999,999,999})
+     * @param   yearOfEra       year of era which will be interpreted according to given year definition,
+     *                          usually ({@code 1 <= yearOfEra <= 999,999,999})
      * @param   month           historic month (1-12)
      * @param   dom             historic day of month (1-31)
      * @param   yearDefinition  defines a strategy how to interprete year of era
@@ -175,9 +175,15 @@ public final class HistoricDate
                 throw new IllegalArgumentException(
                     "Before creation of the world: " + toString(era, yearOfEra, month, dom));
             }
-        } else if ((yearOfEra < 1) || (yearOfEra > 999999999)) {
+        } else if (yearOfEra < 1) {
             throw new IllegalArgumentException(
-                "Year of era out of supported range: " + toString(era, yearOfEra, month, dom));
+                "Year of era must be positive: " + toString(era, yearOfEra, month, dom));
+        }
+
+        if (yearOfEra > 999999999) {
+            throw new IllegalArgumentException(
+                "Year of era must not have more than 9 digits: "
+                        + toString(era, yearOfEra, month, dom));
         }
 
         if (!yearDefinition.equals(YearDefinition.DUAL_DATING)) {
