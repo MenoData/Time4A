@@ -103,14 +103,15 @@ public final class ChronoHistory
 
     /**
      * <p>Describes no real historic event but just the proleptic julian calendar which is assumed
-     * to be in power all times. </p>
+     * to be in power all times (with the technical constraint {@code BC 999979466 - AD 999979465}). </p>
      *
      * <p>This constant rather serves for academic purposes because the julian calendar is now nowhere in power
      * and has not existed before the calendar reform of Julius Caesar. </p>
      */
     /*[deutsch]
      * <p>Beschreibt kein wirkliches historisches Ereignis, sondern einfach nur den proleptisch julianischen
-     * Kalender, der als f&uuml;r alle Zeiten g&uuml;ltig angesehen wird. </p>
+     * Kalender, der als f&uuml;r alle Zeiten g&uuml;ltig angesehen wird (mit der technischen Beschr&auml;nkung
+     * {@code BC 999979466 - AD 999979465}). </p>
      *
      * <p>Diese Konstante dient eher akademischen &Uuml;bungen, weil der julianische Kalender aktuell nirgendwo
      * in der Welt in Kraft ist und vor der Kalenderreform von Julius Caesar nicht existierte. </p>
@@ -119,7 +120,7 @@ public final class ChronoHistory
 
     /**
      * <p>Describes no real historic event but just the proleptic byzantine calendar which is assumed
-     * to be in power all times on or after the creation of the world. </p>
+     * to be in power all times from the creation of the world until the byzantine year 999984973. </p>
      *
      * <p>This constant rather serves for academic purposes because the byzantine calendar was in latest use
      * in Russia before 1700. </p>
@@ -129,7 +130,8 @@ public final class ChronoHistory
      */
     /*[deutsch]
      * <p>Beschreibt kein wirkliches historisches Ereignis, sondern einfach nur den proleptisch byzantinischen
-     * Kalender, der als f&uuml;r alle Zeiten ab der Erschaffung der Welt g&uuml;ltig angesehen wird. </p>
+     * Kalender, der f&uuml;r alle Zeiten ab der Erschaffung der Welt bis zum byzantinischen Jahr 999984973
+     * als g&uuml;ltig angesehen wird. </p>
      *
      * <p>Diese Konstante dient eher akademischen &Uuml;bungen, weil der byzantinische Kalender zuletzt in
      * Ru&szlig;land vor 1700 verwendet wurde. </p>
@@ -138,6 +140,9 @@ public final class ChronoHistory
      * @since   3.14/4.11
      */
     public static final ChronoHistory PROLEPTIC_BYZANTINE;
+
+    static final int BYZANTINE_YMAX = 999984973;
+    static final int JULIAN_YMAX = 999979465;
 
     private static final long EARLIEST_CUTOVER;
     private static final ChronoHistory INTRODUCTION_BY_POPE_GREGOR;
@@ -749,7 +754,7 @@ public final class ChronoHistory
      */
     public boolean isValid(HistoricDate date) {
 
-        if ((date == null) || !this.isWithinSupportedRange(date)) {
+        if ((date == null) || this.isOutOfRange(date)) {
             return false;
         }
 
@@ -778,7 +783,7 @@ public final class ChronoHistory
      */
     public PlainDate convert(HistoricDate date) {
 
-        if (!this.isWithinSupportedRange(date)) {
+        if (this.isOutOfRange(date)) {
             throw new IllegalArgumentException("Out of supported range: " + date);
         }
 
@@ -833,7 +838,7 @@ public final class ChronoHistory
             hd = HistoricDate.of(era, yoe, hd.getMonth(), hd.getDayOfMonth());
         }
 
-        if (!this.isWithinSupportedRange(hd)) {
+        if (this.isOutOfRange(hd)) {
             throw new IllegalArgumentException("Out of supported range: " + hd);
         }
 
@@ -1840,22 +1845,18 @@ public final class ChronoHistory
 
     }
 
-    /**
-     * Range check for the year.
-     *
-     * @param   hd  historic date to be checked
-     * @return  boolean
-     */
-    boolean isWithinSupportedRange(HistoricDate hd) {
+    private boolean isOutOfRange(HistoricDate hd) {
 
         int ad = hd.getEra().annoDomini(hd.getYearOfEra());
 
         if (this == PROLEPTIC_BYZANTINE) {
-            return (ad > -5508) || ((ad == -5508) && (hd.getMonth() >= 9));
-        } else if ((this == PROLEPTIC_GREGORIAN) || (this == PROLEPTIC_JULIAN)) {
-            return true;
+            return ((ad < -5508) || ((ad == -5508) && (hd.getMonth() < 9)) || (ad > BYZANTINE_YMAX - 5508));
+        } else if (this == PROLEPTIC_JULIAN) {
+            return (Math.abs(ad) > JULIAN_YMAX);
+        } else if (this == PROLEPTIC_GREGORIAN) {
+            return false;
         } else {
-            return ((ad >= -44) && (ad <= 9999));
+            return ((ad < -44) || (ad > 9999));
         }
 
     }
