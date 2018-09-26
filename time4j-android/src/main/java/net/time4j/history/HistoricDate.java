@@ -84,7 +84,7 @@ public final class HistoricDate
      * YearDefinition.DUAL_DATING, NewYearRule.BEGIN_OF_JANUARY.until(Integer.MAX_VALUE))}. </p>
      *
      * @param   era         historic era
-     * @param   yearOfEra   year of related era ({@code 1 <= yearOfEra <= 999,999,999}) starting on January the first
+     * @param   yearOfEra   year of related era ({@code 1 <= yearOfEra}) starting on January the first
      * @param   month       historic month (1-12)
      * @param   dom         historic day of month (1-31)
      * @return  new historic date (not yet validated)
@@ -97,7 +97,7 @@ public final class HistoricDate
      * YearDefinition.DUAL_DATING, NewYearRule.BEGIN_OF_JANUARY.until(Integer.MAX_VALUE))}. </p>
      *
      * @param   era         historic era
-     * @param   yearOfEra   year of related era ({@code 1 <= yearOfEra <= 999,999,999}) starting on January the first
+     * @param   yearOfEra   year of related era ({@code 1 <= yearOfEra}) starting on January the first
      * @param   month       historic month (1-12)
      * @param   dom         historic day of month (1-31)
      * @return  new historic date (not yet validated)
@@ -120,12 +120,10 @@ public final class HistoricDate
      * <p>Constructs a new tuple of given historic chronological components. </p>
      *
      * <p>Note: A detailed validation is not done. Such a validation is the responsibility
-     * of any {@code ChronoHistory}, however. The parameter year-of-era must not have
-     * more than 9 digits. </p>
+     * of any {@code ChronoHistory}, however. </p>
      *
      * @param   era             historic era
-     * @param   yearOfEra       year of era which will be interpreted according to given year definition,
-     *                          usually ({@code 1 <= yearOfEra <= 999,999,999})
+     * @param   yearOfEra       positive year of era which will be interpreted according to given year definition
      * @param   month           historic month (1-12)
      * @param   dom             historic day of month (1-31)
      * @param   yearDefinition  defines a strategy how to interprete year of era
@@ -139,11 +137,10 @@ public final class HistoricDate
      * <p>Konstruiert ein neues Tupel aus den angegebenen historischen Zeitkomponenten. </p>
      *
      * <p>Hinweis: Eine detaillierte Validierung wird nicht gemacht. Das ist stattdessen Aufgabe
-     * der {@code ChronoHistory}. Der Parameter year-of-era darf nicht mehr als 9 Ziffern haben. </p>
+     * der {@code ChronoHistory}. </p>
      *
      * @param   era             historic era
-     * @param   yearOfEra       year of era which will be interpreted according to given year definition,
-     *                          usually ({@code 1 <= yearOfEra <= 999,999,999})
+     * @param   yearOfEra       positive year of era which will be interpreted according to given year definition
      * @param   month           historic month (1-12)
      * @param   dom             historic day of month (1-31)
      * @param   yearDefinition  defines a strategy how to interprete year of era
@@ -178,12 +175,6 @@ public final class HistoricDate
         } else if (yearOfEra < 1) {
             throw new IllegalArgumentException(
                 "Year of era must be positive: " + toString(era, yearOfEra, month, dom));
-        }
-
-        if (yearOfEra > 999999999) {
-            throw new IllegalArgumentException(
-                "Year of era must not have more than 9 digits: "
-                        + toString(era, yearOfEra, month, dom));
         }
 
         if (!yearDefinition.equals(YearDefinition.DUAL_DATING)) {
