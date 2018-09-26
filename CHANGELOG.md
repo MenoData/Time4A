@@ -1,5 +1,8 @@
 ## [v3.45-2018?] not yet released
+
+## [v3.44.4-2018e] published on 2018-09-26
 ### Fixed
+- Mismatch between getMinimumSinceUTC and transform for some historic calendars [#808]
 - Fix for narrow era names which had been incomplete [#809]
 
 ## [v3.44.3-2018e] published on 2018-08-29
