@@ -2324,19 +2324,6 @@ public final class PlainDate
         }
 
         @Override
-        @Deprecated
-        public PlainDate createFrom(
-            ChronoEntity<?> entity,
-            AttributeQuery attributes,
-            boolean preparsing
-        ) {
-
-            boolean lenient = attributes.get(Attributes.LENIENCY, Leniency.SMART).isLax();
-            return this.createFrom(entity, attributes, lenient, preparsing);
-
-        }
-
-        @Override
         public PlainDate createFrom(
             ChronoEntity<?> entity,
             AttributeQuery attributes,

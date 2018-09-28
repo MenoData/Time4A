@@ -7231,19 +7231,6 @@ public final class ChronoFormatter<T>
 
         }
 
-        @Override
-        @Deprecated
-        public GeneralTimestamp<C> createFrom(
-            ChronoEntity<?> entity,
-            AttributeQuery attributes,
-            boolean preparsing
-        ) {
-
-            boolean lenient = attributes.get(Attributes.LENIENCY, Leniency.SMART).isLax();
-            return this.createFrom(entity, attributes, lenient, preparsing);
-
-        }
-
         @SuppressWarnings("unchecked")
         @Override
         public GeneralTimestamp<C> createFrom(

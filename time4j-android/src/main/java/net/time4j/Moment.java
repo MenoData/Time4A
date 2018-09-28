@@ -53,7 +53,6 @@ import net.time4j.format.CalendarText;
 import net.time4j.format.CalendarType;
 import net.time4j.format.ChronoPattern;
 import net.time4j.format.DisplayMode;
-import net.time4j.format.Leniency;
 import net.time4j.format.TemporalFormatter;
 import net.time4j.scale.LeapSecondEvent;
 import net.time4j.scale.LeapSeconds;
@@ -81,10 +80,30 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import static net.time4j.PlainTime.*;
+import static net.time4j.PlainTime.AM_PM_OF_DAY;
+import static net.time4j.PlainTime.CLOCK_HOUR_OF_AMPM;
+import static net.time4j.PlainTime.CLOCK_HOUR_OF_DAY;
+import static net.time4j.PlainTime.DIGITAL_HOUR_OF_AMPM;
+import static net.time4j.PlainTime.DIGITAL_HOUR_OF_DAY;
+import static net.time4j.PlainTime.HOUR_FROM_0_TO_24;
+import static net.time4j.PlainTime.MICRO_OF_DAY;
+import static net.time4j.PlainTime.MICRO_OF_SECOND;
+import static net.time4j.PlainTime.MILLI_OF_DAY;
+import static net.time4j.PlainTime.MILLI_OF_SECOND;
+import static net.time4j.PlainTime.MINUTE_OF_DAY;
+import static net.time4j.PlainTime.MINUTE_OF_HOUR;
+import static net.time4j.PlainTime.NANO_OF_DAY;
+import static net.time4j.PlainTime.NANO_OF_SECOND;
+import static net.time4j.PlainTime.SECOND_OF_DAY;
+import static net.time4j.PlainTime.SECOND_OF_MINUTE;
 import static net.time4j.SI.NANOSECONDS;
 import static net.time4j.SI.SECONDS;
-import static net.time4j.scale.TimeScale.*;
+import static net.time4j.scale.TimeScale.GPS;
+import static net.time4j.scale.TimeScale.POSIX;
+import static net.time4j.scale.TimeScale.TAI;
+import static net.time4j.scale.TimeScale.TT;
+import static net.time4j.scale.TimeScale.UT;
+import static net.time4j.scale.TimeScale.UTC;
 
 
 /**
@@ -3139,19 +3158,6 @@ public final class Moment
         ) {
 
             return Moment.from(clock.currentTime());
-
-        }
-
-        @Override
-        @Deprecated
-        public Moment createFrom(
-            ChronoEntity<?> entity,
-            AttributeQuery attributes,
-            boolean preparsing
-        ) {
-
-            boolean lenient = attributes.get(Attributes.LENIENCY, Leniency.SMART).isLax();
-            return this.createFrom(entity, attributes, lenient, preparsing);
 
         }
 

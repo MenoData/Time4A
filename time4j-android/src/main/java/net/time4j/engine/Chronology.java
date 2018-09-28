@@ -1,6 +1,6 @@
 /*
  * -----------------------------------------------------------------------
- * Copyright © 2013-2017 Meno Hochschild, <http://www.menodata.de/>
+ * Copyright © 2013-2018 Meno Hochschild, <http://www.menodata.de/>
  * -----------------------------------------------------------------------
  * This file (Chronology.java) is part of project Time4J.
  *
@@ -237,18 +237,6 @@ public class Chronology<T>
         }
 
         return this.merger.createFrom(clock, attributes);
-
-    }
-
-    @Override
-    @Deprecated
-    public T createFrom(
-        ChronoEntity<?> entity,
-        AttributeQuery attributes,
-        boolean preparsing
-    ) {
-
-        return this.merger.createFrom(entity, attributes, preparsing);
 
     }
 

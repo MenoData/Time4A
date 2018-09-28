@@ -1249,19 +1249,6 @@ public final class ThaiSolarCalendar
         }
 
         @Override
-        @Deprecated
-        public ThaiSolarCalendar createFrom(
-            ChronoEntity<?> entity,
-            AttributeQuery attributes,
-            boolean preparsing
-        ) {
-
-            boolean lenient = attributes.get(Attributes.LENIENCY, Leniency.SMART).isLax();
-            return this.createFrom(entity, attributes, lenient, preparsing);
-
-        }
-
-        @Override
         public ThaiSolarCalendar createFrom(
             ChronoEntity<?> entity,
             AttributeQuery attributes,
