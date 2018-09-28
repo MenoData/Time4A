@@ -1,4 +1,7 @@
 ## [v3.45-2018?] not yet released
+### Changed
+- Remove deprecated stuff in ChronoMerger [#524]
+- StartOfDay now uses CalendarDate in abstract method [#655]
 
 ## [v3.44.4-2018e] published on 2018-09-26
 ### Fixed
