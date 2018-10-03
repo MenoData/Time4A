@@ -1,5 +1,6 @@
-## [v3.45-2018?] not yet released
+## [v4.0-2018?] not yet released
 ### Changed
+- Simplify generic formatter API [#813]
 - Remove deprecated stuff in ChronoMerger [#524]
 - StartOfDay now uses CalendarDate in abstract method [#655]
 
