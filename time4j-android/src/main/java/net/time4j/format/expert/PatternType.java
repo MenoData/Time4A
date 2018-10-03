@@ -36,16 +36,13 @@ import net.time4j.engine.EpochDays;
 import net.time4j.format.Attributes;
 import net.time4j.format.CalendarText;
 import net.time4j.format.CalendarType;
-import net.time4j.format.ChronoPattern;
 import net.time4j.format.DisplayMode;
-import net.time4j.format.FormatEngine;
 import net.time4j.format.NumberSystem;
 import net.time4j.format.OutputContext;
 import net.time4j.format.TextElement;
 import net.time4j.format.TextWidth;
 import net.time4j.format.internal.DualFormatElement;
 import net.time4j.history.ChronoHistory;
-import net.time4j.i18n.UltimateFormatEngine;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -69,8 +66,7 @@ import java.util.Set;
  * @see     net.time4j.format.expert.ChronoFormatter.Builder#addPattern(String, PatternType)
  * @since   3.0
  */
-public enum PatternType
-    implements ChronoPattern<PatternType> {
+public enum PatternType {
 
     //~ Statische Felder/Initialisierungen --------------------------------
 
@@ -1226,27 +1222,6 @@ public enum PatternType
     CLDR_DATE,
 
     /**
-     * <p>A small subset of CLDR applicable on any non-ISO-chronology which has registered the
-     * associated elements with same symbols. </p>
-     *
-     * @since       3.5/4.3
-     * @deprecated  Use {@link #CLDR_DATE} as replacement because the name of this pattern type can be
-     *              confusing considering the fact that not all calendars can be handled by this pattern type
-     *              (for example, the {@code FrenchRepublicanCalendar} is not suitable here)
-     */
-    /*[deutsch]
-     * <p>Eine kleine Untermenge von CLDR, die auf jede Non-ISO-Chronologie anwendbar ist, die die
-     * assoziierten Elemente mit gleichen Symbolen registriert hat. </p>
-     *
-     * @since       3.5/4.3
-     * @deprecated  Use {@link #CLDR_DATE} as replacement because the name of this pattern type can be
-     *              confusing considering the fact that not all calendars can be handled by this pattern type
-     *              (for example, the {@code FrenchRepublicanCalendar} is not suitable here)
-     */
-    @Deprecated
-    NON_ISO_DATE,
-
-    /**
      * <p>Resolves a pattern such that the chronology used in current context determines the meaning
      * of any pattern symbols. </p>
      *
@@ -1282,13 +1257,6 @@ public enum PatternType
     DYNAMIC;
 
     //~ Methoden ----------------------------------------------------------
-
-    @Override
-    public FormatEngine<PatternType> getFormatEngine() {
-
-        return UltimateFormatEngine.INSTANCE;
-
-    }
 
     /**
      * <p>Registers a format symbol. </p>
@@ -1328,11 +1296,6 @@ public enum PatternType
                 return sdf(builder, chronology, locale, symbol, count);
             case CLDR_24:
                 return cldr24(builder, locale, symbol, count);
-            case NON_ISO_DATE:
-                if (isISO(chronology)) {
-                    throw new IllegalArgumentException("Choose CLDR or CLDR_DATE for ISO-8601-chronology.");
-                }
-                return general(builder, chronology, symbol, count, locale);
             case CLDR_DATE:
                 Class<?> type = chronology.getChronoType();
                 if (Calendrical.class.isAssignableFrom(type) || CalendarVariant.class.isAssignableFrom(type)) {

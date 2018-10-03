@@ -1,6 +1,6 @@
 /*
  * -----------------------------------------------------------------------
- * Copyright © 2013-2017 Meno Hochschild, <http://www.menodata.de/>
+ * Copyright © 2013-2018 Meno Hochschild, <http://www.menodata.de/>
  * -----------------------------------------------------------------------
  * This file (CalendarText.java) is part of project Time4J.
  *
@@ -27,6 +27,7 @@ import net.time4j.engine.CalendarEra;
 import net.time4j.engine.ChronoElement;
 import net.time4j.engine.Chronology;
 import net.time4j.format.internal.ExtendedPatterns;
+import net.time4j.format.internal.FormatUtils;
 
 import java.text.DateFormat;
 import java.text.DateFormatSymbols;
@@ -665,37 +666,6 @@ public final class CalendarText {
      * The order of element value enums must be the same. </p>
      *
      * @param   textWidth       text width of displayed AM/PM name
-     * @return  accessor for AM/PM names
-     * @see     #getMeridiems(TextWidth, OutputContext)
-     * @deprecated  Use {@code getMeridiems(textWidth, OutputContext.FORMAT)}
-     */
-    /*[deutsch]
-     * <p>Liefert einen {@code Accessor} f&uuml;r alle
-     * Tagesabschnittsnamen. </p>
-     *
-     * <p>Die Liste ist in AM/PM-Reihenfolge sortiert. Die Reihenfolge der
-     * Elementwert-Enums mu&szlig; mit der Reihenfolge der hier enthaltenen
-     * Textformen &uuml;bereinstimmen. </p>
-     *
-     * @param   textWidth       text width of displayed AM/PM name
-     * @return  accessor for AM/PM names
-     * @see     #getMeridiems(TextWidth, OutputContext)
-     * @deprecated  Use {@code getMeridiems(textWidth, OutputContext.FORMAT)}
-     */
-    @Deprecated
-    public TextAccessor getMeridiems(TextWidth textWidth) {
-
-        return this.getMeridiems(textWidth, OutputContext.FORMAT);
-
-    }
-
-    /**
-     * <p>Yields an {@code Accessor} for all am/pm-names. </p>
-     *
-     * <p>The underlying list of text forms is sorted in AM-PM-order.
-     * The order of element value enums must be the same. </p>
-     *
-     * @param   textWidth       text width of displayed AM/PM name
      * @param   outputContext   output context (stand-alone?)
      * @return  accessor for AM/PM names
      * @see     net.time4j.Meridiem
@@ -962,7 +932,7 @@ public final class CalendarText {
     ) {
 
         String pattern = FORMAT_PATTERN_PROVIDER.getDateTimePattern(dateMode, timeMode, locale);
-        return removeZones(pattern);
+        return FormatUtils.removeZones(pattern);
 
     }
 
@@ -1051,7 +1021,7 @@ public final class CalendarText {
     ) {
 
         String pattern = FORMAT_PATTERN_PROVIDER.getDateTimePattern(dateMode, timeMode, locale);
-        return removeZones(pattern);
+        return FormatUtils.removeZones(pattern);
 
     }
 
@@ -1303,55 +1273,6 @@ public final class CalendarText {
         keyBuilder.append('_');
         keyBuilder.append(counter + baseIndex);
         return keyBuilder.toString();
-
-    }
-
-    // strip off any timezone symbols in clock time patterns,
-    // used by wrappers of FormatPatternProvider-objects
-    private static String removeZones(String pattern) {
-
-        boolean literal = false;
-        StringBuilder sb = new StringBuilder();
-
-        for (int i = 0, n = pattern.length(); i < n; i++) {
-            char c = pattern.charAt(i);
-
-            if (c == '\'') {
-                if (i + 1 < n && pattern.charAt(i + 1) == '\'') {
-                    sb.append(c);
-                    i++;
-                } else {
-                    literal = !literal;
-                }
-                sb.append(c);
-            } else if (literal) {
-                sb.append(c);
-            } else if (c != 'z' && c != 'Z' && c != 'v' && c != 'V' && c != 'x' && c != 'X') {
-                sb.append(c);
-            }
-        }
-
-        for (int j = 0; j < sb.length(); j++) {
-            char c = sb.charAt(j);
-
-            if (c == ' ' && j + 1 < sb.length() && sb.charAt(j + 1) == ' ') {
-                sb.deleteCharAt(j);
-                j--;
-            } else if (c == '[' || c == ']' || c == '(' || c == ')') { // check locales es, fa, ps, uz
-                sb.deleteCharAt(j);
-                j--;
-            }
-        }
-
-        String result = sb.toString().trim();
-
-        if (result.endsWith(" '")) { // special case for de, fr_BE
-            result = result.substring(0, result.length() - 2) + "'";
-        } else if (result.endsWith(",")) { // special case for hy
-            result = result.substring(0, result.length() - 1);
-        }
-
-        return result;
 
     }
 
@@ -1778,7 +1699,7 @@ public final class CalendarText {
                 pattern = this.delegate.getTimePattern(mode, locale);
             }
 
-            return removeZones(pattern);
+            return FormatUtils.removeZones(pattern);
 
         }
 

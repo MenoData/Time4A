@@ -648,10 +648,17 @@ public final class ChronoFormatter<T>
     }
 
     @Override
-    public String format(T formattable) {
+    public String print(T formattable) {
 
         ChronoDisplay display = this.display(formattable, this.globalAttributes);
         return this.format0(display);
+
+    }
+
+    @Override
+    public String format(T formattable) {
+
+        return this.print(formattable);
 
     }
 
@@ -676,18 +683,6 @@ public final class ChronoFormatter<T>
         return this.format0(tsp);
 
     }
-
-    @Override
-    public void formatToBuffer(
-        T formattable,
-        Appendable buffer
-    ) throws IOException {
-
-        ChronoDisplay display = this.display(formattable, this.globalAttributes);
-        this.print(display, buffer, this.globalAttributes, false);
-
-    }
-
 
     /**
      * <p>Prints given chronological entity as formatted text and writes
@@ -979,43 +974,23 @@ public final class ChronoFormatter<T>
 
     }
 
-    /**
-     * <p>For maximum information use {@link #parse(CharSequence, ParseLog)} instead. </p>
-     *
-     * @param   text        text to be parsed
-     * @param   position    parse position (always as new instance)
-     * @return  result or {@code null} if parsing does not work
-     * @throws  IndexOutOfBoundsException if the start position is at end of text or even behind
-     */
-    /*[deutsch]
-     * <p>F&uuml;r maximale Information stattdessen {@link #parse(CharSequence, ParseLog)} nutzen. </p>
-     *
-     * @param   text        text to be parsed
-     * @param   position    parse position (always as new instance)
-     * @return  result or {@code null} if parsing does not work
-     * @throws  IndexOutOfBoundsException if the start position is at end of text or even behind
-     */
     @Override
     public T parse(
         CharSequence text,
-        ParsePosition position
-    ) {
-
-        return this.parse(text, new ParseLog(position));
-
-    }
-
-    @Override
-    public T parse(
-        CharSequence text,
-        ParsePosition position,
         RawValues rawValues
-    ) {
+    ) throws ParseException {
 
-        ParseLog plog = new ParseLog(position);
+        ParseLog plog = new ParseLog();
         T result = this.parse(text, plog);
         rawValues.accept(plog.getRawValues());
-        return result;
+
+        if (plog.isError()) {
+            throw new ParseException(plog.getErrorMessage(), plog.getErrorIndex());
+        } else if (result == null) {
+            throw new ParseException("Cannot parse: \"" + text + "\"", 0);
+        } else {
+            return result;
+        }
 
     }
 
@@ -3253,7 +3228,6 @@ public final class ChronoFormatter<T>
             case CLDR_24:
             case CLDR_DATE:
             case SIMPLE_DATE_FORMAT:
-            case NON_ISO_DATE:
                 if (p.contains("h") || p.contains("K")) {
                     if (!p.contains("a") && !p.contains("b") && !p.contains("B")) {
                         throw new IllegalArgumentException(
@@ -5034,7 +5008,7 @@ public final class ChronoFormatter<T>
          * treated as literal by double apostroph. </p>
          *
          * <p>For exact interpretation and description of format symbols
-         * see the implementations of interface {@code ChronoPattern}. </p>
+         * see the enum {@code PatternType}. </p>
          *
          * @param   formatPattern   pattern of symbols to be used in formatting
          * @param   patternType     type of pattern how to interprete symbols
@@ -5054,8 +5028,8 @@ public final class ChronoFormatter<T>
          * Apostrophs &quot;'&quot; gekennzeichnet werden (ESCAPE). Das Apostroph selbst wird durch
          * Verdoppelung als Literal interpretiert. </p>
          *
-         * <p>Zur genauen Interpretation der Formatsymbole sei auf die
-         * Implementierungen des Interface {@code ChronoPattern} verwiesen. </p>
+         * <p>Zur genauen Interpretation der Formatsymbole sei auf das Enum
+         * {@code PatternType} verwiesen. </p>
          *
          * @param   formatPattern   pattern of symbols to be used in formatting
          * @param   patternType     type of pattern how to interprete symbols
