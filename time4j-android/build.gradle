@@ -28,13 +28,13 @@ gradle.projectsEvaluated {
     tasks.withType(JavaCompile) {
         options.debug = false
         options.debugOptions.debugLevel = "source"
-        options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+        options.compilerArgs << "-Xlint:deprecation"
     }
 }
 
 android {
     compileSdkVersion 26
-    buildToolsVersion '25.0.2'
+    buildToolsVersion '28.0.2'
 
     defaultConfig {
         minSdkVersion 9
@@ -58,16 +58,16 @@ task javadoc(type: Javadoc) {
     source = android.sourceSets.main.java.srcDirs
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
 
-    exclude "net/time4j/tz/spi/**"
-    exclude "net/time4j/android/spi/**"
-    exclude "net/time4j/i18n/**"
-    exclude "net/time4j/format/internal/**"
-    exclude "net/time4j/history/internal/**"
-    exclude "net/time4j/calendar/service/**"
-    exclude "net/time4j/calendar/doc-files/**"
-
     options.memberLevel = JavadocMemberLevel.PUBLIC
     options.encoding = "UTF-8"
+
+    exclude "net/time4j/tz/spi/*.java"
+    exclude "net/time4j/android/spi/*.java"
+    exclude "net/time4j/i18n/*.java"
+    exclude "net/time4j/format/internal/*.java"
+    exclude "net/time4j/history/internal/*.java"
+    exclude "net/time4j/calendar/service/*.java"
+
     failOnError false
 }
 

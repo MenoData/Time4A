@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion '25.0.2'
+    buildToolsVersion '28.0.2'
     defaultConfig {
         minSdkVersion 9
         targetSdkVersion 26
@@ -20,5 +20,5 @@ android {
 }
 
 dependencies {
-    compile project(':time4j-android')
+    implementation project(':time4j-android')
 }
