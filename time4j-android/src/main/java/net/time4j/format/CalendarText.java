@@ -1431,27 +1431,16 @@ public final class CalendarText {
         public String[] meridiems(
             String calendarType,
             Locale locale,
-            TextWidth textWidth
-        ) {
-
-        	if (textWidth == TextWidth.NARROW) {
-                return new String[] {"A", "P"};
-        	}
-
-            // JDK-Quelle
-            return DateFormatSymbols.getInstance(locale).getAmPmStrings();
-
-        }
-
-        @Override
-        public String[] meridiems(
-            String calendarType,
-            Locale locale,
             TextWidth textWidth,
             OutputContext outputContext
         ) {
 
-            return this.meridiems(calendarType, locale, textWidth);
+            if (textWidth == TextWidth.NARROW) {
+                return new String[] {"A", "P"};
+            }
+
+            // JDK-Quelle
+            return DateFormatSymbols.getInstance(locale).getAmPmStrings();
 
         }
 
@@ -1608,7 +1597,8 @@ public final class CalendarText {
         public String[] meridiems(
             String calendarType,
             Locale locale,
-            TextWidth textWidth
+            TextWidth textWidth,
+            OutputContext outputContext
         ) {
 
             if (textWidth == TextWidth.NARROW) {
@@ -1616,18 +1606,6 @@ public final class CalendarText {
             } else {
                 return new String[] {"AM", "PM"};
             }
-
-        }
-
-        @Override
-        public String[] meridiems(
-            String calendarType,
-            Locale locale,
-            TextWidth textWidth,
-            OutputContext outputContext
-        ) {
-
-            return this.meridiems(calendarType, locale, textWidth);
 
         }
 
