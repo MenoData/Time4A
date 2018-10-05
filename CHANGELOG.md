@@ -1,5 +1,6 @@
 ## [v4.0-2018?] not yet released
 ### Changed
+- Improved handling of negative DST-offsets [#742]
 - Simplify generic formatter API [#813]
 - Remove deprecated stuff in ChronoMerger [#524]
 - StartOfDay now uses CalendarDate in abstract method [#655]
