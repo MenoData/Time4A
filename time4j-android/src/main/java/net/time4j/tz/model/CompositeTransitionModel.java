@@ -1,6 +1,6 @@
 /*
  * -----------------------------------------------------------------------
- * Copyright © 2013-2016 Meno Hochschild, <http://www.menodata.de/>
+ * Copyright © 2013-2018 Meno Hochschild, <http://www.menodata.de/>
  * -----------------------------------------------------------------------
  * This file (CompositeTransitionModel.java) is part of project Time4J.
  *
@@ -167,6 +167,13 @@ final class CompositeTransitionModel
 
         this.arrayModel.dump(this.size, buffer);
         this.ruleModel.dump(buffer);
+
+    }
+
+    @Override
+    public boolean hasNegativeDST() {
+
+        return this.ruleModel.hasNegativeDST() || this.arrayModel.hasNegativeDST();
 
     }
 

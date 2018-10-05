@@ -1,6 +1,6 @@
 /*
  * -----------------------------------------------------------------------
- * Copyright © 2013-2016 Meno Hochschild, <http://www.menodata.de/>
+ * Copyright © 2013-2018 Meno Hochschild, <http://www.menodata.de/>
  * -----------------------------------------------------------------------
  * This file (ArrayTransitionModel.java) is part of project Time4J.
  *
@@ -56,6 +56,7 @@ final class ArrayTransitionModel
     //~ Instanzvariablen --------------------------------------------------
 
     private transient final ZonalTransition[] transitions;
+    private transient final boolean negativeDST;
 
     // Cache
     private transient final List<ZonalTransition> stdTransitions;
@@ -83,6 +84,13 @@ final class ArrayTransitionModel
         int n = transitions.size();
         ZonalTransition[] tmp = new ZonalTransition[n];
         tmp = transitions.toArray(tmp);
+        boolean negativeDST = false;
+
+        for (ZonalTransition zt : tmp) {
+            negativeDST = (negativeDST || (zt.getDaylightSavingOffset() < 0));
+        }
+
+        this.negativeDST = negativeDST;
 
         if (create) {
             Arrays.sort(tmp);
@@ -107,6 +115,13 @@ final class ArrayTransitionModel
 
         return ZonalOffset.ofTotalSeconds(
             this.transitions[0].getPreviousOffset());
+
+    }
+
+    @Override
+    public boolean hasNegativeDST() {
+
+        return this.negativeDST;
 
     }
 
@@ -369,29 +384,6 @@ final class ArrayTransitionModel
 
     }
 
-    // Called by CompositeTransitionModel
-    static void checkSanity(
-        ZonalTransition[] transitions,
-        List<ZonalTransition> original
-    ) {
-
-        int previous = transitions[0].getTotalOffset();
-
-        for (int i = 1; i < transitions.length; i++) {
-            if (previous != transitions[i].getPreviousOffset()) {
-                Moment m =
-                    Moment.of(transitions[i].getPosixTime(), TimeScale.POSIX);
-                throw new IllegalArgumentException(
-                    "Model inconsistency detected at: " + m
-                    + " (" + transitions[i].getPosixTime() + ") "
-                    + " in transitions: " + original);
-            } else {
-                previous = transitions[i].getTotalOffset();
-            }
-        }
-
-    }
-
     /**
      * <p>Benutzt in der Serialisierung. </p>
      *
@@ -415,6 +407,28 @@ final class ArrayTransitionModel
     ) throws IOException {
 
         SPX.writeTransitions(this.transitions, size, out);
+
+    }
+
+    private static void checkSanity(
+            ZonalTransition[] transitions,
+            List<ZonalTransition> original
+    ) {
+
+        int previous = transitions[0].getTotalOffset();
+
+        for (int i = 1; i < transitions.length; i++) {
+            if (previous != transitions[i].getPreviousOffset()) {
+                Moment m =
+                        Moment.of(transitions[i].getPosixTime(), TimeScale.POSIX);
+                throw new IllegalArgumentException(
+                        "Model inconsistency detected at: " + m
+                                + " (" + transitions[i].getPosixTime() + ") "
+                                + " in transitions: " + original);
+            } else {
+                previous = transitions[i].getTotalOffset();
+            }
+        }
 
     }
 

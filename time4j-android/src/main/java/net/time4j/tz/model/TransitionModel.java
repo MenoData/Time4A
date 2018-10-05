@@ -1,6 +1,6 @@
 /*
  * -----------------------------------------------------------------------
- * Copyright © 2013-2016 Meno Hochschild, <http://www.menodata.de/>
+ * Copyright © 2013-2018 Meno Hochschild, <http://www.menodata.de/>
  * -----------------------------------------------------------------------
  * This file (TransitionModel.java) is part of project Time4J.
  *
@@ -168,6 +168,30 @@ public abstract class TransitionModel
 
     @Override
     public boolean isEmpty() {
+
+        return false;
+
+    }
+
+    /**
+     * <p>This method is only a performance indicator and determines if negative daylight savings
+     * exist at all in this model. </p>
+     *
+     * <p>The standard implementation obtains the value {@code false}. </p>
+     *
+     * @return  boolean
+     * @since   4.0
+     */
+    /*[deutsch]
+     * <p>Diese Methode dient nur Optimierungszwecken und ermittelt, ob es &uuml;berhaupt einen
+     * negativen DST-Versatz in diesem Modell gibt. </p>
+     *
+     * <p>Die Standardimplementierung liefert den Wert {@code false}. </p>
+     *
+     * @return  boolean
+     * @since   4.0
+     */
+    public boolean hasNegativeDST() {
 
         return false;
 
