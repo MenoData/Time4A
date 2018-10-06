@@ -1,4 +1,7 @@
 ## [v4.0-2018?] not yet released
+### Added
+- Enhance duration comparators [#816]
+
 ### Changed
 - Improved handling of negative DST-offsets [#742]
 - Simplify generic formatter API [#813]
