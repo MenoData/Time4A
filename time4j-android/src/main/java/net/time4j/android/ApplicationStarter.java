@@ -175,34 +175,6 @@ public class ApplicationStarter {
     }
 
     /**
-     * <p>Prepares and optimizes the access to all internal resource files. </p>
-     *
-     * <p>The application parameter should be specified otherwise Time4A will try to
-     * find the assets via the classloader and is likely to fail. </p>
-     *
-     * @param   application     Android app
-     * @since   3.5
-     * @deprecated  Use {@link #prepareAssets(Context, AssetLocation)}
-     */
-    /*[deutsch]
-     * <p>Bereitet den allgemeinen Ressourcenzugriff vor und optimiert ihn. </p>
-     *
-     * <p>Der Anwendungskontext sollte angegeben werden, sonst versucht Time4A
-     * die Ressourcen &uuml;ber den {@code Classloader} zu finden, was wahrscheinlich
-     * scheitert. </p>
-     *
-     * @param   application     Android app
-     * @since   3.5
-     * @deprecated  Use {@link #prepareAssets(Context, AssetLocation)}
-     */
-    @Deprecated
-    public static void prepareResources(Application application) {
-
-        prepareAssets(application, null);
-
-    }
-
-    /**
      * <p>Prepares and optimizes the access to all internal asset files. </p>
      *
      * <p>The context parameter must be specified while the second parameter

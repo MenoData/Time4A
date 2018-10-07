@@ -564,20 +564,6 @@ public final class PlainTime
             'H');
 
     /**
-     * <p>Synonym for {@code HOUR_FROM_0_TO_24}. </p>
-     *
-     * @deprecated  Use {@link #HOUR_FROM_0_TO_24} instead, will be removed in next major release
-     */
-    /*[deutsch]
-     * <p>Synonym f&uuml;r {@code HOUR_FROM_0_TO_24}. </p>
-     *
-     * @deprecated  Use {@link #HOUR_FROM_0_TO_24} instead, will be removed in next major release
-     */
-    @FormattableElement(format = "H")
-    @Deprecated
-    public static final ProportionalElement<Integer, PlainTime> ISO_HOUR = HOUR_FROM_0_TO_24;
-
-    /**
      * <p>Element with the minute of hour in the value range {@code 0-59}. </p>
      *
      * @see     #getMinute()
