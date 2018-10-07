@@ -3,6 +3,7 @@
 - Enhance duration comparators [#816]
 
 ### Changed
+- Remove confusing method `ZonalClock.currentMoment()` [#817]
 - Improved handling of negative DST-offsets [#742]
 - Simplify generic formatter API [#813]
 - Remove deprecated stuff in ChronoMerger [#524]
