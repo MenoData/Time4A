@@ -1,5 +1,6 @@
 ## [v4.0-2018?] not yet released
 ### Added
+- Make enums Month, Weekday and Quarter to operators for PlainDate [#819]
 - Enhance duration comparators [#816]
 
 ### Changed
