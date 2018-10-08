@@ -379,6 +379,28 @@ public class Chronology<T>
     }
 
     /**
+     * <p>Returns the calendar system for given calendar variant if available. </p>
+     *
+     * @param   variant     name of calendar variant
+     * @return  calendar system, not {@code null}
+     * @throws  ChronoException if a calendar system is unavailable for given variant (invalid variant name)
+     * @since   4.0
+     */
+    /*[deutsch]
+     * <p>Liefert das Kalendersystem zur angegebenen Kalendervariante, wenn verf&uuml;gbar. </p>
+     *
+     * @param   variant     name of calendar variant
+     * @return  calendar system, not {@code null}
+     * @throws  ChronoException if a calendar system is unavailable for given variant (invalid variant name)
+     * @since   4.0
+     */
+    public final CalendarSystem<T> getCalendarSystem(VariantSource variant) {
+
+        return this.getCalendarSystem(variant.getVariant());
+
+    }
+
+    /**
      * <p>Returns a typed singleton per {@code ChronoEntity}-class. </p>
      *
      * @param   <T> generic type of time context
@@ -392,7 +414,7 @@ public class Chronology<T>
      * @param   chronoType  chronological type
      * @return  chronology or {@code null} if not found
      */
-    public static <T extends ChronoEntity<T>> Chronology<T> lookup(Class<T> chronoType) {
+    public static <T> Chronology<T> lookup(Class<T> chronoType) {
 
         try {
             // Initialisierung der Klasse anstoßen, wenn noch nicht erfolgt
