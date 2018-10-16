@@ -6691,7 +6691,7 @@ public final class ChronoFormatter<T>
                 || !last.isNumerical()
                 || (count != 4)
             ) {
-                return this.addNumber(element, false, count, 9, SignPolicy.SHOW_WHEN_NEGATIVE, protectedMode);
+                return this.addNumber(element, false, count, 10, SignPolicy.SHOW_WHEN_NEGATIVE, protectedMode);
             }
 
             // adjacent digit parsing
