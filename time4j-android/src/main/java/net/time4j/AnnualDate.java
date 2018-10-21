@@ -43,8 +43,6 @@ import net.time4j.format.CalendarText;
 import net.time4j.format.CalendarType;
 import net.time4j.format.Leniency;
 import net.time4j.format.LocalizedPatternSupport;
-import net.time4j.format.expert.ChronoFormatter;
-import net.time4j.format.expert.PatternType;
 import net.time4j.tz.Timezone;
 
 import java.io.InvalidObjectException;
@@ -174,9 +172,6 @@ public final class AnnualDate
             .appendElement(MONTH_OF_YEAR, new MonthElementRule())
             .appendElement(MONTH_AS_NUMBER, new IntegerElementRule(false))
             .build();
-
-    private static final ChronoFormatter<AnnualDate> PARSER =
-        ChronoFormatter.setUp(ENGINE, Locale.ROOT).addPattern("--MM-dd", PatternType.CLDR).build();
 
     private static final long serialVersionUID = 7510648008819092983L;
 
@@ -431,7 +426,15 @@ public final class AnnualDate
      */
     public static AnnualDate parseXML(String xml) throws ParseException {
 
-        return PARSER.parse(xml);
+        if ((xml.length() == 7) && (xml.charAt(0) == '-') && (xml.charAt(1) == '-') && (xml.charAt(4) == '-')) {
+            int m1 = toDigit(xml, 2);
+            int m2 = toDigit(xml, 3);
+            int d1 = toDigit(xml, 5);
+            int d2 = toDigit(xml, 6);
+            return new AnnualDate(m1 * 10 + m2, d1 * 10 + d2);
+        } else {
+            throw new ParseException("Not compatible to standard XML-format: " + xml, xml.length());
+        }
 
     }
 
@@ -645,6 +648,21 @@ public final class AnnualDate
                 return 30;
             default:
                 return 31;
+        }
+
+    }
+
+    private static int toDigit(
+        String xml,
+        int offset
+    ) throws ParseException {
+
+        char c = xml.charAt(offset);
+
+        if ((c >= '0') && (c <= '9')) {
+            return (c - '0');
+        } else {
+            throw new ParseException("Digit expected: " + xml, offset);
         }
 
     }
