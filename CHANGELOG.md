@@ -1,7 +1,8 @@
-## [v4.0-2018?] not yet released
+## [v4.0-2018f] not yet released
 ### Added
 - Make enums Month, Weekday and Quarter to operators for PlainDate [#819]
 - Enhance duration comparators [#816]
+- Support tzdb-time-switches out of range T00:00/T24:00 [#825]
 
 ### Changed
 - Remove confusing method `ZonalClock.currentMoment()` [#817]
