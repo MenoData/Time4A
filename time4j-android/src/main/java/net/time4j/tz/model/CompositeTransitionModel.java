@@ -103,6 +103,20 @@ final class CompositeTransitionModel
     }
 
     @Override
+    public ZonalTransition getConflictTransition(
+        GregorianDate localDate,
+        WallTime localTime
+    ) {
+
+        return this.arrayModel.getConflictTransition(
+            localDate,
+            localTime,
+            this.ruleModel
+        );
+
+    }
+
+    @Override
     public ZonalTransition getNextTransition(UnixTime ut) {
 
         ZonalTransition result = this.arrayModel.getNextTransition(ut);
@@ -112,19 +126,6 @@ final class CompositeTransitionModel
         }
 
         return result;
-
-    }
-
-    @Override
-    public ZonalTransition getConflictTransition(
-        GregorianDate localDate,
-        WallTime localTime
-    ) {
-
-        return this.arrayModel.getConflictTransition(
-            localDate,
-            localTime,
-            this.ruleModel);
 
     }
 
@@ -255,7 +256,7 @@ final class CompositeTransitionModel
      *              at full hours around midnight in local standard time.
      *              Insight in details see source code.
      *
-     * @return  replacement object
+     * @return  replacement object in serialization graph
      */
     private Object writeReplace() {
 
@@ -264,12 +265,12 @@ final class CompositeTransitionModel
     }
 
     /**
-     * @param       in  serialization stream
      * @serialData  Blocks because a serialization proxy is required.
+     * @param       in      object input stream
      * @throws      InvalidObjectException (always)
      */
     private void readObject(ObjectInputStream in)
-        throws InvalidObjectException {
+        throws IOException {
 
         throw new InvalidObjectException("Serialization proxy required.");
 

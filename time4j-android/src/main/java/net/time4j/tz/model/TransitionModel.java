@@ -173,24 +173,7 @@ public abstract class TransitionModel
 
     }
 
-    /**
-     * <p>This method is only a performance indicator and determines if negative daylight savings
-     * exist at all in this model. </p>
-     *
-     * <p>The standard implementation obtains the value {@code false}. </p>
-     *
-     * @return  boolean
-     * @since   4.0
-     */
-    /*[deutsch]
-     * <p>Diese Methode dient nur Optimierungszwecken und ermittelt, ob es &uuml;berhaupt einen
-     * negativen DST-Versatz in diesem Modell gibt. </p>
-     *
-     * <p>Die Standardimplementierung liefert den Wert {@code false}. </p>
-     *
-     * @return  boolean
-     * @since   4.0
-     */
+    @Override
     public boolean hasNegativeDST() {
 
         return false;

@@ -236,6 +236,13 @@ final class RuleBasedTransitionModel
     }
 
     @Override
+    public ZonalTransition getNextTransition(UnixTime ut) {
+
+        return getNextTransition(ut.getPosixTime(), this.initial, this.rules);
+
+    }
+
+    @Override
     public List<ZonalOffset> getValidOffsets(
         GregorianDate localDate,
         WallTime localTime
@@ -268,9 +275,15 @@ final class RuleBasedTransitionModel
     }
 
     @Override
-    public ZonalTransition getNextTransition(UnixTime ut) {
+    public boolean hasNegativeDST() {
 
-        return getNextTransition(ut.getPosixTime(), this.initial, this.rules);
+        for (DaylightSavingRule rule : this.rules) {
+            if (rule.getSavings() < 0) {
+                return true;
+            }
+        }
+
+        return false;
 
     }
 
@@ -319,19 +332,6 @@ final class RuleBasedTransitionModel
         for (DaylightSavingRule rule : this.rules) {
             buffer.append(">>> ").append(rule.toString()).append(NEW_LINE);
         }
-
-    }
-
-    @Override
-    public boolean hasNegativeDST() {
-
-        for (DaylightSavingRule rule : this.rules) {
-            if (rule.getSavings() < 0) {
-                return true;
-            }
-        }
-
-        return false;
 
     }
 
