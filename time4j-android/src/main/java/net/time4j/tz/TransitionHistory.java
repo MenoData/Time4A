@@ -264,6 +264,22 @@ public interface TransitionHistory {
     );
 
     /**
+     * <p>This method is only a performance indicator and determines if negative daylight savings
+     * exist at all in this model. </p>
+     *
+     * @return  boolean
+     * @since   4.0
+     */
+    /*[deutsch]
+     * <p>Diese Methode dient nur Optimierungszwecken und ermittelt, ob es &uuml;berhaupt einen
+     * negativen DST-Versatz in diesem Modell gibt. </p>
+     *
+     * @return  boolean
+     * @since   4.0
+     */
+    boolean hasNegativeDST();
+
+    /**
      * <p>Determines if this history does not have any transitions. </p>
      *
      * @return  {@code true} if there are no transitions else {@code false}

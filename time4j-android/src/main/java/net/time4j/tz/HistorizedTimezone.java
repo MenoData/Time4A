@@ -24,7 +24,6 @@ package net.time4j.tz;
 import net.time4j.base.GregorianDate;
 import net.time4j.base.UnixTime;
 import net.time4j.base.WallTime;
-import net.time4j.tz.model.TransitionModel;
 
 import java.io.IOException;
 import java.io.InvalidObjectException;
@@ -202,11 +201,8 @@ final class HistorizedTimezone
         }
 
         // dst = 0
-        if (this.history instanceof TransitionModel) {
-            TransitionModel model = (TransitionModel) this.history;
-            if (!model.hasNegativeDST()) {
-                return false; // short-cut
-            }
+        if (!this.history.hasNegativeDST()) {
+            return false; // short-cut
         }
 
         // compare with previous transition
