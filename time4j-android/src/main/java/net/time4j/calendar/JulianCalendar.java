@@ -64,9 +64,13 @@ import net.time4j.history.HistoricEra;
 import net.time4j.tz.TZID;
 import net.time4j.tz.Timezone;
 
+import java.io.Externalizable;
 import java.io.IOException;
 import java.io.InvalidObjectException;
+import java.io.ObjectInput;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectStreamException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -877,8 +881,7 @@ public final class JulianCalendar
     }
 
     /**
-     * @serialData  Uses <a href="../../../serialized-form.html#net.time4j.calendar.SPX">
-     *              a dedicated serialization form</a> as proxy. The first byte contains
+     * @serialData  Uses a dedicated serialization form as proxy. The first byte contains
      *              the type-ID {@code 7}. Then the year is written as int, finally
      *              month and day-of-month as bytes.
      *
@@ -886,7 +889,7 @@ public final class JulianCalendar
      */
     private Object writeReplace() {
 
-        return new SPX(this, SPX.JULIAN);
+        return new SPX(this);
 
     }
 
@@ -1710,6 +1713,94 @@ public final class JulianCalendar
         private static long ymValue(JulianCalendar date) {
 
             return date.prolepticYear * 12L + date.month - 1;
+
+        }
+
+    }
+
+    private static class SPX
+        implements Externalizable {
+
+        //~ Statische Felder/Initialisierungen ----------------------------
+
+        private static final long serialVersionUID = 1L;
+        private static final int JULIAN = 7;
+
+        //~ Instanzvariablen ----------------------------------------------
+
+        private transient Object obj;
+
+        //~ Konstruktoren -------------------------------------------------
+
+        /**
+         * <p>Benutzt in der Deserialisierung gem&auml;&szlig; dem Kontrakt
+         * von {@code Externalizable}. </p>
+         */
+        public SPX() {
+            super();
+
+        }
+
+        /**
+         * <p>Benutzt in der Serialisierung (writeReplace). </p>
+         *
+         * @param   obj     object to be serialized
+         */
+        SPX(Object obj) {
+            super();
+
+            this.obj = obj;
+
+        }
+
+        //~ Methoden ------------------------------------------------------
+
+        @Override
+        public void writeExternal(ObjectOutput out) throws IOException {
+
+            out.writeByte(JULIAN);
+            this.writeJulian(out);
+
+        }
+
+        @Override
+        public void readExternal(ObjectInput in) throws IOException {
+
+            byte header = in.readByte();
+
+            switch (header) {
+                case JULIAN:
+                    this.obj = this.readJulian(in);
+                    break;
+                default:
+                    throw new InvalidObjectException("Unknown calendar type.");
+            }
+
+        }
+
+        private Object readResolve() throws ObjectStreamException {
+
+            return this.obj;
+
+        }
+
+        private void writeJulian(ObjectOutput out) throws IOException {
+
+            JulianCalendar jc = (JulianCalendar) this.obj;
+            out.writeInt(jc.getProlepticYear());
+            out.writeInt(jc.getMonth().getValue());
+            out.writeInt(jc.getDayOfMonth());
+
+        }
+
+        private JulianCalendar readJulian(ObjectInput in) throws IOException {
+
+            int pyear = in.readInt();
+            int month = in.readInt();
+            int dom = in.readInt();
+            HistoricEra era = ((pyear >= 1) ? HistoricEra.AD : HistoricEra.BC);
+            int yearOfEra = ((pyear >= 1) ? pyear : MathUtils.safeSubtract(1, pyear));
+            return JulianCalendar.of(era, yearOfEra, month, dom);
 
         }
 

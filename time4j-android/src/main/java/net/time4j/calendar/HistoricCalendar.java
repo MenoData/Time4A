@@ -77,9 +77,12 @@ import net.time4j.i18n.HistoricExtension;
 import net.time4j.tz.TZID;
 import net.time4j.tz.Timezone;
 
+import java.io.Externalizable;
 import java.io.IOException;
 import java.io.InvalidObjectException;
+import java.io.ObjectInput;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
 import java.io.ObjectStreamException;
 import java.text.ParsePosition;
 import java.util.ArrayList;
@@ -977,8 +980,7 @@ public final class HistoricCalendar
     }
 
     /**
-     * @serialData  Uses <a href="../../../serialized-form.html#net.time4j.calendar.SPX">
-     *              a dedicated serialization form</a> as proxy. The first byte contains
+     * @serialData  Uses a dedicated serialization form as proxy. The first byte contains
      *              the type-ID {@code 11}. Then the calendar history is written out as UTF-string.
      *              Finally the UTC-epoch-days of corresponding gregorian date will be serialized as long.
      *
@@ -986,7 +988,7 @@ public final class HistoricCalendar
      */
     private Object writeReplace() {
 
-        return new SPX(this, SPX.HISTORIC);
+        return new SPX(this);
 
     }
 
@@ -1998,6 +2000,92 @@ public final class HistoricCalendar
         public Chronology<?> preparser() {
 
             return null;
+
+        }
+
+    }
+
+    private static class SPX
+        implements Externalizable {
+
+        //~ Statische Felder/Initialisierungen ----------------------------
+
+        private static final long serialVersionUID = 1L;
+        private static final int HISTORIC = 11;
+
+        //~ Instanzvariablen ----------------------------------------------
+
+        private transient Object obj;
+
+        //~ Konstruktoren -------------------------------------------------
+
+        /**
+         * <p>Benutzt in der Deserialisierung gem&auml;&szlig; dem Kontrakt
+         * von {@code Externalizable}. </p>
+         */
+        public SPX() {
+            super();
+
+        }
+
+        /**
+         * <p>Benutzt in der Serialisierung (writeReplace). </p>
+         *
+         * @param   obj     object to be serialized
+         */
+        SPX(Object obj) {
+            super();
+
+            this.obj = obj;
+
+        }
+
+        //~ Methoden ------------------------------------------------------
+
+        @Override
+        public void writeExternal(ObjectOutput out) throws IOException {
+
+            out.writeByte(HISTORIC);
+            this.writeHistoric(out);
+
+        }
+
+        @Override
+        public void readExternal(ObjectInput in) throws IOException {
+
+            byte header = in.readByte();
+
+            switch (header) {
+                case HISTORIC:
+                    this.obj = this.readHistoric(in);
+                    break;
+                default:
+                    throw new InvalidObjectException("Unknown calendar type.");
+            }
+
+        }
+
+        private Object readResolve() throws ObjectStreamException {
+
+            return this.obj;
+
+        }
+
+        private void writeHistoric(ObjectOutput out) throws IOException {
+
+            HistoricCalendar cal = (HistoricCalendar) this.obj;
+            out.writeUTF(cal.getHistory().getVariant());
+            out.writeLong(cal.get(PlainDate.COMPONENT).getDaysSinceEpochUTC());
+
+        }
+
+        private HistoricCalendar readHistoric(ObjectInput in) throws IOException {
+
+            String variant = in.readUTF();
+            long utcDays = in.readLong();
+
+            PlainDate date = PlainDate.of(utcDays, EpochDays.UTC);
+            return date.transform(HistoricCalendar.class, variant);
 
         }
 

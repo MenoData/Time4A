@@ -1,6 +1,6 @@
 /*
  * -----------------------------------------------------------------------
- * Copyright © 2013-2017 Meno Hochschild, <http://www.menodata.de/>
+ * Copyright © 2013-2018 Meno Hochschild, <http://www.menodata.de/>
  * -----------------------------------------------------------------------
  * This file (EthiopianTime.java) is part of project Time4J.
  *
@@ -48,9 +48,13 @@ import net.time4j.format.CalendarType;
 import net.time4j.format.DisplayElement;
 import net.time4j.format.LocalizedPatternSupport;
 
+import java.io.Externalizable;
 import java.io.IOException;
 import java.io.InvalidObjectException;
+import java.io.ObjectInput;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectStreamException;
 import java.text.DateFormat;
 import java.util.EnumSet;
 import java.util.Locale;
@@ -1005,8 +1009,7 @@ public final class EthiopianTime
     }
 
     /**
-     * @serialData  Uses <a href="../../../serialized-form.html#net.time4j.calendar.SPX">
-     *              a dedicated serialization form</a> as proxy. The first byte contains
+     * @serialData  Uses a dedicated serialization form as proxy. The first byte contains
      *              the type-ID {@code 5}. Then the time of day in seconds using western
      *              format is written as integer.
      *
@@ -1014,7 +1017,7 @@ public final class EthiopianTime
      */
     private Object writeReplace() {
 
-        return new SPX(this, SPX.ETHIOPIAN_TIME);
+        return new SPX(this);
 
     }
 
@@ -1622,6 +1625,97 @@ public final class EthiopianTime
         @Override
         public int getDefaultPivotYear() {
             return Integer.MIN_VALUE;
+        }
+
+    }
+
+    private static class SPX
+        implements Externalizable {
+
+        //~ Statische Felder/Initialisierungen ----------------------------
+
+        private static final long serialVersionUID = 1L;
+        private static final int ETHIOPIAN_TIME = 5;
+
+        //~ Instanzvariablen ----------------------------------------------
+
+        private transient Object obj;
+
+        //~ Konstruktoren -------------------------------------------------
+
+        /**
+         * <p>Benutzt in der Deserialisierung gem&auml;&szlig; dem Kontrakt
+         * von {@code Externalizable}. </p>
+         */
+        public SPX() {
+            super();
+
+        }
+
+        /**
+         * <p>Benutzt in der Serialisierung (writeReplace). </p>
+         *
+         * @param   obj     object to be serialized
+         */
+        SPX(Object obj) {
+            super();
+
+            this.obj = obj;
+
+        }
+
+        //~ Methoden ------------------------------------------------------
+
+        @Override
+        public void writeExternal(ObjectOutput out) throws IOException {
+
+            out.writeByte(ETHIOPIAN_TIME);
+            this.writeEthiopianTime(out);
+
+        }
+
+        @Override
+        public void readExternal(ObjectInput in) throws IOException {
+
+            byte header = in.readByte();
+
+            switch (header) {
+                case ETHIOPIAN_TIME:
+                    this.obj = this.readEthiopianTime(in);
+                    break;
+                default:
+                    throw new InvalidObjectException("Unknown calendar type.");
+            }
+
+        }
+
+        private Object readResolve() throws ObjectStreamException {
+
+            return this.obj;
+
+        }
+
+        private void writeEthiopianTime(ObjectOutput out) throws IOException {
+
+            EthiopianTime ethio = (EthiopianTime) this.obj;
+            int tod =
+                ethio.get(EthiopianTime.DIGITAL_HOUR_OF_DAY).intValue() * 3600
+                    + ethio.getMinute() * 60
+                    + ethio.getSecond();
+            out.writeInt(tod);
+
+        }
+
+        private EthiopianTime readEthiopianTime(ObjectInput in) throws IOException {
+
+            int tod = in.readInt();
+            int second = tod % 60;
+            int minutes = tod / 60;
+            int minute = minutes % 60;
+            int hour24 = minutes / 60;
+            PlainTime time = PlainTime.of(hour24, minute, second);
+            return EthiopianTime.from(time);
+
         }
 
     }

@@ -59,9 +59,13 @@ import net.time4j.format.LocalizedPatternSupport;
 import net.time4j.tz.TZID;
 import net.time4j.tz.Timezone;
 
+import java.io.Externalizable;
 import java.io.IOException;
 import java.io.InvalidObjectException;
+import java.io.ObjectInput;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectStreamException;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -1407,8 +1411,7 @@ public final class HijriCalendar
     }
 
     /**
-     * @serialData  Uses <a href="../../../serialized-form.html#net.time4j.calendar.SPX">
-     *              a dedicated serialization form</a> as proxy. The first byte contains
+     * @serialData  Uses a dedicated serialization form as proxy. The first byte contains
      *              the type-ID {@code 1}. Then the UTF-coded variant and its data version
      *              follow. Finally the year is written as int, month and day-of-month as bytes.
      *              The successful serialization requires equal versions per variant on both sides.
@@ -1417,7 +1420,7 @@ public final class HijriCalendar
      */
     private Object writeReplace() {
 
-        return new SPX(this, SPX.HIJRI);
+        return new SPX(this);
 
     }
 
@@ -2049,6 +2052,105 @@ public final class HijriCalendar
         public int getDefaultPivotYear() {
 
             return HijriCalendar.nowInSystemTime(HijriAlgorithm.WEST_ISLAMIC_CIVIL,StartOfDay.MIDNIGHT).getYear() + 20;
+
+        }
+
+    }
+
+    private static class SPX
+        implements Externalizable {
+
+        //~ Statische Felder/Initialisierungen ----------------------------
+
+        private static final long serialVersionUID = 1L;
+        private static final int HIJRI = 1;
+
+        //~ Instanzvariablen ----------------------------------------------
+
+        private transient Object obj;
+
+        //~ Konstruktoren -------------------------------------------------
+
+        /**
+         * <p>Benutzt in der Deserialisierung gem&auml;&szlig; dem Kontrakt
+         * von {@code Externalizable}. </p>
+         */
+        public SPX() {
+            super();
+
+        }
+
+        /**
+         * <p>Benutzt in der Serialisierung (writeReplace). </p>
+         *
+         * @param   obj     object to be serialized
+         */
+        SPX(Object obj) {
+            super();
+
+            this.obj = obj;
+
+        }
+
+        //~ Methoden ------------------------------------------------------
+
+        @Override
+        public void writeExternal(ObjectOutput out) throws IOException {
+
+            out.writeByte(HIJRI);
+            this.writeHijri(out);
+
+        }
+
+        @Override
+        public void readExternal(ObjectInput in) throws IOException {
+
+            byte header = in.readByte();
+
+            switch (header) {
+                case HIJRI:
+                    this.obj = this.readHijri(in);
+                    break;
+                default:
+                    throw new InvalidObjectException("Unknown calendar type.");
+            }
+
+        }
+
+        private Object readResolve() throws ObjectStreamException {
+
+            return this.obj;
+
+        }
+
+        private void writeHijri(ObjectOutput out) throws IOException {
+
+            HijriCalendar hijri = (HijriCalendar) this.obj;
+            out.writeUTF(hijri.getVariant());
+            out.writeUTF(HijriCalendar.getVersion(hijri.getVariant()));
+            out.writeInt(hijri.getYear());
+            out.writeByte(hijri.getMonth().getValue());
+            out.writeByte(hijri.getDayOfMonth());
+
+        }
+
+        private HijriCalendar readHijri(ObjectInput in) throws IOException {
+
+            String variant = in.readUTF();
+            String version = in.readUTF();
+
+            if (!HijriCalendar.getVersion(variant).equals(version)) {
+                throw new InvalidObjectException(
+                        "Hijri calendar object with different data version not supported: "
+                                + variant
+                                + "/"
+                                + version);
+            }
+
+            int year = in.readInt();
+            int month = in.readByte();
+            int dom = in.readByte();
+            return HijriCalendar.of(variant, year, month, dom);
 
         }
 

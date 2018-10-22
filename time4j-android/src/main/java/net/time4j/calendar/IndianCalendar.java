@@ -63,9 +63,13 @@ import net.time4j.format.LocalizedPatternSupport;
 import net.time4j.tz.TZID;
 import net.time4j.tz.Timezone;
 
+import java.io.Externalizable;
 import java.io.IOException;
 import java.io.InvalidObjectException;
+import java.io.ObjectInput;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectStreamException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -789,8 +793,7 @@ public final class IndianCalendar
     }
 
     /**
-     * @serialData  Uses <a href="../../../serialized-form.html#net.time4j.calendar.SPX">
-     *              a dedicated serialization form</a> as proxy. The first byte contains
+     * @serialData  Uses a dedicated serialization form as proxy. The first byte contains
      *              the type-ID {@code 10}. Then the year is written as int, finally
      *              month and day-of-month as bytes.
      *
@@ -798,7 +801,7 @@ public final class IndianCalendar
      */
     private Object writeReplace() {
 
-        return new SPX(this, SPX.INDIAN);
+        return new SPX(this);
 
     }
 
@@ -1605,6 +1608,92 @@ public final class IndianCalendar
         private static int ymValue(IndianCalendar date) {
 
             return date.iyear * 12 + date.imonth - 1;
+
+        }
+
+    }
+
+    private static class SPX
+        implements Externalizable {
+
+        //~ Statische Felder/Initialisierungen ----------------------------
+
+        private static final long serialVersionUID = 1L;
+        private static final int INDIAN = 10;
+
+        //~ Instanzvariablen ----------------------------------------------
+
+        private transient Object obj;
+
+        //~ Konstruktoren -------------------------------------------------
+
+        /**
+         * <p>Benutzt in der Deserialisierung gem&auml;&szlig; dem Kontrakt
+         * von {@code Externalizable}. </p>
+         */
+        public SPX() {
+            super();
+
+        }
+
+        /**
+         * <p>Benutzt in der Serialisierung (writeReplace). </p>
+         *
+         * @param   obj     object to be serialized
+         */
+        SPX(Object obj) {
+            super();
+
+            this.obj = obj;
+
+        }
+
+        //~ Methoden ------------------------------------------------------
+
+        @Override
+        public void writeExternal(ObjectOutput out) throws IOException {
+
+            out.writeByte(INDIAN);
+            this.writeIndian(out);
+
+        }
+
+        @Override
+        public void readExternal(ObjectInput in) throws IOException {
+
+            byte header = in.readByte();
+
+            switch (header) {
+                case INDIAN:
+                    this.obj = this.readIndian(in);
+                    break;
+                default:
+                    throw new InvalidObjectException("Unknown calendar type.");
+            }
+
+        }
+
+        private Object readResolve() throws ObjectStreamException {
+
+            return this.obj;
+
+        }
+
+        private void writeIndian(ObjectOutput out) throws IOException {
+
+            IndianCalendar indian = (IndianCalendar) this.obj;
+            out.writeInt(indian.getYear());
+            out.writeByte(indian.getMonth().getValue());
+            out.writeByte(indian.getDayOfMonth());
+
+        }
+
+        private IndianCalendar readIndian(ObjectInput in) throws IOException {
+
+            int year = in.readInt();
+            int month = in.readByte();
+            int dom = in.readByte();
+            return IndianCalendar.of(year, month, dom);
 
         }
 

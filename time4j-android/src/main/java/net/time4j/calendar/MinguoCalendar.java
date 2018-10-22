@@ -63,9 +63,13 @@ import net.time4j.format.LocalizedPatternSupport;
 import net.time4j.tz.TZID;
 import net.time4j.tz.Timezone;
 
+import java.io.Externalizable;
 import java.io.IOException;
 import java.io.InvalidObjectException;
+import java.io.ObjectInput;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectStreamException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
@@ -791,21 +795,21 @@ public final class MinguoCalendar
     }
 
     /**
-     * @return replacement object in serialization graph
-     * @serialData Uses <a href="../../../serialized-form.html#net.time4j.calendar.SPX">
-     * a dedicated serialization form</a> as proxy. The first byte contains
-     * the type-ID {@code 6}. Then the associated gregorian date is written.
+     * @serialData  Uses a dedicated serialization form as proxy. The first byte contains
+     *              the type-ID {@code 6}. Then the associated gregorian date is written.
+     *
+     * @return  replacement object in serialization graph
      */
     private Object writeReplace() {
 
-        return new SPX(this, SPX.MINGUO);
+        return new SPX(this);
 
     }
 
     /**
-     * @param in object input stream
+     * @serialData  Blocks because a serialization proxy is required.
+     * @param       in      object input stream
      * @throws InvalidObjectException (always)
-     * @serialData Blocks because a serialization proxy is required.
      */
     private void readObject(ObjectInputStream in)
         throws IOException {
@@ -1242,6 +1246,89 @@ public final class MinguoCalendar
         public Chronology<?> preparser() {
 
             return null;
+
+        }
+
+    }
+
+    private static class SPX
+        implements Externalizable {
+
+        //~ Statische Felder/Initialisierungen ----------------------------
+
+        private static final long serialVersionUID = 1L;
+        private static final int MINGUO = 6;
+
+        //~ Instanzvariablen ----------------------------------------------
+
+        private transient Object obj;
+
+        //~ Konstruktoren -------------------------------------------------
+
+        /**
+         * <p>Benutzt in der Deserialisierung gem&auml;&szlig; dem Kontrakt
+         * von {@code Externalizable}. </p>
+         */
+        public SPX() {
+            super();
+
+        }
+
+        /**
+         * <p>Benutzt in der Serialisierung (writeReplace). </p>
+         *
+         * @param   obj     object to be serialized
+         */
+        SPX(Object obj) {
+            super();
+
+            this.obj = obj;
+
+        }
+
+        //~ Methoden ------------------------------------------------------
+
+        @Override
+        public void writeExternal(ObjectOutput out) throws IOException {
+
+            out.writeByte(MINGUO);
+            this.writeMinguo(out);
+
+        }
+
+        @Override
+        public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+
+            byte header = in.readByte();
+
+            switch (header) {
+                case MINGUO:
+                    this.obj = this.readMinguo(in);
+                    break;
+                default:
+                    throw new InvalidObjectException("Unknown calendar type.");
+            }
+
+        }
+
+        private Object readResolve() throws ObjectStreamException {
+
+            return this.obj;
+
+        }
+
+        private void writeMinguo(ObjectOutput out) throws IOException {
+
+            MinguoCalendar mc = (MinguoCalendar) this.obj;
+            out.writeObject(mc.toISO());
+
+        }
+
+        private MinguoCalendar readMinguo(ObjectInput in)
+            throws IOException, ClassNotFoundException {
+
+            PlainDate iso = PlainDate.class.cast(in.readObject());
+            return iso.transform(MinguoCalendar.class);
 
         }
 

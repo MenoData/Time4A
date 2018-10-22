@@ -73,10 +73,13 @@ import net.time4j.tz.TZID;
 import net.time4j.tz.Timezone;
 
 import java.io.DataInputStream;
+import java.io.Externalizable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InvalidObjectException;
+import java.io.ObjectInput;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
 import java.io.ObjectStreamException;
 import java.net.URI;
 import java.text.ParsePosition;
@@ -1563,16 +1566,16 @@ public final class JapaneseCalendar
     }
 
     /**
-     * @return      replacement object in serialization graph
-     * @serialData  Uses <a href="../../../serialized-form.html#net.time4j.calendar.SPX">
-     *              a dedicated serialization form</a> as proxy. The first byte contains
+     * @serialData  Uses a dedicated serialization form as proxy. The first byte contains
      *              the type-ID {@code 9}. Then the related gregorian year and the day-of-year
      *              are written as int-primitives. Note that the serialization round-trip
      *              might fail for calendar objects created in lax mode due to normalization.
+     *
+     * @return      replacement object in serialization graph
      */
     private Object writeReplace() {
 
-        return new SPX(this, SPX.JAPANESE);
+        return new SPX(this);
 
     }
 
@@ -2872,6 +2875,91 @@ public final class JapaneseCalendar
         public Chronology<?> preparser() {
 
             return null;
+
+        }
+
+    }
+
+    private static class SPX
+        implements Externalizable {
+
+        //~ Statische Felder/Initialisierungen ----------------------------
+
+        private static final long serialVersionUID = 1L;
+        private static final int JAPANESE = 9;
+
+        //~ Instanzvariablen ----------------------------------------------
+
+        private transient Object obj;
+
+        //~ Konstruktoren -------------------------------------------------
+
+        /**
+         * <p>Benutzt in der Deserialisierung gem&auml;&szlig; dem Kontrakt
+         * von {@code Externalizable}. </p>
+         */
+        public SPX() {
+            super();
+
+        }
+
+        /**
+         * <p>Benutzt in der Serialisierung (writeReplace). </p>
+         *
+         * @param   obj     object to be serialized
+         */
+        SPX(Object obj) {
+            super();
+
+            this.obj = obj;
+
+        }
+
+        //~ Methoden ------------------------------------------------------
+
+        @Override
+        public void writeExternal(ObjectOutput out) throws IOException {
+
+            out.writeByte(JAPANESE);
+            this.writeJapanese(out);
+
+        }
+
+        @Override
+        public void readExternal(ObjectInput in) throws IOException {
+
+            byte header = in.readByte();
+
+            switch (header) {
+                case JAPANESE:
+                    this.obj = this.readJapanese(in);
+                    break;
+                default:
+                    throw new InvalidObjectException("Unknown calendar type.");
+            }
+
+        }
+
+        private Object readResolve() throws ObjectStreamException {
+
+            return this.obj;
+
+        }
+
+        private void writeJapanese(ObjectOutput out) throws IOException {
+
+            JapaneseCalendar jcal = (JapaneseCalendar) this.obj;
+            out.writeInt(jcal.getYear() - 1 + jcal.getEra().getFirstRelatedGregorianYear());
+            out.writeInt(jcal.getDayOfYear());
+
+        }
+
+        private JapaneseCalendar readJapanese(ObjectInput in) throws IOException {
+
+            int relgregyear = in.readInt();
+            int doy = in.readInt();
+            long utcDays = JapaneseCalendar.transform(relgregyear, doy);
+            return JapaneseCalendar.axis().getCalendarSystem().transform(utcDays);
 
         }
 

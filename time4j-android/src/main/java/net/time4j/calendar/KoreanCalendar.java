@@ -45,9 +45,13 @@ import net.time4j.format.TextElement;
 import net.time4j.tz.OffsetSign;
 import net.time4j.tz.ZonalOffset;
 
+import java.io.Externalizable;
 import java.io.IOException;
 import java.io.InvalidObjectException;
+import java.io.ObjectInput;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectStreamException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -698,8 +702,7 @@ public final class KoreanCalendar
     }
 
     /**
-     * @serialData  Uses <a href="../../../serialized-form.html#net.time4j.calendar.SPX">
-     *              a dedicated serialization form</a> as proxy. The first byte contains
+     * @serialData  Uses a dedicated serialization form as proxy. The first byte contains
      *              the type-ID {@code 15}. Then the cycle, year-of-cycle and the month number
      *              are written as byte, finally the leap state of month as boolean and
      *              the day-of-month as byte.
@@ -708,7 +711,7 @@ public final class KoreanCalendar
      */
     private Object writeReplace() {
 
-        return new SPX(this, SPX.KOREAN);
+        return new SPX(this);
 
     }
 
@@ -1036,6 +1039,103 @@ public final class KoreanCalendar
             }
 
             return null;
+
+        }
+
+    }
+
+    private static class SPX
+        implements Externalizable {
+
+        //~ Statische Felder/Initialisierungen ----------------------------
+
+        private static final long serialVersionUID = 1L;
+        private static final int KOREAN = 15;
+
+        //~ Instanzvariablen ----------------------------------------------
+
+        private transient Object obj;
+
+        //~ Konstruktoren -------------------------------------------------
+
+        /**
+         * <p>Benutzt in der Deserialisierung gem&auml;&szlig; dem Kontrakt
+         * von {@code Externalizable}. </p>
+         */
+        public SPX() {
+            super();
+
+        }
+
+        /**
+         * <p>Benutzt in der Serialisierung (writeReplace). </p>
+         *
+         * @param   obj     object to be serialized
+         */
+        SPX(Object obj) {
+            super();
+
+            this.obj = obj;
+
+        }
+
+        //~ Methoden ------------------------------------------------------
+
+        @Override
+        public void writeExternal(ObjectOutput out) throws IOException {
+
+            out.writeByte(KOREAN);
+            this.writeKorean(out);
+
+        }
+
+        @Override
+        public void readExternal(ObjectInput in) throws IOException {
+
+            byte header = in.readByte();
+
+            switch (header) {
+                case KOREAN:
+                    this.obj = this.readKorean(in);
+                    break;
+                default:
+                    throw new InvalidObjectException("Unknown calendar type.");
+            }
+
+        }
+
+        private Object readResolve() throws ObjectStreamException {
+
+            return this.obj;
+
+        }
+
+        private void writeKorean(ObjectOutput out) throws IOException {
+
+            EastAsianCalendar<?, ?> cal = (EastAsianCalendar<?, ?>) this.obj;
+            out.writeByte(cal.getCycle());
+            out.writeByte(cal.getYear().getNumber());
+            out.writeByte(cal.getMonth().getNumber());
+            out.writeBoolean(cal.getMonth().isLeap());
+            out.writeByte(cal.getDayOfMonth());
+
+        }
+
+        private KoreanCalendar readKorean(ObjectInput in) throws IOException {
+
+            int cycle = in.readByte();
+            int yearOfCycle = in.readByte();
+            int month = in.readByte();
+            boolean leap = in.readBoolean();
+            int dom = in.readByte();
+
+            EastAsianMonth eam = EastAsianMonth.valueOf(month);
+
+            if (leap) {
+                eam = eam.withLeap();
+            }
+
+            return KoreanCalendar.of(cycle, yearOfCycle, eam, dom);
 
         }
 

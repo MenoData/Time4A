@@ -65,9 +65,13 @@ import net.time4j.history.HistoricEra;
 import net.time4j.tz.TZID;
 import net.time4j.tz.Timezone;
 
+import java.io.Externalizable;
 import java.io.IOException;
 import java.io.InvalidObjectException;
+import java.io.ObjectInput;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectStreamException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -889,8 +893,7 @@ public final class EthiopianCalendar
     }
 
     /**
-     * @serialData  Uses <a href="../../../serialized-form.html#net.time4j.calendar.SPX">
-     *              a dedicated serialization form</a> as proxy. The first byte contains
+     * @serialData  Uses a dedicated serialization form as proxy. The first byte contains
      *              the type-ID {@code 4}. Then the era ordinal is written as byte, the year-of-era
      *              is written as int, finally month and day-of-month written as bytes.
      *
@@ -898,7 +901,7 @@ public final class EthiopianCalendar
      */
     private Object writeReplace() {
 
-        return new SPX(this, SPX.ETHIOPIAN_DATE);
+        return new SPX(this);
 
     }
 
@@ -1748,6 +1751,94 @@ public final class EthiopianCalendar
         private static int ymValue(EthiopianCalendar date) {
 
             return date.mihret * 13 + date.emonth - 1;
+
+        }
+
+    }
+
+    private static class SPX
+        implements Externalizable {
+
+        //~ Statische Felder/Initialisierungen ----------------------------
+
+        private static final long serialVersionUID = 1L;
+        private static final int ETHIOPIAN_DATE = 4;
+
+        //~ Instanzvariablen ----------------------------------------------
+
+        private transient Object obj;
+
+        //~ Konstruktoren -------------------------------------------------
+
+        /**
+         * <p>Benutzt in der Deserialisierung gem&auml;&szlig; dem Kontrakt
+         * von {@code Externalizable}. </p>
+         */
+        public SPX() {
+            super();
+
+        }
+
+        /**
+         * <p>Benutzt in der Serialisierung (writeReplace). </p>
+         *
+         * @param   obj     object to be serialized
+         */
+        SPX(Object obj) {
+            super();
+
+            this.obj = obj;
+
+        }
+
+        //~ Methoden ------------------------------------------------------
+
+        @Override
+        public void writeExternal(ObjectOutput out) throws IOException {
+
+            out.writeByte(ETHIOPIAN_DATE);
+            this.writeEthiopianDate(out);
+
+        }
+
+        @Override
+        public void readExternal(ObjectInput in) throws IOException {
+
+            byte header = in.readByte();
+
+            switch (header) {
+                case ETHIOPIAN_DATE:
+                    this.obj = this.readEthiopianDate(in);
+                    break;
+                default:
+                    throw new InvalidObjectException("Unknown calendar type.");
+            }
+
+        }
+
+        private Object readResolve() throws ObjectStreamException {
+
+            return this.obj;
+
+        }
+
+        private void writeEthiopianDate(ObjectOutput out) throws IOException {
+
+            EthiopianCalendar ethio = (EthiopianCalendar) this.obj;
+            out.writeByte(ethio.getEra().ordinal());
+            out.writeInt(ethio.getYear());
+            out.writeByte(ethio.getMonth().getValue());
+            out.writeByte(ethio.getDayOfMonth());
+
+        }
+
+        private EthiopianCalendar readEthiopianDate(ObjectInput in) throws IOException {
+
+            EthiopianEra era = EthiopianEra.values()[in.readByte()];
+            int year = in.readInt();
+            int month = in.readByte();
+            int dom = in.readByte();
+            return EthiopianCalendar.of(era, year, month, dom);
 
         }
 

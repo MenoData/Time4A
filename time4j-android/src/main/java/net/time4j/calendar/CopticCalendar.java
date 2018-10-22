@@ -64,9 +64,13 @@ import net.time4j.history.HistoricEra;
 import net.time4j.tz.TZID;
 import net.time4j.tz.Timezone;
 
+import java.io.Externalizable;
 import java.io.IOException;
 import java.io.InvalidObjectException;
+import java.io.ObjectInput;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectStreamException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -822,8 +826,7 @@ public final class CopticCalendar
     }
 
     /**
-     * @serialData  Uses <a href="../../../serialized-form.html#net.time4j.calendar.SPX">
-     *              a dedicated serialization form</a> as proxy. The first byte contains
+     * @serialData  Uses a dedicated serialization form as proxy. The first byte contains
      *              the type-ID {@code 3}. Then the year is written as int, finally
      *              month and day-of-month as bytes.
      *
@@ -831,7 +834,7 @@ public final class CopticCalendar
      */
     private Object writeReplace() {
 
-        return new SPX(this, SPX.COPTIC);
+        return new SPX(this);
 
     }
 
@@ -1523,6 +1526,92 @@ public final class CopticCalendar
         private static int ymValue(CopticCalendar date) {
 
             return date.cyear * 13 + date.cmonth - 1;
+
+        }
+
+    }
+
+    private static class SPX
+        implements Externalizable {
+
+        //~ Statische Felder/Initialisierungen ----------------------------
+
+        private static final long serialVersionUID = 1L;
+        private static final int COPTIC = 3;
+
+        //~ Instanzvariablen ----------------------------------------------
+
+        private transient Object obj;
+
+        //~ Konstruktoren -------------------------------------------------
+
+        /**
+         * <p>Benutzt in der Deserialisierung gem&auml;&szlig; dem Kontrakt
+         * von {@code Externalizable}. </p>
+         */
+        public SPX() {
+            super();
+
+        }
+
+        /**
+         * <p>Benutzt in der Serialisierung (writeReplace). </p>
+         *
+         * @param   obj     object to be serialized
+         */
+        SPX(Object obj) {
+            super();
+
+            this.obj = obj;
+
+        }
+
+        //~ Methoden ------------------------------------------------------
+
+        @Override
+        public void writeExternal(ObjectOutput out) throws IOException {
+
+            out.writeByte(COPTIC);
+            this.writeCoptic(out);
+
+        }
+
+        @Override
+        public void readExternal(ObjectInput in) throws IOException {
+
+            byte header = in.readByte();
+
+            switch (header) {
+                case COPTIC:
+                    this.obj = this.readCoptic(in);
+                    break;
+                default:
+                    throw new InvalidObjectException("Unknown calendar type.");
+            }
+
+        }
+
+        private Object readResolve() throws ObjectStreamException {
+
+            return this.obj;
+
+        }
+
+        private void writeCoptic(ObjectOutput out) throws IOException {
+
+            CopticCalendar coptic = (CopticCalendar) this.obj;
+            out.writeInt(coptic.getYear());
+            out.writeByte(coptic.getMonth().getValue());
+            out.writeByte(coptic.getDayOfMonth());
+
+        }
+
+        private CopticCalendar readCoptic(ObjectInput in) throws IOException {
+
+            int year = in.readInt();
+            int month = in.readByte();
+            int dom = in.readByte();
+            return CopticCalendar.of(year, month, dom);
 
         }
 

@@ -63,9 +63,13 @@ import net.time4j.tz.TZID;
 import net.time4j.tz.Timezone;
 import net.time4j.tz.ZonalOffset;
 
+import java.io.Externalizable;
 import java.io.IOException;
 import java.io.InvalidObjectException;
+import java.io.ObjectInput;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectStreamException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -979,8 +983,7 @@ public final class PersianCalendar
     }
 
     /**
-     * @serialData  Uses <a href="../../../serialized-form.html#net.time4j.calendar.SPX">
-     *              a dedicated serialization form</a> as proxy. The first byte contains
+     * @serialData  Uses a dedicated serialization form as proxy. The first byte contains
      *              the type-ID {@code 2}. Then the year is written as int, finally
      *              month and day-of-month as bytes.
      *
@@ -988,7 +991,7 @@ public final class PersianCalendar
      */
     private Object writeReplace() {
 
-        return new SPX(this, SPX.PERSIAN);
+        return new SPX(this);
 
     }
 
@@ -1959,6 +1962,92 @@ public final class PersianCalendar
         private static int ymValue(PersianCalendar date) {
 
             return date.pyear * 12 + date.pmonth - 1;
+
+        }
+
+    }
+
+    private static class SPX
+        implements Externalizable {
+
+        //~ Statische Felder/Initialisierungen ----------------------------
+
+        private static final long serialVersionUID = 1L;
+        private static final int PERSIAN = 2;
+
+        //~ Instanzvariablen ----------------------------------------------
+
+        private transient Object obj;
+
+        //~ Konstruktoren -------------------------------------------------
+
+        /**
+         * <p>Benutzt in der Deserialisierung gem&auml;&szlig; dem Kontrakt
+         * von {@code Externalizable}. </p>
+         */
+        public SPX() {
+            super();
+
+        }
+
+        /**
+         * <p>Benutzt in der Serialisierung (writeReplace). </p>
+         *
+         * @param   obj     object to be serialized
+         */
+        SPX(Object obj) {
+            super();
+
+            this.obj = obj;
+
+        }
+
+        //~ Methoden ------------------------------------------------------
+
+        @Override
+        public void writeExternal(ObjectOutput out) throws IOException {
+
+            out.writeByte(PERSIAN);
+            this.writePersian(out);
+
+        }
+
+        @Override
+        public void readExternal(ObjectInput in) throws IOException {
+
+            byte header = in.readByte();
+
+            switch (header) {
+                case PERSIAN:
+                    this.obj = this.readPersian(in);
+                    break;
+                default:
+                    throw new InvalidObjectException("Unknown calendar type.");
+            }
+
+        }
+
+        private Object readResolve() throws ObjectStreamException {
+
+            return this.obj;
+
+        }
+
+        private void writePersian(ObjectOutput out) throws IOException {
+
+            PersianCalendar persian = (PersianCalendar) this.obj;
+            out.writeInt(persian.getYear());
+            out.writeByte(persian.getMonth().getValue());
+            out.writeByte(persian.getDayOfMonth());
+
+        }
+
+        private PersianCalendar readPersian(ObjectInput in) throws IOException {
+
+            int year = in.readInt();
+            int month = in.readByte();
+            int dom = in.readByte();
+            return PersianCalendar.of(year, month, dom);
 
         }
 

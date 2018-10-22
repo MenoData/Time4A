@@ -58,9 +58,13 @@ import net.time4j.tz.TZID;
 import net.time4j.tz.Timezone;
 import net.time4j.tz.ZonalOffset;
 
+import java.io.Externalizable;
 import java.io.IOException;
 import java.io.InvalidObjectException;
+import java.io.ObjectInput;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectStreamException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.EnumSet;
@@ -872,8 +876,7 @@ public final class HebrewTime
     }
 
     /**
-     * @serialData  Uses <a href="../../../serialized-form.html#net.time4j.calendar.SPX">
-     *              a dedicated serialization form</a> as proxy. The first byte contains the
+     * @serialData  Uses a dedicated serialization form as proxy. The first byte contains the
      *              type-ID {@code 13}. Then a boolean flag is written (set to {@code true} if day).
      *              Finally the hour is written as byte and the part of hour written as short integer.
      *
@@ -881,7 +884,7 @@ public final class HebrewTime
      */
     private Object writeReplace() {
 
-        return new SPX(this, SPX.HEBREW_TIME);
+        return new SPX(this);
 
     }
 
@@ -1351,6 +1354,91 @@ public final class HebrewTime
         @Override
         public int getDefaultPivotYear() {
             return Integer.MIN_VALUE;
+        }
+
+    }
+
+    private static class SPX
+        implements Externalizable {
+
+        //~ Statische Felder/Initialisierungen ----------------------------
+
+        private static final long serialVersionUID = 1L;
+        private static final int HEBREW_TIME = 13;
+
+        //~ Instanzvariablen ----------------------------------------------
+
+        private transient Object obj;
+
+        //~ Konstruktoren -------------------------------------------------
+
+        /**
+         * <p>Benutzt in der Deserialisierung gem&auml;&szlig; dem Kontrakt
+         * von {@code Externalizable}. </p>
+         */
+        public SPX() {
+            super();
+
+        }
+
+        /**
+         * <p>Benutzt in der Serialisierung (writeReplace). </p>
+         *
+         * @param   obj     object to be serialized
+         */
+        SPX(Object obj) {
+            super();
+
+            this.obj = obj;
+
+        }
+
+        //~ Methoden ------------------------------------------------------
+
+        @Override
+        public void writeExternal(ObjectOutput out) throws IOException {
+
+            out.writeByte(HEBREW_TIME);
+            this.writeHebrewTime(out);
+
+        }
+
+        @Override
+        public void readExternal(ObjectInput in) throws IOException {
+
+            byte header = in.readByte();
+
+            switch (header) {
+                case HEBREW_TIME:
+                    this.obj = this.readHebrewTime(in);
+                    break;
+                default:
+                    throw new InvalidObjectException("Unknown calendar type.");
+            }
+
+        }
+
+        private Object readResolve() throws ObjectStreamException {
+
+            return this.obj;
+
+        }
+
+        private void writeHebrewTime(ObjectOutput out) throws IOException {
+
+            HebrewTime time = (HebrewTime) this.obj;
+            out.writeByte(time.getDigitalHour());
+            out.writeShort(time.getPart());
+
+        }
+
+        private HebrewTime readHebrewTime(ObjectInput in) throws IOException {
+
+            int hour23 = in.readByte();
+            int part = in.readShort();
+
+            return HebrewTime.ofDigital(hour23, part);
+
         }
 
     }

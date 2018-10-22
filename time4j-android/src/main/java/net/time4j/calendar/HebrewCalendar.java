@@ -63,9 +63,13 @@ import net.time4j.format.LocalizedPatternSupport;
 import net.time4j.tz.TZID;
 import net.time4j.tz.Timezone;
 
+import java.io.Externalizable;
 import java.io.IOException;
 import java.io.InvalidObjectException;
+import java.io.ObjectInput;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectStreamException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -1183,8 +1187,7 @@ public final class HebrewCalendar
     }
 
     /**
-     * @serialData  Uses <a href="../../../serialized-form.html#net.time4j.calendar.SPX">
-     *              a dedicated serialization form</a> as proxy. The first byte contains
+     * @serialData  Uses a dedicated serialization form as proxy. The first byte contains
      *              the type-ID {@code 12}. Then the year is written as int, finally
      *              {@code month.getValue()} and day-of-month as bytes.
      *
@@ -1192,7 +1195,7 @@ public final class HebrewCalendar
      */
     private Object writeReplace() {
 
-        return new SPX(this, SPX.HEBREW_DATE);
+        return new SPX(this);
 
     }
 
@@ -2055,6 +2058,92 @@ public final class HebrewCalendar
                 default:
                     throw new UnsupportedOperationException(this.unit.name());
             }
+
+        }
+
+    }
+
+    private static class SPX
+        implements Externalizable {
+
+        //~ Statische Felder/Initialisierungen ----------------------------
+
+        private static final long serialVersionUID = 1L;
+        private static final int HEBREW_DATE = 12;
+
+        //~ Instanzvariablen ----------------------------------------------
+
+        private transient Object obj;
+
+        //~ Konstruktoren -------------------------------------------------
+
+        /**
+         * <p>Benutzt in der Deserialisierung gem&auml;&szlig; dem Kontrakt
+         * von {@code Externalizable}. </p>
+         */
+        public SPX() {
+            super();
+
+        }
+
+        /**
+         * <p>Benutzt in der Serialisierung (writeReplace). </p>
+         *
+         * @param   obj     object to be serialized
+         */
+        SPX(Object obj) {
+            super();
+
+            this.obj = obj;
+
+        }
+
+        //~ Methoden ------------------------------------------------------
+
+        @Override
+        public void writeExternal(ObjectOutput out) throws IOException {
+
+            out.writeByte(HEBREW_DATE);
+            this.writeHebrewDate(out);
+
+        }
+
+        @Override
+        public void readExternal(ObjectInput in) throws IOException {
+
+            byte header = in.readByte();
+
+            switch (header) {
+                case HEBREW_DATE:
+                    this.obj = this.readHebrewDate(in);
+                    break;
+                default:
+                    throw new InvalidObjectException("Unknown calendar type.");
+            }
+
+        }
+
+        private Object readResolve() throws ObjectStreamException {
+
+            return this.obj;
+
+        }
+
+        private void writeHebrewDate(ObjectOutput out) throws IOException {
+
+            HebrewCalendar cal = (HebrewCalendar) this.obj;
+            out.writeInt(cal.getYear());
+            out.writeByte(cal.getMonth().getValue());
+            out.writeByte(cal.getDayOfMonth());
+
+        }
+
+        private HebrewCalendar readHebrewDate(ObjectInput in) throws IOException {
+
+            int year = in.readInt();
+            HebrewMonth month = HebrewMonth.valueOf(in.readByte());
+            int dom = in.readByte();
+            return HebrewCalendar.of(year, month, dom);
 
         }
 
