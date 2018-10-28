@@ -21,6 +21,7 @@ import net.time4j.calendar.HijriCalendar;
 import net.time4j.calendar.JapaneseCalendar;
 import net.time4j.calendar.KoreanCalendar;
 import net.time4j.calendar.PersianCalendar;
+import net.time4j.calendar.PersianMonth;
 import net.time4j.calendar.astro.LunarTime;
 import net.time4j.calendar.astro.SolarTime;
 import net.time4j.calendar.frenchrev.FrenchRepublicanCalendar;
@@ -35,6 +36,11 @@ import net.time4j.tz.TZID;
 import net.time4j.tz.Timezone;
 import net.time4j.tz.olson.EUROPE;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.text.ParseException;
 import java.util.Locale;
 
@@ -80,8 +86,8 @@ public class TimeDemoApp
                         HijriCalendar.family(), HijriCalendar.VARIANT_ICU4J, StartOfDay.EVENING
                 ).toDate();
         String germanTime =
-                PlainTime.formatter(DisplayMode.FULL, Locale.GERMANY).format(
-                        SystemClock.inLocalView().now().toTime());
+                SystemClock.inLocalView().now().toTime().print(
+                        ChronoFormatter.ofTimeStyle(DisplayMode.FULL, Locale.GERMANY));
         ChronoFormatter<Moment> ef =
                 ChronoFormatter.setUpWithOverride(Locale.ENGLISH, EthiopianCalendar.axis())
                         .addPattern("G, yyyy-MM-dd hh:mm a XXX", PatternType.CLDR)
@@ -171,6 +177,7 @@ public class TimeDemoApp
                 + "\n=> Hijri-toString=" + hijriDate
                 + "\n=> Hijri-formatted=" + hf.format(hijriDate)
                 + "\n=> Persian-today=" + pf.format(hijriDate.transform(PersianCalendar.class))
+                + "\n=> Persian-serialized=" + createSerialized()
                 + "\n=> Japanese-today=" + jf.format(hijriDate.transform(JapaneseCalendar.class))
                 + "\n=> Hebrew-today=" + fh.format(hijriDate.transform(HebrewCalendar.class))
                 + "\n=> Ethiopian moment"
@@ -181,6 +188,42 @@ public class TimeDemoApp
                 + "\n=> Gregorian/Dangi date=" + gregKorean.format(PlainDate.nowInSystemTime())
                 + "\n=> Chinese-today=" + fc.format(ChineseCalendar.nowInSystemTime())
                 ;
+    }
+
+    private static PersianCalendar createSerialized() {
+        PersianCalendar pcal = PersianCalendar.of(1395, PersianMonth.DEY, 15);
+        return roundtrip(pcal);
+    }
+
+    private static PersianCalendar roundtrip(Object obj) {
+        ObjectOutputStream oos = null;
+        ObjectInputStream ois = null;
+        try {
+            try {
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                oos = new ObjectOutputStream(baos);
+                oos.writeObject(obj);
+                byte[] data = baos.toByteArray();
+                ByteArrayInputStream bais = new ByteArrayInputStream(data);
+                ois = new ObjectInputStream(bais);
+                Object result = ois.readObject();
+                if (!result.equals(obj)) {
+                    throw new AssertionError("Serialization error in Time4A.");
+                }
+                return PersianCalendar.class.cast(result);
+            } finally {
+                if (oos != null) {
+                    oos.close();
+                }
+                if (ois != null) {
+                    ois.close();
+                }
+            }
+        } catch (IOException ioe) {
+            throw new AssertionError(ioe);
+        } catch (ClassNotFoundException cnfe) {
+            throw new AssertionError(cnfe);
+        }
     }
 
 }
