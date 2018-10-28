@@ -13,15 +13,15 @@ ext {
     siteUrl = 'https://github.com/menodata/Time4A'
     gitUrl = 'https://github.com/menodata/Time4A.git'
 
-    libraryVersion = '4.0-2018e'
+    libraryVersion = '4.0-2018g'
 
     developerId = 'mhochschild'
     developerName = 'Meno Hochschild'
     developerEmail = 'mhochschild@gmx.de'
 
-    licenseName = 'GNU LESSER GENERAL PUBLIC LICENSE, Version 2.1, February 1999'
-    licenseUrl = 'http://www.gnu.org/licenses/lgpl-2.1.html'
-    allLicenses = ["LGPL-2.1"]
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
 }
 
 gradle.projectsEvaluated {
