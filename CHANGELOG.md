@@ -1,4 +1,6 @@
-## [v4.0-2018f] not yet released
+## [v4.1-2018?] not yet released
+
+## [v4.0-2018g] published on 2018-10-28
 ### Added
 - Time arithmetic in class GeneralTimestamp [#810]
 - Make enums Month, Weekday and Quarter to operators for PlainDate [#819]
@@ -6,7 +8,8 @@
 - Support tzdb-time-switches out of range T00:00/T24:00 [#825]
 
 ### Changed
-- Update TZDB to version 2018f [#828]
+- Licensed under Apache v2.0 [#621]
+- Update TZDB to version 2018g [#830]
 - Remove confusing method `ZonalClock.currentMoment()` [#817]
 - Improved handling of negative DST-offsets [#742]
 - Simplify generic formatter API [#813]
