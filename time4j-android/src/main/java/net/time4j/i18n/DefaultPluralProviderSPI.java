@@ -1,20 +1,22 @@
 /*
- * Licensed by the author of Time4J-project.
+ * -----------------------------------------------------------------------
+ * Copyright © 2013-2018 Meno Hochschild, <http://www.menodata.de/>
+ * -----------------------------------------------------------------------
+ * This file (DefaultPluralProviderSPI.java) is part of project Time4J.
  *
- * See the NOTICE file distributed with this work for additional
- * information regarding copyright ownership. The copyright owner
- * licenses this file to you under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance
- * with the License. You may obtain a copy of the License at
+ * Time4J is free software: You can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 2.1 of the License, or
+ * (at your option) any later version.
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ * Time4J is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
  *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations
- * under the License.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Time4J. If not, see <http://www.gnu.org/licenses/>.
+ * -----------------------------------------------------------------------
  */
 
 package net.time4j.i18n;
@@ -28,12 +30,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import static net.time4j.format.PluralCategory.FEW;
-import static net.time4j.format.PluralCategory.MANY;
-import static net.time4j.format.PluralCategory.ONE;
-import static net.time4j.format.PluralCategory.OTHER;
-import static net.time4j.format.PluralCategory.TWO;
-import static net.time4j.format.PluralCategory.ZERO;
+import static net.time4j.format.PluralCategory.*;
 
 
 /**
@@ -41,9 +38,9 @@ import static net.time4j.format.PluralCategory.ZERO;
  * plural rules. </p>
  *
  * @author  Meno Hochschild
- * @since   2.2
+ * @since   5.0
  */
-public final class PluralProviderSPI
+public final class DefaultPluralProviderSPI
     implements PluralProvider {
 
     //~ Statische Felder/Initialisierungen --------------------------------
@@ -98,7 +95,7 @@ public final class PluralProviderSPI
         fillO(omap, "hu", 3);
         fillO(omap, "ne", 4);
         fillO(omap, "kk", 5);
-        fillO(omap, "it", 6);
+        fillO(omap, "it sc scn", 6);
         fillO(omap, "ka", 7);
         fillO(omap, "sq", 8);
         fillO(omap, "en", 9);
@@ -113,13 +110,14 @@ public final class PluralProviderSPI
         fillO(omap, "uk", 18);
         fillO(omap, "tk", 19);
         fillO(omap, "or", 20);
+        fillO(omap, "gd", 21);
         ORDINAL_MAP.putAll(omap);
     }
 
     //~ Konstruktoren -----------------------------------------------------
 
     /** For {@code java.util.ServiceLoader}. */
-    public PluralProviderSPI() {
+    public DefaultPluralProviderSPI() {
         super();
 
     }
@@ -148,12 +146,13 @@ public final class PluralProviderSPI
         }
 
         PluralRules rules = null;
+        String region = locale.getCountry();
 
-        if (!locale.getCountry().equals("")) {
+        if (!region.isEmpty()) {
             StringBuilder kb = new StringBuilder();
             kb.append(locale.getLanguage());
             kb.append('_');
-            kb.append(locale.getCountry());
+            kb.append(region);
             rules = map.get(kb.toString());
         }
 
@@ -739,6 +738,15 @@ public final class PluralProviderSPI
                         return FEW;
                     } else if (n == 6) {
                         return MANY;
+                    }
+                    return OTHER;
+                case 21: // gd
+                    if (n == 1 || n == 11) {
+                        return ONE;
+                    } else if (n == 2 || n == 12) {
+                        return TWO;
+                    } else if (n == 3 || n == 13) {
+                        return FEW;
                     }
                     return OTHER;
                 default: // fallback

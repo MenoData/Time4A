@@ -27,6 +27,7 @@ import net.time4j.base.ResourceLoader;
 import net.time4j.calendar.service.GenericTextProviderSPI;
 import net.time4j.calendar.service.KoreanExtension;
 import net.time4j.engine.ChronoExtension;
+import net.time4j.i18n.DefaultPluralProviderSPI;
 import net.time4j.format.DisplayMode;
 import net.time4j.format.FormatPatternProvider;
 import net.time4j.format.NumberSymbolProvider;
@@ -37,7 +38,6 @@ import net.time4j.format.WeekdataProvider;
 import net.time4j.format.internal.ExtendedPatterns;
 import net.time4j.i18n.HistoricExtension;
 import net.time4j.i18n.IsoTextProviderSPI;
-import net.time4j.i18n.PluralProviderSPI;
 import net.time4j.i18n.SymbolProviderSPI;
 import net.time4j.i18n.UnitPatternProviderSPI;
 import net.time4j.i18n.WeekdataProviderSPI;
@@ -523,7 +523,7 @@ public class AndroidResourceLoader
         private static final Iterable<ChronoExtension> EXTENSIONS;
 
         static {
-            PluralProvider pluralProvider = new PluralProviderSPI();
+            PluralProvider pluralProvider = new DefaultPluralProviderSPI();
             PLURALS = Collections.singleton(pluralProvider);
 
             EXTENSIONS = Arrays.asList(new HistoricExtension(), new KoreanExtension());
