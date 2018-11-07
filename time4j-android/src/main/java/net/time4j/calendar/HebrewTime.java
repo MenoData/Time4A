@@ -1351,7 +1351,7 @@ public final class HebrewTime
 
         @Override
         public int getDefaultPivotYear() {
-            return Integer.MIN_VALUE;
+            return 100;
         }
 
     }

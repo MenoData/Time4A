@@ -553,12 +553,14 @@ public final class Attributes
         PredefinedKey.valueOf("PROTECTED_CHARACTERS", Integer.class);
 
     /**
-     * <p>Defines an attribute key which can be used in queries for the calendar variant. </p>
+     * <p>Defines a read-only attribute key which can be used in queries
+     * for the calendar variant. </p>
      *
      * @since   3.5/4.3
      */
     /*[deutsch]
-     * <p>Definiert ein Formatattribut, das in Abfragen nach der Kalendervariante verwendet werden kann. </p>
+     * <p>Definiert ein schreibgesch&uuml;tztes Formatattribut, das in Abfragen
+     * nach der Kalendervariante verwendet werden kann. </p>
      *
      * @since   3.5/4.3
      */
@@ -646,14 +648,14 @@ public final class Attributes
         PredefinedKey.valueOf("TIME_SCALE", TimeScale.class);
 
     /**
-     * <p>Defines an attribute key which can show the global format pattern when the formatter
-     * was constructed by pattern. </p>
+     * <p>Defines a read-only attribute key which can show the global format pattern
+     * when the formatter was constructed by pattern. </p>
      *
      * @since       3.33/4.28
      */
     /*[deutsch]
-     * <p>Definiert ein Formatattribut, das das bei der Konstruktion des Formatierers verwendete
-     * Formatmuster zeigen kann. </p>
+     * <p>Definiert ein schreibgesch&uuml;tztes Formatattribut, das das bei der Konstruktion
+     * des Formatierers verwendete Formatmuster zeigen kann. </p>
      *
      * @since       3.33/4.28
      */

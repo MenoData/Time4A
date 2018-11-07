@@ -1475,7 +1475,17 @@ public enum PatternType {
                 break;
             case 'w':
                 if (count <= 2) {
-                    addNumber(Weekmodel.of(locale).weekOfYear(), symbol, builder, count, sdf);
+                    ChronoElement<Integer> element = Weekmodel.of(locale).weekOfYear();
+                    for (ChronoElement<?> e : chronology.getRegisteredElements()) {
+                        if (
+                            (e.getSymbol() == symbol)
+                            && e.equals(Weekmodel.ISO.weekOfYear())
+                        ) {
+                            element = Weekmodel.ISO.weekOfYear(); // special case
+                            break;
+                        }
+                    }
+                    addNumber(element, symbol, builder, count, sdf);
                 } else {
                     throw new IllegalArgumentException(
                         "Too many pattern letters (w): " + count);

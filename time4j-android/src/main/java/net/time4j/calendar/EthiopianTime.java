@@ -1622,7 +1622,7 @@ public final class EthiopianTime
 
         @Override
         public int getDefaultPivotYear() {
-            return Integer.MIN_VALUE;
+            return 100;
         }
 
     }
