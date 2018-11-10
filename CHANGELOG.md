@@ -1,4 +1,6 @@
 ## [v4.1-2018?] not yet released
+### Changed
+- Update to CLDR 34 [#831]
 
 ## [v4.0-2018g] published on 2018-10-28
 ### Added
