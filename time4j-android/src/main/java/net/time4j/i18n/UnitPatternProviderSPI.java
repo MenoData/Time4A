@@ -19,6 +19,7 @@
 
 package net.time4j.i18n;
 
+import net.time4j.Weekday;
 import net.time4j.format.PluralCategory;
 import net.time4j.format.RelativeTimeProvider;
 import net.time4j.format.TextWidth;
@@ -364,6 +365,24 @@ public final class UnitPatternProviderSPI
     }
 
     @Override
+    public String labelForLast(Weekday weekday, Locale lang) {
+
+        return this.getLabel(
+            lang,
+            weekday.name().substring(0, 3).toLowerCase() + "-");
+
+    }
+
+    @Override
+    public String labelForNext(Weekday weekday, Locale lang) {
+
+        return this.getLabel(
+            lang,
+            weekday.name().substring(0, 3).toLowerCase() + "+");
+
+    }
+
+    @Override
     public String getListPattern(
         Locale desired,
         TextWidth width,
@@ -516,6 +535,44 @@ public final class UnitPatternProviderSPI
 		);
 
 	}
+
+    private String getLabel(
+        Locale		   desired,
+        String		   key
+    ) {
+
+        ClassLoader loader = this.getClass().getClassLoader();
+        ResourceBundle.Control control = UTF8ResourceControl.SINGLETON;
+        boolean init = true;
+        ResourceBundle first = null;
+        String baseName = "reltime/relpattern";
+
+        for (Locale locale : control.getCandidateLocales(baseName, desired)) {
+            ResourceBundle rb = (
+                init && (first != null)
+                    ? first
+                    : ResourceBundle.getBundle(baseName, locale, loader, control));
+
+            if (init) {
+                if (locale.equals(rb.getLocale())) {
+                    init = false;
+                } else {
+                    first = rb;
+                    continue;
+                }
+            }
+
+            UTF8ResourceBundle bundle = UTF8ResourceBundle.class.cast(rb);
+
+            if (bundle.getInternalKeys().contains(key)) {
+                return bundle.getString(key);
+            }
+
+        }
+
+        return "";
+
+    }
 
     private static String buildKey(
         char unitID,

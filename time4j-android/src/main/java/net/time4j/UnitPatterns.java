@@ -95,6 +95,8 @@ final class UnitPatterns {
     private final String yesterday;
     private final String today;
     private final String tomorrow;
+    private final Map<Weekday, String> lastWeekdays;
+    private final Map<Weekday, String> nextWeekdays;
 
     //~ Konstruktoren -----------------------------------------------------
 
@@ -197,6 +199,14 @@ final class UnitPatterns {
         String t1 = "";
         String t2 = "";
 
+        Map<Weekday, String> mLast = new EnumMap<Weekday, String>(Weekday.class);
+        Map<Weekday, String> mFuture = new EnumMap<Weekday, String>(Weekday.class);
+
+        for (Weekday wd : Weekday.values()) {
+            mLast.put(wd, "");
+            mFuture.put(wd, "");
+        }
+
         try {
             n = PROVIDER.getNowWord(language);
 
@@ -205,6 +215,10 @@ final class UnitPatterns {
                 y = rp.getYesterdayWord(language);
                 t1 = rp.getTodayWord(language);
                 t2 = rp.getTomorrowWord(language);
+                for (Weekday wd : Weekday.values()) {
+                    mLast.put(wd, rp.labelForLast(wd, language));
+                    mFuture.put(wd, rp.labelForNext(wd, language));
+                }
             }
         } catch (MissingResourceException mre) {
             n = FALLBACK.getNowWord(language); // should not happen
@@ -214,7 +228,8 @@ final class UnitPatterns {
         this.yesterday = y;
         this.today = t1;
         this.tomorrow = t2;
-
+        this.lastWeekdays = Collections.unmodifiableMap(mLast);
+        this.nextWeekdays = Collections.unmodifiableMap(mFuture);
     }
 
     //~ Methoden ----------------------------------------------------------
@@ -366,6 +381,31 @@ final class UnitPatterns {
 
     }
 
+    /**
+     * <p>Obtains the localized word for given last day-of-week if available. </p>
+     *
+     * @param   weekday     the last day of week
+     * @return  localized word, maybe empty
+     * @since   4.1
+     */
+    String labelForLast(Weekday weekday) {
+
+        return this.lastWeekdays.get(weekday);
+
+    }
+
+    /**
+     * <p>Obtains the localized word for given next day-of-week if available. </p>
+     *
+     * @param   weekday     the next day of week
+     * @return  localized word, maybe empty
+     * @since   4.1
+     */
+    String labelForNext(Weekday weekday) {
+
+        return this.nextWeekdays.get(weekday);
+
+    }
     /**
      * <p>Constructs a localized list pattern suitable for the use in
      * {@link java.text.MessageFormat#format(String, Object[])}. </p>

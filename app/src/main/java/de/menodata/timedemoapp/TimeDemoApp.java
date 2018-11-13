@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.format.DateFormat;
 import android.util.Log;
 
+import net.time4j.CalendarUnit;
 import net.time4j.ClockUnit;
 import net.time4j.Duration;
 import net.time4j.Moment;
@@ -34,6 +35,7 @@ import net.time4j.format.expert.ChronoFormatter;
 import net.time4j.format.expert.PatternType;
 import net.time4j.tz.TZID;
 import net.time4j.tz.Timezone;
+import net.time4j.tz.ZonalOffset;
 import net.time4j.tz.olson.EUROPE;
 
 import java.io.ByteArrayInputStream;
@@ -64,6 +66,10 @@ public class TimeDemoApp
 
         Duration<?> dur = Duration.of(337540, ClockUnit.SECONDS).with(Duration.STD_CLOCK_PERIOD);
         String formattedDuration = PrettyTime.of(Locale.FRANCE).print(dur, TextWidth.WIDE);
+        String relativeDuration =
+                PrettyTime.of(Locale.GERMAN).printRelative(
+                        PlainTimestamp.nowInSystemTime().minus(3, CalendarUnit.DAYS).atUTC(),
+                        ZonalOffset.UTC);
 
         int dangiYear = PlainDate.of(2018, 1, 1).get(KoreanCalendar.YEAR_OF_ERA);
         ChronoFormatter<PlainDate> gregKorean =
@@ -173,6 +179,7 @@ public class TimeDemoApp
                 + "\n=> moonset (HH): " + hhMoon.moonsetLocal()
                 + "\n"
                 + "\n=> Duration=" + formattedDuration
+                + "\n=> Relative (3 days earlier)=" + relativeDuration
                 + "\n"
                 + "\n=> Hijri-toString=" + hijriDate
                 + "\n=> Hijri-formatted=" + hf.format(hijriDate)
