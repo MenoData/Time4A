@@ -1,4 +1,7 @@
 ## [v4.1-2018?] not yet released
+### Added
+- Formatting relative times like "last Monday" or "next Friday" [#733]
+
 ### Changed
 - Update to CLDR 34 [#831]
 
