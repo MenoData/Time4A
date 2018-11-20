@@ -4,6 +4,7 @@
 - Formatting relative times like "last Monday" or "next Friday" [#733]
 
 ### Changed
+- Make parsing month names slightly more tolerant in smart mode [#837]
 - Update to CLDR 34 [#831]
 
 ## [v4.0-2018g] published on 2018-10-28
