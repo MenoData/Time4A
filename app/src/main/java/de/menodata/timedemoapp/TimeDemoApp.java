@@ -30,9 +30,11 @@ import net.time4j.engine.CalendarDays;
 import net.time4j.engine.StartOfDay;
 import net.time4j.format.CalendarText;
 import net.time4j.format.DisplayMode;
+import net.time4j.format.OutputContext;
 import net.time4j.format.TextWidth;
 import net.time4j.format.expert.ChronoFormatter;
 import net.time4j.format.expert.PatternType;
+import net.time4j.i18n.IsoTextProviderSPI;
 import net.time4j.tz.TZID;
 import net.time4j.tz.Timezone;
 import net.time4j.tz.ZonalOffset;
@@ -44,6 +46,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.Locale;
 
 public class TimeDemoApp
@@ -53,12 +56,33 @@ public class TimeDemoApp
     public void onCreate() {
         try {
             super.onCreate();
+            //checkBuiltInLocales();
             String timeInfo = getTimeInfo(this);
             Log.i("TIME4A", timeInfo);
         } catch (Throwable th) {
             Log.e("TIME4A-ERROR-ON-INIT", th.getMessage(), th);
             throw th;
         }
+    }
+
+    private static void checkBuiltInLocales() {
+        IsoTextProviderSPI spi = new IsoTextProviderSPI();
+        for (Locale locale : spi.getAvailableLocales()) {
+            for (TextWidth tw : TextWidth.values()) {
+                for (OutputContext oc : OutputContext.values()) {
+                    String[] arr =
+                            spi.months(CalendarText.ISO_CALENDAR_TYPE, locale, tw, oc, false);
+                    Log.i("TIME4A", locale + "=>" + Arrays.toString(arr));
+                }
+            }
+        }
+        String[] arr =
+                spi.months(
+                        CalendarText.ISO_CALENDAR_TYPE,
+                        new Locale("xyz", "??"),
+                        TextWidth.WIDE,
+                        OutputContext.FORMAT, false);
+        Log.i("TIME4A", "xyz-??=>" + Arrays.toString(arr));
     }
 
     // called by MainActivity

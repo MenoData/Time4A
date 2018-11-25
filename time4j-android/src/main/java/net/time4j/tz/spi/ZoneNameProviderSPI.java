@@ -20,7 +20,7 @@
 package net.time4j.tz.spi;
 
 import net.time4j.base.ResourceLoader;
-import net.time4j.i18n.UTF8ResourceControl;
+import net.time4j.i18n.PropertyBundle;
 import net.time4j.tz.NameStyle;
 import net.time4j.tz.ZoneNameProvider;
 
@@ -38,7 +38,6 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -62,7 +61,6 @@ public class ZoneNameProviderSPI
     private static final Set<String> GMT_ZONES;
     private static final Map<String, Set<String>> TERRITORIES;
     private static final Map<String, String> PRIMARIES;
-    private static final ResourceBundle.Control CONTROL;
 
     static {
         Set<String> gmtZones = new HashSet<String>();
@@ -96,16 +94,6 @@ public class ZoneNameProviderSPI
         addPrimary(primaries, "UA", "Europe/Kiev");
         addPrimary(primaries, "UZ", "Asia/Tashkent");
         PRIMARIES = Collections.unmodifiableMap(primaries);
-
-        CONTROL =
-            new UTF8ResourceControl() {
-                protected String getModuleName() {
-                    return "olson";
-                }
-                protected Class<?> getModuleRef() {
-                    return ZoneNameProviderSPI.class;
-                }
-            };
     }
 
     //~ Methoden ----------------------------------------------------------
@@ -286,19 +274,11 @@ public class ZoneNameProviderSPI
 
     }
 
-    /**
-     * <p>Gets a resource bundle for given calendar type and locale. </p>
-     *
-     * @param   desired         locale (language and/or country)
-     * @return  {@code ResourceBundle}
-     */
-    private static ResourceBundle getBundle(Locale desired) {
+    private static PropertyBundle getBundle(Locale desired) {
 
-        return ResourceBundle.getBundle(
-            "zones/tzname",
-            desired,
-            ZoneNameProviderSPI.class.getClassLoader(),
-            CONTROL);
+        return PropertyBundle.load(
+            "olson/zones/tzname",
+            desired);
 
     }
 

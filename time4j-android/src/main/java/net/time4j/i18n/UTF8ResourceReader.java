@@ -39,7 +39,7 @@ class UTF8ResourceReader
     //~ Instanzvariablen --------------------------------------------------
 
     private final PushbackInputStream pis;
-    private Reader internal = null;
+    private BufferedReader internal = null;
 
     //~ Konstruktoren -----------------------------------------------------
 
@@ -51,6 +51,20 @@ class UTF8ResourceReader
     }
 
     //~ Methoden ----------------------------------------------------------
+
+    /**
+     * See {@code BufferedReader}.
+     *
+     * @return  A String containing the contents of the line, not including any line-termination characters,
+     *          or null if the end of the stream has been reached
+     * @throws  IOException in case of any I/O-error
+     */
+    public String readLine() throws IOException {
+
+        this.init();
+        return this.internal.readLine();
+
+    }
 
     @Override
     public int read(char[] cbuf, int off, int len) throws IOException {

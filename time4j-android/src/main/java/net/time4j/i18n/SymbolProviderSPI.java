@@ -27,7 +27,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.Set;
 
 
@@ -54,12 +53,10 @@ public final class SymbolProviderSPI
     private static final Map<String, NumberSystem> CLDR_NAMES;
 
     static {
-        ResourceBundle rb =
-            ResourceBundle.getBundle(
-                "numbers/symbol",
-                Locale.ROOT,
-                getLoader(),
-                UTF8ResourceControl.SINGLETON);
+        PropertyBundle rb =
+            PropertyBundle.load(
+                "i18n/numbers/symbol",
+                Locale.ROOT);
 
         String[] languages = rb.getString("locales").split(" ");
         Set<String> set = new HashSet<String>();
@@ -156,7 +153,7 @@ public final class SymbolProviderSPI
         char standard
     ) {
 
-        ResourceBundle rb = getBundle(locale);
+        PropertyBundle rb = getBundle(locale);
 
         if (
             (rb != null)
@@ -175,7 +172,7 @@ public final class SymbolProviderSPI
         String standard
     ) {
 
-        ResourceBundle rb = getBundle(locale);
+        PropertyBundle rb = getBundle(locale);
 
         if (
             (rb != null)
@@ -188,24 +185,16 @@ public final class SymbolProviderSPI
 
     }
 
-    private static ResourceBundle getBundle(Locale desired) {
+    private static PropertyBundle getBundle(Locale desired) {
 
         if (SUPPORTED_LOCALES.contains(LanguageMatch.getAlias(desired))) {
-            return ResourceBundle.getBundle(
-                "numbers/symbol",
-                desired,
-                getLoader(),
-                UTF8ResourceControl.SINGLETON);
+            return PropertyBundle.load(
+                "i18n/numbers/symbol",
+                desired);
         }
 
         return null;
 
     }
-
-	private static ClassLoader getLoader() {
-
-		return SymbolProviderSPI.class.getClassLoader();
-
-	}
 
 }

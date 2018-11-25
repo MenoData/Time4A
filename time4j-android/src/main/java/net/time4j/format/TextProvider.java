@@ -20,7 +20,6 @@
 package net.time4j.format;
 
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 
 /**
@@ -257,20 +256,5 @@ public interface TextProvider {
         TextWidth textWidth,
         OutputContext outputContext
     );
-
-    /**
-     * <p>Returns a suitable object for controlling access to resources. </p>
-     *
-     * @return  helper object for accessing resources
-     * @since   2.2
-     */
-    /*[deutsch]
-     * <p>Liefert ein geeignetes Hilfsobjekt zur fein-granularen Kontrolle
-     * des Zugangs zu Ressourcen. </p>
-     *
-     * @return  helper object for accessing resources
-     * @since   2.2
-     */
-    ResourceBundle.Control getControl();
 
 }

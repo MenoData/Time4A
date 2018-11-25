@@ -26,7 +26,6 @@ import net.time4j.format.TextWidth;
 
 import java.util.Locale;
 import java.util.MissingResourceException;
-import java.util.ResourceBundle;
 
 
 /**
@@ -393,10 +392,7 @@ public final class UnitPatternProviderSPI
             throw new IllegalArgumentException("Size must be greater than 1.");
         }
 
-		ClassLoader loader = this.getClass().getClassLoader();
-		ResourceBundle.Control control = UTF8ResourceControl.SINGLETON;
-		ResourceBundle rb =
-            ResourceBundle.getBundle("units/upattern", desired, loader, control);
+        PropertyBundle rb = PropertyBundle.load("i18n/units/upattern", desired);
         String exact = buildListKey(width, String.valueOf(size));
 
         if (rb.containsKey(exact)) {
@@ -494,16 +490,14 @@ public final class UnitPatternProviderSPI
 		PluralCategory category
 	) {
 
-		ClassLoader loader = this.getClass().getClassLoader();
-		ResourceBundle.Control control = UTF8ResourceControl.SINGLETON;
 		boolean init = true;
-		ResourceBundle first = null;
+        PropertyBundle first = null;
 
-		for (Locale locale : control.getCandidateLocales(baseName, desired)) {
-			ResourceBundle rb = (
+		for (Locale locale : PropertyBundle.getCandidateLocales(desired)) {
+            PropertyBundle rb = (
 				init && (first != null)
 				? first
-				: ResourceBundle.getBundle(baseName, locale, loader, control));
+				: PropertyBundle.load("i18n/" + baseName, locale));
 
 			if (init) {
 				if (locale.equals(rb.getLocale())) {
@@ -514,15 +508,13 @@ public final class UnitPatternProviderSPI
 				}
 			}
 
-			UTF8ResourceBundle bundle = UTF8ResourceBundle.class.cast(rb);
-
-			if (bundle.getInternalKeys().contains(key)) {
-				return bundle.getString(key);
+			if (rb.getInternalKeys().contains(key)) {
+				return rb.getString(key);
 			} else if (
 				(category != PluralCategory.OTHER)
-				&& bundle.getInternalKeys().contains(alt)
+				&& rb.getInternalKeys().contains(alt)
 			) {
-				return bundle.getString(alt);
+				return rb.getString(alt);
 			}
 
 		}
@@ -541,17 +533,15 @@ public final class UnitPatternProviderSPI
         String		   key
     ) {
 
-        ClassLoader loader = this.getClass().getClassLoader();
-        ResourceBundle.Control control = UTF8ResourceControl.SINGLETON;
         boolean init = true;
-        ResourceBundle first = null;
-        String baseName = "reltime/relpattern";
+        PropertyBundle first = null;
+        String baseName = "i18n/reltime/relpattern";
 
-        for (Locale locale : control.getCandidateLocales(baseName, desired)) {
-            ResourceBundle rb = (
+        for (Locale locale : PropertyBundle.getCandidateLocales(desired)) {
+            PropertyBundle rb = (
                 init && (first != null)
                     ? first
-                    : ResourceBundle.getBundle(baseName, locale, loader, control));
+                    : PropertyBundle.load(baseName, locale));
 
             if (init) {
                 if (locale.equals(rb.getLocale())) {
@@ -562,10 +552,8 @@ public final class UnitPatternProviderSPI
                 }
             }
 
-            UTF8ResourceBundle bundle = UTF8ResourceBundle.class.cast(rb);
-
-            if (bundle.getInternalKeys().contains(key)) {
-                return bundle.getString(key);
+            if (rb.getInternalKeys().contains(key)) {
+                return rb.getString(key);
             }
 
         }

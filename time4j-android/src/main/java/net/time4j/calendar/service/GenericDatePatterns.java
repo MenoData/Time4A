@@ -23,9 +23,9 @@ package net.time4j.calendar.service;
 import net.time4j.engine.DisplayStyle;
 import net.time4j.format.CalendarText;
 import net.time4j.format.DisplayMode;
+import net.time4j.i18n.PropertyBundle;
 
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 
 /**
@@ -72,7 +72,7 @@ public final class GenericDatePatterns {
         sb.append(')');
         String key = sb.toString();
 
-        ResourceBundle rb = GenericTextProviderSPI.getBundle(calendarType, locale);
+        PropertyBundle rb = GenericTextProviderSPI.getBundle(calendarType, locale);
 
         if (!rb.containsKey(key)) {
             rb = GenericTextProviderSPI.getBundle("generic", locale);

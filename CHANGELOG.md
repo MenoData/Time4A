@@ -1,4 +1,6 @@
-## [v4.1-2018?] not yet released
+## [v4.2-2018?] not yet released
+
+## [v4.1-2018g] published on 2018-11-25
 ### Added
 - Support for languages Assamese, Sindhi and Tongan [#834]
 - Formatting relative times like "last Monday" or "next Friday" [#733]

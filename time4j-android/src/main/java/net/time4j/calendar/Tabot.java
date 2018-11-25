@@ -24,6 +24,7 @@ import net.time4j.engine.AttributeQuery;
 import net.time4j.engine.ChronoDisplay;
 import net.time4j.format.Attributes;
 import net.time4j.format.TextElement;
+import net.time4j.i18n.PropertyBundle;
 
 import java.io.IOException;
 import java.text.ParsePosition;
@@ -31,7 +32,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 
 /**
@@ -57,8 +57,8 @@ public final class Tabot
 
     static {
         GenericTextProviderSPI spi = new GenericTextProviderSPI();
-        ResourceBundle rbRoot = getBundle(Locale.ROOT, spi.getControl());
-        ResourceBundle rbAmharic = getBundle(new Locale("am"), spi.getControl());
+        PropertyBundle rbRoot = getBundle(Locale.ROOT);
+        PropertyBundle rbAmharic = getBundle(new Locale("am"));
 
         String[] transscription = new String[30];
         String[] amharic = new String[30];
@@ -211,16 +211,11 @@ public final class Tabot
 
     }
 
-    private static ResourceBundle getBundle(
-        Locale locale,
-        ResourceBundle.Control control
-    ) {
+    private static PropertyBundle getBundle(Locale locale) {
 
-        return ResourceBundle.getBundle(
-            "names/ethiopic",
-            locale,
-            GenericTextProviderSPI.class.getClassLoader(),
-            control);
+        return PropertyBundle.load(
+            "calendar/names/ethiopic",
+            locale);
 
     }
 
