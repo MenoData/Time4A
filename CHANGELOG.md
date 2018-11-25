@@ -6,6 +6,7 @@
 - Formatting relative times like "last Monday" or "next Friday" [#733]
 
 ### Changed
+- Replace usage of java.util.ResourceBundle for sake of robustness [#838]
 - Make parsing month names slightly more tolerant in smart mode [#837]
 - Update to CLDR 34 [#831]
 
