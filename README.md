@@ -3,10 +3,7 @@ Advanced Date and Time Library for Android
 
 ## What is Time4A?
 This project is a specialized version of Time4J-v3.x (originally using the branch level6) and distributes
-an AAR-library suitable for the Android platform. It is not modularized like Time4J itself, but its (single) artifact 
-"time4j-android" replaces the Time4J-modules "core", "i18n", "calendar", "olson" and "tzdata". Hence the only Time4J-modules
-which might be combined with this AAR-library are just "misc" and "range" if needed. More details and links can be found in
-the main project under:
+an AAR-library suitable for the Android platform. More details and links can be found in the main project under:
 
 https://github.com/MenoData/Time4J
 
@@ -19,7 +16,7 @@ resources by defining your own assets using the same resource paths.
 While libraries like ThreetenABP or Joda-Time-Android care about holding the latest timezone data independent
 from the Android platform they fail to hold their own i18n-resources. But real-world mobile devices using the
 Android platform often use very different text resources and data for world languages, dependent on how up-to-date
-the Android OS-version is. Time4A closes this big gap **supporting actually 89 languages** and has more features
+the Android OS-version is. Time4A closes this big gap **supporting actually 92 languages** and has more features
 than any other date and time library available for the Android platform. Of course, Time4A also supports the
 **newest timezone data** available at [IANA](http://www.iana.org/time-zones). On the other side: If you really
 want you can even use the platform timezone data in parallel. Time4A gives you the freedom which timezone data to use.
@@ -35,7 +32,7 @@ Only two steps are required before coding against the API of Time4A.
 
 ```groovy
 dependencies {
-    implementation group: 'net.time4j', name: 'time4j-android', version: '4.0-2018g'
+    implementation group: 'net.time4j', name: 'time4j-android', version: '4.1-2018g'
 }
 ```
 
