@@ -138,6 +138,8 @@ public final class PrettyTime {
     private final IsoUnit emptyUnit;
     private final boolean weekToDays;
     private final boolean shortStyle;
+    private final String stdListSeparator;
+    private final String endListSeparator;
 
     //~ Konstruktoren -----------------------------------------------------
 
@@ -148,7 +150,9 @@ public final class PrettyTime {
         String minusSign,
         IsoUnit emptyUnit,
         boolean weekToDays,
-        boolean shortStyle
+        boolean shortStyle,
+        String stdListSeparator,
+        String endListSeparator
     ) {
         super();
 
@@ -167,6 +171,8 @@ public final class PrettyTime {
         this.minusSign = minusSign;
         this.weekToDays = weekToDays;
         this.shortStyle = shortStyle;
+        this.stdListSeparator = stdListSeparator;
+        this.endListSeparator = endListSeparator;
 
     }
 
@@ -201,7 +207,9 @@ public final class PrettyTime {
                     NUMBER_SYMBOLS.getMinusSign(locale),
                     SECONDS,
                     false,
-                    false);
+                    false,
+                    null,
+                    null);
             PrettyTime old = LANGUAGE_MAP.putIfAbsent(locale, ptime);
 
             if (old != null) {
@@ -286,7 +294,9 @@ public final class PrettyTime {
             this.minusSign,
             this.emptyUnit,
             this.weekToDays,
-            this.shortStyle);
+            this.shortStyle,
+            this.stdListSeparator,
+            this.endListSeparator);
 
     }
 
@@ -361,7 +371,9 @@ public final class PrettyTime {
             this.minusSign,
             this.emptyUnit,
             this.weekToDays,
-            this.shortStyle);
+            this.shortStyle,
+            this.stdListSeparator,
+            this.endListSeparator);
 
     }
 
@@ -413,7 +425,9 @@ public final class PrettyTime {
             minusSign,
             this.emptyUnit,
             this.weekToDays,
-            this.shortStyle);
+            this.shortStyle,
+            this.stdListSeparator,
+            this.endListSeparator);
 
     }
 
@@ -453,7 +467,9 @@ public final class PrettyTime {
             this.minusSign,
             emptyUnit,
             this.weekToDays,
-            this.shortStyle);
+            this.shortStyle,
+            this.stdListSeparator,
+            this.endListSeparator);
 
     }
 
@@ -493,7 +509,9 @@ public final class PrettyTime {
             this.minusSign,
             emptyUnit,
             this.weekToDays,
-            this.shortStyle);
+            this.shortStyle,
+            this.stdListSeparator,
+            this.endListSeparator);
 
     }
 
@@ -522,7 +540,9 @@ public final class PrettyTime {
             this.minusSign,
             this.emptyUnit,
             true,
-            this.shortStyle);
+            this.shortStyle,
+            this.stdListSeparator,
+            this.endListSeparator);
 
     }
 
@@ -558,7 +578,109 @@ public final class PrettyTime {
             this.minusSign,
             this.emptyUnit,
             this.weekToDays,
-            true);
+            true,
+            this.stdListSeparator,
+            this.endListSeparator);
+
+    }
+
+    /**
+     * <p>Mandates the use of given default list separator. </p>
+     *
+     * <p>Usually the locale specifies any list patterns for printing durations. However, this
+     * method allows customized list separators. Example: </p>
+     *
+     * <pre>
+     *     assertThat(
+     *      PrettyTime.of(Locale.US)
+     *          .withDefaultListSeparator(&quot; | &quot;)
+     *          .withLastListSeparator(&quot; + &quot;)
+     *          .print(Duration.ofCalendarUnits(1, 2, 3), TextWidth.WIDE),
+     *      is(&quot;1 year | 2 months + 3 days&quot;));
+     * </pre>
+     *
+     * @param   separator   the separator characters between any duration items
+     * @return  changed copy of this instance
+     * @see     #withLastListSeparator(String)
+     * @since   4.2
+     */
+    /*[deutsch]
+     * <p>Legt einen neuen Standard f&uuml;r die Listentrennzeichen fest. </p>
+     *
+     * <p>Normalerweise legt die angewandte {@code Locale} die verwendeten Listentrennzeichen fest.
+     * Diese Methode erlaubt benutzerdefinierte Listentrennzeichen. Beispiel: </p>
+     *
+     * <pre>
+     *     assertThat(
+     *      PrettyTime.of(Locale.US)
+     *          .withDefaultListSeparator(&quot; | &quot;)
+     *          .withLastListSeparator(&quot; + &quot;)
+     *          .print(Duration.ofCalendarUnits(1, 2, 3), TextWidth.WIDE),
+     *      is(&quot;1 year | 2 months + 3 days&quot;));
+     * </pre>
+     *
+     * @param   separator   the separator characters between any duration items
+     * @return  changed copy of this instance
+     * @see     #withLastListSeparator(String)
+     * @since   4.2
+     */
+    public PrettyTime withDefaultListSeparator(String separator) {
+
+        if (separator.equals(this.stdListSeparator)) { // includes NPE-check
+            return this;
+        }
+
+        return new PrettyTime(
+                this.locale,
+                this.refClock,
+                this.zeroDigit,
+                this.minusSign,
+                this.emptyUnit,
+                this.weekToDays,
+                this.shortStyle,
+                separator,
+                this.endListSeparator);
+
+    }
+
+    /**
+     * <p>Mandates the use of given list separator at the last position. </p>
+     *
+     * <p><strong>Important:</strong> A default list separator must be specified
+     * otherwise this method will have no effect. </p>
+     *
+     * @param   separator   the separator characters between the last two duration items
+     * @return  changed copy of this instance
+     * @see     #withDefaultListSeparator(String)
+     * @since   4.2
+     */
+    /*[deutsch]
+     * <p>Legt die Listentrennzeichen an der letzten Position fest. </p>
+     *
+     * <p><strong>Wichtig:</strong> Die Standardlistentrennzeichen m&uuml;ssen angegeben
+     * werden, damit diese Methode Wirkung zeigt. </p>
+     *
+     * @param   separator   the separator characters between the last two duration items
+     * @return  changed copy of this instance
+     * @see     #withDefaultListSeparator(String)
+     * @since   4.2
+     */
+    public PrettyTime withLastListSeparator(String separator) {
+
+        if (separator.equals(this.endListSeparator)) { // includes NPE-check
+            return this;
+        }
+
+        return new PrettyTime(
+            this.locale,
+            this.refClock,
+            this.zeroDigit,
+            this.minusSign,
+            this.emptyUnit,
+            this.weekToDays,
+            this.shortStyle,
+            this.stdListSeparator,
+            separator);
 
     }
 
@@ -947,8 +1069,31 @@ public final class PrettyTime {
         }
 
         // multiple items >= 2
+        String listPattern;
+
+        if (this.stdListSeparator != null) {
+            String endSep = this.endListSeparator;
+            if (endSep == null) {
+                endSep = this.stdListSeparator;
+            }
+            StringBuilder sb = new StringBuilder();
+            for (int i = count - 1; i >= 0; i--) {
+                sb.insert(0, '}');
+                sb.insert(0, i);
+                sb.insert(0, '{');
+                if (i == count - 1) {
+                    sb.insert(0, endSep);
+                } else if (i > 0) {
+                    sb.insert(0, this.stdListSeparator);
+                }
+            }
+            listPattern = sb.toString();
+        } else {
+            listPattern = UnitPatterns.of(this.locale).getListPattern(width, count);
+        }
+
         return MessageFormat.format(
-            UnitPatterns.of(this.locale).getListPattern(width, count),
+            listPattern,
             parts.toArray(new Object[count]));
 
     }
