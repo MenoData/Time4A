@@ -1,4 +1,6 @@
 ## [v4.2-2018?] not yet released
+### Added
+- Custom duration separators in `PrettyTime` [#839]
 
 ## [v4.1-2018g] published on 2018-11-25
 ### Added
