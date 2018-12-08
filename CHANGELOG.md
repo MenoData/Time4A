@@ -3,6 +3,9 @@
 - New static factory method for astronomical seasons [#841]
 - Custom duration separators in `PrettyTime` [#839]
 
+### Fixed
+- AstronomicalSeason fails for years like 999_999_999 [#842]
+
 ## [v4.1-2018g] published on 2018-11-25
 ### Added
 - Support for languages Assamese, Sindhi and Tongan [#834]
