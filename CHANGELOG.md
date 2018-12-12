@@ -1,5 +1,6 @@
 ## [v4.2-2018?] not yet released
 ### Added
+- Easier calculation of Chinese holidays [#844]
 - New static factory method for astronomical seasons [#841]
 - Custom duration separators in `PrettyTime` [#839]
 
