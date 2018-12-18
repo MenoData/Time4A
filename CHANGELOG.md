@@ -5,6 +5,7 @@
 - Custom duration separators in `PrettyTime` [#839]
 
 ### Fixed
+- Handle Sindhi and Uyghur as right-to-left [#847]
 - AstronomicalSeason fails for years like 999_999_999 [#842]
 
 ## [v4.1-2018g] published on 2018-11-25
