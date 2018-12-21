@@ -1,4 +1,6 @@
-## [v4.2-2018?] not yet released
+## [v4.3-2018?] not yet released
+
+## [v4.2-2018g] published on 2018-12-21
 ### Added
 - Easier truncation of durations with any arbitrary units [#850]
 - Easier calculation of Chinese holidays [#844]
