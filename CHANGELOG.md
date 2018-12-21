@@ -1,5 +1,6 @@
 ## [v4.2-2018?] not yet released
 ### Added
+- Easier truncation of durations with any arbitrary units [#850]
 - Easier calculation of Chinese holidays [#844]
 - New static factory method for astronomical seasons [#841]
 - Custom duration separators in `PrettyTime` [#839]
