@@ -889,14 +889,16 @@ public final class LunarTime
         }
 
         /**
-         * <p>Obtains the timestamp of moonrise in the local observer timezoone if it exists. </p>
+         * <p>Obtains the timestamp of moonrise in the local observer timezone if it exists. </p>
          *
          * @return  local timestamp of moonrise, maybe null
+         * @see     LunarTime#ofLocation(TZID)
          */
         /*[deutsch]
          * <p>Liefert den Zeitstempel des Mondaufgangs in der lokalen Zeitzone des Beobachters wenn vorhanden. </p>
          *
          * @return  local timestamp of moonrise, maybe null
+         * @see     LunarTime#ofLocation(TZID)
          */
         public PlainTimestamp moonriseLocal() {
 
@@ -909,7 +911,7 @@ public final class LunarTime
         }
 
         /**
-         * <p>Obtains the timestamp of moonrise in given timezoone if it exists. </p>
+         * <p>Obtains the timestamp of moonrise in given timezone if it exists. </p>
          *
          * @param   tzid    timezone identifier (which maybe deviates from local observer timezone)
          * @return  zonal timestamp of moonrise, maybe null
@@ -947,14 +949,16 @@ public final class LunarTime
         }
 
         /**
-         * <p>Obtains the timestamp of moonset in the local observer timezoone if it exists. </p>
+         * <p>Obtains the timestamp of moonset in the local observer timezone if it exists. </p>
          *
          * @return  local timestamp of moonset, maybe null
+         * @see     LunarTime#ofLocation(TZID)
          */
         /*[deutsch]
          * <p>Liefert den Zeitstempel des Monduntergangs in der lokalen Zeitzone des Beobachters wenn vorhanden. </p>
          *
          * @return  local timestamp of moonset, maybe null
+         * @see     LunarTime#ofLocation(TZID)
          */
         public PlainTimestamp moonsetLocal() {
 
@@ -967,7 +971,7 @@ public final class LunarTime
         }
 
         /**
-         * <p>Obtains the timestamp of moonset in given timezoone if it exists. </p>
+         * <p>Obtains the timestamp of moonset in given timezone if it exists. </p>
          *
          * @param   tzid    timezone identifier (which maybe deviates from local observer timezone)
          * @return  zonal timestamp of moonset, maybe null
