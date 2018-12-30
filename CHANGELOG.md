@@ -1,4 +1,8 @@
-## [v4.3-2018?] not yet released
+## [v4.3-2019?] not yet released
+
+## [v4.2-2018h] published on 2018-12-30
+### Changed
+- Update TZDB to version 2018h [#852]
 
 ## [v4.2-2018g] published on 2018-12-21
 ### Added
