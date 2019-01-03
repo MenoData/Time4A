@@ -134,7 +134,7 @@ public enum FrenchRepublicanMonth {
      * <p>The twelvth month starting in August. </p>
      */
     /*[deutsch]
-     * <p>Der zw&ouml:lfte Monat beginnend im August. </p>
+     * <p>Der zw&ouml;lfte Monat beginnend im August. </p>
      */
     FRUCTIDOR;
 
