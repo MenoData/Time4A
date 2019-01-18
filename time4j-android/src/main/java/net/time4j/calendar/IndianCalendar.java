@@ -211,7 +211,7 @@ public final class IndianCalendar
     /*[deutsch]
      * <p>Repr&auml;sentiert den indischen Monat. </p>
      */
-    @FormattableElement(format = "M", standalone = "L")
+    @FormattableElement(format = "M", alt = "L")
     public static final StdCalendarElement<IndianMonth, IndianCalendar> MONTH_OF_YEAR =
         new StdEnumDateElement<IndianMonth, IndianCalendar>(
             "MONTH_OF_YEAR",

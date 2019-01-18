@@ -209,7 +209,7 @@ public final class PersianCalendar
     /*[deutsch]
      * <p>Repr&auml;sentiert den persischen Monat. </p>
      */
-    @FormattableElement(format = "M", standalone = "L")
+    @FormattableElement(format = "M", alt = "L")
     public static final StdCalendarElement<PersianMonth, PersianCalendar> MONTH_OF_YEAR =
         new StdEnumDateElement<PersianMonth, PersianCalendar>(
             "MONTH_OF_YEAR",

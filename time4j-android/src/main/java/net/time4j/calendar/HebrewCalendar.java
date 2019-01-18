@@ -220,7 +220,7 @@ public final class HebrewCalendar
     /*[deutsch]
      * <p>Repr&auml;sentiert den hebr&auml;ischen Monat. </p>
      */
-    @FormattableElement(format = "M", standalone = "L")
+    @FormattableElement(format = "M", alt = "L")
     public static final StdCalendarElement<HebrewMonth, HebrewCalendar> MONTH_OF_YEAR =
         new StdEnumDateElement<HebrewMonth, HebrewCalendar>(
             "MONTH_OF_YEAR",

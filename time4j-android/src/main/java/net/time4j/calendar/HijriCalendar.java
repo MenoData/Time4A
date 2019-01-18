@@ -282,7 +282,7 @@ public final class HijriCalendar
     /*[deutsch]
      * <p>Repr&auml;sentiert den islamischen Monat. </p>
      */
-    @FormattableElement(format = "M", standalone = "L")
+    @FormattableElement(format = "M", alt = "L")
     public static final StdCalendarElement<HijriMonth, HijriCalendar> MONTH_OF_YEAR =
         new StdEnumDateElement<HijriMonth, HijriCalendar>(
             "MONTH_OF_YEAR",

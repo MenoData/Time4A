@@ -217,7 +217,7 @@ public final class JulianCalendar
      *
      * <p>Dieses Element entspricht {@code ChronoHistory.PROLEPTIC_JULIAN.month()}. </p>
      */
-    @FormattableElement(format = "M", standalone = "L")
+    @FormattableElement(format = "M", alt = "L")
     public static final TextElement<Integer> MONTH_OF_YEAR = ChronoHistory.PROLEPTIC_JULIAN.month();
 
     /**

@@ -126,7 +126,7 @@ public class CommonElements {
      * @throws  IllegalArgumentException if the chronology does not support this element
      * @since   3.24/4.20
      */
-    @FormattableElement(format = "e", standalone = "c")
+    @FormattableElement(format = "e", alt = "c")
     public static <T extends ChronoEntity<T> & CalendarDate> StdCalendarElement<Weekday, T> localDayOfWeek(
         Chronology<T> chronology,
         Weekmodel model

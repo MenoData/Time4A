@@ -427,7 +427,7 @@ public final class ChineseCalendar
     /*[deutsch]
      * <p>Repr&auml;sentiert den chinesischen Monat. </p>
      */
-    @FormattableElement(format = "M", standalone = "L")
+    @FormattableElement(format = "M", alt = "L")
     public static final TextElement<EastAsianMonth> MONTH_OF_YEAR = EastAsianME.SINGLETON_EA;
 
     /**

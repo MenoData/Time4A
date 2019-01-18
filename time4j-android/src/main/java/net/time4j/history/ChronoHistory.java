@@ -1630,7 +1630,7 @@ public final class ChronoHistory
      * @see     PlainDate
      * @see     net.time4j.PlainTimestamp
      */
-    @FormattableElement(format = "M", standalone = "L")
+    @FormattableElement(format = "M", alt = "L")
     public TextElement<Integer> month() {
 
         return this.monthElement;

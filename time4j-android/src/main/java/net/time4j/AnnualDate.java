@@ -132,7 +132,7 @@ public final class AnnualDate
     /*[deutsch]
      * <p>Element mit dem Monat als Enum (Wertebereich {@code JANUARY-DECEMBER}). </p>
      */
-    @FormattableElement(format = "M", standalone = "L")
+    @FormattableElement(format = "M", alt = "L")
     public static final ChronoElement<Month> MONTH_OF_YEAR = PlainDate.MONTH_OF_YEAR;
 
     /**

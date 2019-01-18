@@ -232,7 +232,7 @@ public final class EthiopianCalendar
     /*[deutsch]
      * <p>Repr&auml;sentiert den &auml;thiopischen Monat. </p>
      */
-    @FormattableElement(format = "M", standalone = "L")
+    @FormattableElement(format = "M", alt = "L")
     public static final StdCalendarElement<EthiopianMonth, EthiopianCalendar> MONTH_OF_YEAR =
         new StdEnumDateElement<EthiopianMonth, EthiopianCalendar>(
             "MONTH_OF_YEAR",

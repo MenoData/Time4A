@@ -661,7 +661,7 @@ public final class Weekmodel
      *
      * @return  day of week with localized order
      */
-    @FormattableElement(format = "e", standalone = "c")
+    @FormattableElement(format = "e", alt = "c")
     public NavigableElement<Weekday> localDayOfWeek() {
 
         return this.dayOfWeekElement;

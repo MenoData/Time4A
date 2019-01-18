@@ -308,7 +308,7 @@ public final class FrenchRepublicanCalendar
     /*[deutsch]
      * <p>Repr&auml;sentiert die republikanische &Auml;ra der franz&ouml;sischen Revolution. </p>
      */
-    @FormattableElement(format = "G")
+    @FormattableElement(format = "G", alt = "g", dynamic = true)
     public static final ChronoElement<FrenchRepublicanEra> ERA =
         new StdEnumDateElement<FrenchRepublicanEra, FrenchRepublicanCalendar>(
             "ERA", FrenchRepublicanCalendar.class, FrenchRepublicanEra.class, 'G');
@@ -324,7 +324,7 @@ public final class FrenchRepublicanCalendar
      * <p>Das Jahr wird als r&ouml;mische Zahl formatiert, wenn ein Formatmuster und die franz&ouml;sische
      * Sprache verwendet werden. </p>
      */
-    @FormattableElement(format = "Y")
+    @FormattableElement(format = "Y", alt = "y", dynamic = true)
     public static final StdCalendarElement<Integer, FrenchRepublicanCalendar> YEAR_OF_ERA =
         new YearOfEraElement();
 
@@ -359,7 +359,7 @@ public final class FrenchRepublicanCalendar
      * @see     #hasSansculottides()
      * @see     #hasMonth()
      */
-    @FormattableElement(format = "S")
+    @FormattableElement(format = "S", alt = "s", dynamic = true)
     public static final ChronoElement<Sansculottides> SANSCULOTTIDES = SANSCULOTTIDES_ACCESS;
 
     /**
@@ -391,7 +391,7 @@ public final class FrenchRepublicanCalendar
      * @see     #hasSansculottides()
      * @see     #hasMonth()
      */
-    @FormattableElement(format = "M")
+    @FormattableElement(format = "M", alt = "m", dynamic = true)
     public static final StdCalendarElement<FrenchRepublicanMonth, FrenchRepublicanCalendar> MONTH_OF_YEAR =
         new StdEnumDateElement<FrenchRepublicanMonth, FrenchRepublicanCalendar>(
             "MONTH_OF_YEAR",
@@ -447,7 +447,7 @@ public final class FrenchRepublicanCalendar
      * @see     #hasSansculottides()
      * @see     #hasMonth()
      */
-    @FormattableElement(format = "C")
+    @FormattableElement(format = "C", alt = "c", dynamic = true)
     public static final ChronoElement<DayOfDecade> DAY_OF_DECADE = DAY_OF_DECADE_ACCESS;
 
     /**
@@ -472,7 +472,7 @@ public final class FrenchRepublicanCalendar
      * @see     #hasSansculottides()
      * @see     #hasMonth()
      */
-    @FormattableElement(format = "D")
+    @FormattableElement(format = "D", dynamic = true)
     public static final StdCalendarElement<Integer, FrenchRepublicanCalendar> DAY_OF_MONTH =
         new StdIntegerDateElement<FrenchRepublicanCalendar>("DAY_OF_MONTH", FrenchRepublicanCalendar.class, 1, 30, 'D');
 
@@ -502,7 +502,7 @@ public final class FrenchRepublicanCalendar
      *
      * @see     #DAY_OF_DECADE
      */
-    @FormattableElement(format = "E")
+    @FormattableElement(format = "E", dynamic = true)
     public static final StdCalendarElement<Weekday, FrenchRepublicanCalendar> DAY_OF_WEEK =
         new StdWeekdayElement<FrenchRepublicanCalendar>(FrenchRepublicanCalendar.class, getDefaultWeekmodel());
 

@@ -167,7 +167,7 @@ public final class MinguoCalendar
     /*[deutsch]
      * <p>Repr&auml;sentiert den Monat. </p>
      */
-    @FormattableElement(format = "M", standalone = "L")
+    @FormattableElement(format = "M", alt = "L")
     public static final StdCalendarElement<Month, MinguoCalendar> MONTH_OF_YEAR =
         new StdEnumDateElement<Month, MinguoCalendar>(
             "MONTH_OF_YEAR",

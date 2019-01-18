@@ -1225,15 +1225,16 @@ public enum PatternType {
      *
      * <p>In contrast to other pattern types like {@code CLDR}, the meaning of pattern symbols is not
      * defined by any external standard. The elements associated with symbols are looked up among the registered
-     * elements of a chronology including those which can be found via any chronological extension. If the
-     * found element is a {@link TextElement text element} then it will be treated as such, and the count of
-     * symbols determines the text width (1 = NARROW, 2 = SHORT, 3 = ABBREVIATED, 4 = WIDE). Otherwise
-     * this pattern type tries to resolve the element in question as {@code ChronoElement<Integer>}, and
-     * the count of symbols will determine the min width of displayed/parsed digits and apply some padding
-     * if necessary. The maximum width is always 9, and no sign is used. </p>
+     * elements of a chronology including those which can be found via any chronological extension. This search
+     * is case-insensitive. If the symbol is a big letter (A-Z) and if the found element is a {@link TextElement
+     * text element} or an enum-based element then it will be treated as text element, and the count of symbols
+     * determines the text width (1 = NARROW, 2 = SHORT, 3 = ABBREVIATED, 4 = WIDE). Otherwise this pattern type
+     * tries to resolve the element in question as {@code ChronoElement<Integer>} or handle an enum-based element
+     * in a numerical way, and the count of symbols will determine the min width of displayed/parsed digits and
+     * apply some padding if necessary. The maximum width is always 9, and no sign is used. </p>
      *
      * @see    ChronoElement#getSymbol()
-     * @since   3.33/4.20
+     * @since   4.3
      */
     /*[deutsch]
      * <p>L&ouml;st ein Muster so auf, da&szlig; die im aktuellen Kontext benutzte Chronologie die
@@ -1242,15 +1243,17 @@ public enum PatternType {
      * <p>Im Kontrast zu anderen Mustertypen wie {@code CLDR} ist die Bedeutung von Mustersymbolen nicht
      * durch irgendeinen externen Standard festgelegt. Die mit den Symbolen verkn&uuml;pften Elemente
      * werden unter den registrierten Elementen einer Chronologie gesucht, notfalls auch in den chronologischen
-     * Erweiterungen. Falls das gefundene Element ein {@link TextElement} ist, wird es als solches behandelt,
-     * und die Anzahl der Symbole bestimmt dann die Textbreite (1 = NARROW, 2 = SHORT, 3 = ABBREVIATED, 4 = WIDE).
-     * Sonst versucht dieser Mustertyp das fragliche Element als {@code ChronoElement<Integer>} aufzul&ouml;sen,
-     * und die Anzahl der Symbole wird die Mindestbreite der angezeigten/interpretierten Ziffern festlegen,
-     * unter Umst&auml;nden auch mit Auff&uuml;llen von F&uuml;llzeichen. Im numerischen Fall ist die maximale
-     * Breite 9, und ein Vorzeichen wird nie verwendet. </p>
+     * Erweiterungen. Diese Suche ber&uuml;cksichtigt nicht die Gro&szlig;- und Kleinschreibung. Falls das
+     * Symbol ein Gro&szlig;buchstabe und das gefundene Element ein {@link TextElement} oder ein enum-basiertes
+     * Element ist, wird es als Textelement behandelt, und die Anzahl der Symbole bestimmt dann die Textbreite
+     * (1 = NARROW, 2 = SHORT, 3 = ABBREVIATED, 4 = WIDE). Sonst versucht dieser Mustertyp das fragliche Element
+     * als {@code ChronoElement<Integer>} aufzul&ouml;sen oder ein enum-basiertes Element in einer numerischen
+     * Weise zu behandeln, und die Anzahl der Symbole wird die Mindestbreite der angezeigten/interpretierten
+     * Ziffern festlegen, unter Umst&auml;nden auch mit Auff&uuml;llen von F&uuml;llzeichen. Im numerischen Fall
+     * ist die maximale Breite 9, und ein Vorzeichen wird nie verwendet. </p>
      *
      * @see    ChronoElement#getSymbol()
-     * @since   3.33/4.20
+     * @since   4.3
      */
     DYNAMIC;
 
@@ -2095,6 +2098,90 @@ public enum PatternType {
 
     }
 
+    private static int capitalized(int symbol) {
+
+        if ((symbol >= 'A') && (symbol <= 'Z')) {
+            return symbol;
+        } else {
+            return symbol + 'A' - 'a';
+        }
+
+    }
+
+    @SuppressWarnings("unchecked")
+    private static void addEnumElementAsText(
+        ChronoFormatter.Builder<?> builder,
+        ChronoElement<? extends Enum> element
+    ) {
+
+        builder.addText(element);
+
+    }
+
+    @SuppressWarnings("unchecked")
+    private static void addEnumElementAsInteger(
+        ChronoFormatter.Builder<?> builder,
+        ChronoElement<? extends Enum> element,
+        int count
+    ) {
+
+        builder.addNumerical(element, count, 9);
+
+    }
+
+    private static ChronoElement<?> findDynamicElement(
+        Chronology<?> chronology,
+        Locale locale,
+        int symbol
+    ) {
+
+        ChronoElement<?> found = findDynamicElement(chronology, locale, symbol, false);
+
+        if (found == null) {
+            found = findDynamicElement(chronology, locale, symbol, true);
+        }
+
+        return found;
+
+    }
+
+    private static ChronoElement<?> findDynamicElement(
+        Chronology<?> chronology,
+        Locale locale,
+        int symbol,
+        boolean caseInsensitive
+    ) {
+
+        if (caseInsensitive) {
+            symbol = capitalized(symbol);
+        }
+
+        for (ChronoElement<?> element : chronology.getRegisteredElements()) {
+            int c = element.getSymbol();
+            if (caseInsensitive) {
+                c = capitalized(c);
+            }
+            if (c == symbol) {
+                return element;
+            }
+        }
+
+        for (ChronoExtension extension : chronology.getExtensions()) {
+            for (ChronoElement<?> element : extension.getElements(locale, Attributes.empty())) {
+                int c = element.getSymbol();
+                if (caseInsensitive) {
+                    c = capitalized(c);
+                }
+                if (c == symbol) {
+                    return element;
+                }
+            }
+        }
+
+        return null;
+
+    }
+
     private Map<ChronoElement<?>, ChronoElement<?>> dynamic(
         ChronoFormatter.Builder<?> builder,
         char symbol,
@@ -2102,33 +2189,13 @@ public enum PatternType {
         Locale locale
     ) {
 
-        ChronoElement<?> found = null;
+        boolean isBig = ((symbol >= 'A') && (symbol <= 'Z'));
         Chronology<?> chronology = getEffectiveChronology(builder);
-
-        for (ChronoElement<?> element : chronology.getRegisteredElements()) {
-            if (element.getSymbol() == symbol) {
-                found = element;
-                break;
-            }
-        }
-
-        if (found == null) {
-            for (ChronoExtension extension : chronology.getExtensions()) {
-                for (ChronoElement<?> element : extension.getElements(locale, Attributes.empty())) {
-                    if (element.getSymbol() == symbol) {
-                        found = element;
-                        break;
-                    }
-                }
-                if (found != null) {
-                    break;
-                }
-            }
-        }
+        ChronoElement<?> found = findDynamicElement(chronology, locale, symbol);
 
         if (found == null) {
             throw new IllegalArgumentException("Cannot resolve symbol: " + symbol);
-        } else if (found instanceof TextElement) {
+        } else if (isBig && ((found instanceof TextElement) || Enum.class.isAssignableFrom(found.getType()))) {
             switch (count) {
                 case 1:
                     builder.startSection(Attributes.TEXT_WIDTH, TextWidth.NARROW);
@@ -2145,14 +2212,23 @@ public enum PatternType {
                 default:
                     throw new IllegalArgumentException("Illegal count of symbols: " + symbol);
             }
-            TextElement<?> textElement = cast(found);
-            builder.addText(textElement);
+            if (found instanceof TextElement) {
+                TextElement<?> textElement = cast(found);
+                builder.addText(textElement);
+            } else {
+                ChronoElement<? extends Enum> e = cast(found);
+                addEnumElementAsText(builder, e);
+            }
             builder.endSection();
         } else if (found.getType() == Integer.class) {
             ChronoElement<Integer> intElement = cast(found);
             builder.addInteger(intElement, count, 9);
+        } else if (Enum.class.isAssignableFrom(found.getType())) {
+            ChronoElement<? extends Enum> e = cast(found);
+            addEnumElementAsInteger(builder, e, count);
         } else {
-            throw new IllegalArgumentException("Can only handle integer or text elements: " + found);
+            throw new IllegalArgumentException(
+                    "Can only handle enum or integer elements in a numerical way: " + found);
         }
 
         return Collections.emptyMap();

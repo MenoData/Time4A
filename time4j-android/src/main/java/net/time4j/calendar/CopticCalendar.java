@@ -210,7 +210,7 @@ public final class CopticCalendar
     /*[deutsch]
      * <p>Repr&auml;sentiert den koptischen Monat. </p>
      */
-    @FormattableElement(format = "M", standalone = "L")
+    @FormattableElement(format = "M", alt = "L")
     public static final StdCalendarElement<CopticMonth, CopticCalendar> MONTH_OF_YEAR =
         new StdEnumDateElement<CopticMonth, CopticCalendar>(
             "MONTH_OF_YEAR",
