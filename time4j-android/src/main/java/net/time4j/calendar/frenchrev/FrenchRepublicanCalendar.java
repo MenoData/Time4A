@@ -1431,7 +1431,7 @@ public final class FrenchRepublicanCalendar
         }
 
         /**
-         * <p>Calculates the difference between given Indian dates in this unit. </p>
+         * <p>Calculates the difference between given republican dates in this unit. </p>
          *
          * @param   start   start date (inclusive)
          * @param   end     end date (exclusive)
@@ -2551,8 +2551,9 @@ public final class FrenchRepublicanCalendar
                 if (doy != Integer.MIN_VALUE) {
                     if ((doy >= 1) && (doy <= (algorithm.isLeapYear(year) ? 366 : 365))) {
                         cal = new FrenchRepublicanCalendar(year, doy);
+                    } else {
+                        entity.with(ValidationElement.ERROR_MESSAGE, "Invalid republican date.");
                     }
-                    entity.with(ValidationElement.ERROR_MESSAGE, "Invalid republican date.");
                 }
             }
 
