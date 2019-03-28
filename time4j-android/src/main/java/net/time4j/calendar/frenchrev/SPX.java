@@ -40,7 +40,7 @@ final class SPX
     //~ Statische Felder/Initialisierungen ----------------------------
 
     /** Serialisierungstyp. */
-    static final int FRENCH_REV = 11;
+    static final int FRENCH_REV = 18;
 
     private static final long serialVersionUID = 1L;
 

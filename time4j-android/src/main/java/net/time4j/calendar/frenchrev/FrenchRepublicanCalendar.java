@@ -1311,7 +1311,7 @@ public final class FrenchRepublicanCalendar
     /**
      * @serialData  Uses <a href="../../../../serialized-form.html#net.time4j.calendar.frenchrev/SPX">
      *              a dedicated serialization form</a> as proxy. The first byte contains
-     *              the type-ID {@code 11}. Then the year is written as int, finally
+     *              the type-ID {@code 18}. Then the year is written as int, finally
      *              month and day-of-month as bytes.
      *
      * @return  replacement object in serialization graph
