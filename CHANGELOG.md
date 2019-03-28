@@ -1,5 +1,6 @@
-## [v4.3-2019?] not yet released
+## [v4.3-2019a] not yet released
 ### Changed
+- Update TZDB to version 2019a [#856]
 - More flexible dynamic patterns [#854]
 
 ## [v4.2-2018i] published on 2019-01-02
