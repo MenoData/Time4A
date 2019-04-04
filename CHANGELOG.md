@@ -1,5 +1,6 @@
 ## [v4.3-2019a] not yet released
 ### Changed
+- New Japanese Nengo "Reiwa" [#840]
 - Update TZDB to version 2019a [#856]
 - More flexible dynamic patterns [#854]
 
