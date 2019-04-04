@@ -120,7 +120,7 @@ import java.util.Locale;
  *
  * <div style="margin-top:5px;">
  * <table border="1">
- * <caption>Mapping of dynamic pattern symbols</caption>
+ * <caption>Zuordnung von dynamischen Mustersymbolen</caption>
  * <tr>
  *  <th>element</th><th>symbol</th><th>type</th>
  * </tr>
@@ -128,19 +128,19 @@ import java.util.Locale;
  *  <td>ERA</td><td>G</td><td>text</td>
  * </tr>
  * <tr>
- *  <td>YEAR_OF_ERA</td><td>Y</td><td>number</td>
+ *  <td>YEAR_OF_ERA</td><td>y/Y</td><td>number</td>
  * </tr>
  * <tr>
- *  <td>MONTH_OF_YEAR</td><td>M</td><td>text</td>
+ *  <td>MONTH_OF_YEAR</td><td>m/M</td><td>number/text</td>
  * </tr>
  * <tr>
- *  <td>SANSCULOTTIDES</td><td>S</td><td>text</td>
+ *  <td>SANSCULOTTIDES</td><td>s/S</td><td>text</td>
  * </tr>
  * <tr>
- *  <td>DAY_OF_MONTH</td><td>D</td><td>number</td>
+ *  <td>DAY_OF_MONTH</td><td>d/D</td><td>number</td>
  * </tr>
  * <tr>
- *  <td>DAY_OF_DECADE</td><td>C</td><td>text</td>
+ *  <td>DAY_OF_DECADE</td><td>c/C</td><td>text</td>
  * </tr>
  * <tr>
  *  <td>DAY_OF_WEEK</td><td>E</td><td>text</td>
@@ -234,19 +234,19 @@ import java.util.Locale;
  *  <td>ERA</td><td>G</td><td>text</td>
  * </tr>
  * <tr>
- *  <td>YEAR_OF_ERA</td><td>Y</td><td>number</td>
+ *  <td>YEAR_OF_ERA</td><td>y/Y</td><td>number</td>
  * </tr>
  * <tr>
- *  <td>MONTH_OF_YEAR</td><td>M</td><td>text</td>
+ *  <td>MONTH_OF_YEAR</td><td>m/M</td><td>number/text</td>
  * </tr>
  * <tr>
- *  <td>SANSCULOTTIDES</td><td>S</td><td>text</td>
+ *  <td>SANSCULOTTIDES</td><td>s/S</td><td>text</td>
  * </tr>
  * <tr>
- *  <td>DAY_OF_MONTH</td><td>D</td><td>number</td>
+ *  <td>DAY_OF_MONTH</td><td>d/D</td><td>number</td>
  * </tr>
  * <tr>
- *  <td>DAY_OF_DECADE</td><td>C</td><td>text</td>
+ *  <td>DAY_OF_DECADE</td><td>c/C</td><td>text</td>
  * </tr>
  * <tr>
  *  <td>DAY_OF_WEEK</td><td>E</td><td>text</td>
@@ -308,7 +308,7 @@ public final class FrenchRepublicanCalendar
     /*[deutsch]
      * <p>Repr&auml;sentiert die republikanische &Auml;ra der franz&ouml;sischen Revolution. </p>
      */
-    @FormattableElement(format = "G", alt = "g", dynamic = true)
+    @FormattableElement(format = "G", dynamic = true)
     public static final ChronoElement<FrenchRepublicanEra> ERA =
         new StdEnumDateElement<FrenchRepublicanEra, FrenchRepublicanCalendar>(
             "ERA", FrenchRepublicanCalendar.class, FrenchRepublicanEra.class, 'G');
@@ -472,7 +472,7 @@ public final class FrenchRepublicanCalendar
      * @see     #hasSansculottides()
      * @see     #hasMonth()
      */
-    @FormattableElement(format = "D", dynamic = true)
+    @FormattableElement(format = "D", alt = "d", dynamic = true)
     public static final StdCalendarElement<Integer, FrenchRepublicanCalendar> DAY_OF_MONTH =
         new StdIntegerDateElement<FrenchRepublicanCalendar>("DAY_OF_MONTH", FrenchRepublicanCalendar.class, 1, 30, 'D');
 

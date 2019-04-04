@@ -58,7 +58,7 @@ public class StdIntegerDateElement<T extends ChronoEntity<T>>
         int max,
         char symbol
     ) {
-        super(name, chrono, symbol, true);
+        super(name, chrono, symbol, name.startsWith("DAY_OF_"));
 
         this.min = min;
         this.max = max;

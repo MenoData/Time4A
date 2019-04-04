@@ -37,7 +37,7 @@ import net.time4j.engine.ChronoEntity;
  * @author  Meno Hochschild
  * @since   3.5/4.3
  */
-public final class StdWeekdayElement<T extends ChronoEntity<T>>
+public class StdWeekdayElement<T extends ChronoEntity<T>>
     extends StdEnumDateElement<Weekday, T> {
 
     //~ Statische Felder/Initialisierungen --------------------------------
