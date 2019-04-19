@@ -25,6 +25,7 @@ import net.time4j.calendar.PersianCalendar;
 import net.time4j.calendar.PersianMonth;
 import net.time4j.calendar.astro.LunarTime;
 import net.time4j.calendar.astro.SolarTime;
+import net.time4j.calendar.bahai.BadiCalendar;
 import net.time4j.calendar.frenchrev.FrenchRepublicanCalendar;
 import net.time4j.engine.CalendarDays;
 import net.time4j.engine.StartOfDay;
@@ -162,6 +163,11 @@ public class TimeDemoApp
                         .easternLongitude(10, 0, 0)
                         .build()
                         .on(today);
+        ChronoFormatter<BadiCalendar> badiFormatter = ChronoFormatter.ofPattern(
+                "k.v.x.m.d|k.v.x.A.d",
+                PatternType.DYNAMIC,
+                Locale.GERMAN,
+                BadiCalendar.axis());
 
         return "\n\n\n\n"
                 + "=> Current time (UTC): " + moment.toString()
@@ -218,6 +224,7 @@ public class TimeDemoApp
                 + "\n=> Dangi year (2018)=" + dangiYear
                 + "\n=> Gregorian/Dangi date=" + gregKorean.format(PlainDate.nowInSystemTime())
                 + "\n=> Chinese-today=" + fc.format(ChineseCalendar.nowInSystemTime())
+                + "\n=> Badi-formatted=" + badiFormatter.print(BadiCalendar.ofIntercalary(5, 11, 2))
                 ;
     }
 
