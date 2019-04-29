@@ -2161,7 +2161,7 @@ public final class BadiCalendar
             AttributeQuery attributes
         ) throws IOException {
 
-            Weekday value = context.get(this);
+            Weekday value = context.get(this).roll(2);
             buffer.append(this.accessor(attributes).print(value));
 
         }
@@ -2173,7 +2173,9 @@ public final class BadiCalendar
             AttributeQuery attributes
         ) {
 
-            return this.accessor(attributes).parse(text, status, Weekday.class, attributes);
+            Weekday value =
+                this.accessor(attributes).parse(text, status, Weekday.class, attributes);
+            return value.roll(-2);
 
         }
 
