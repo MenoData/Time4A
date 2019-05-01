@@ -45,6 +45,10 @@ import java.util.List;
  */
 public final class TextAccessor {
 
+    //~ Statische Felder/Initialisierungen --------------------------------
+
+    private static final char PROTECTED_SPACE = '\u00A0'; // ASCII-0160
+
     //~ Instanzvariablen --------------------------------------------------
 
     private final List<String> textForms;
@@ -313,6 +317,15 @@ public final class TextAccessor {
                 } else {
                     char c = parseable.charAt(start + j);
                     char t = s.charAt(j);
+
+                    if (smart) {
+                        if (c == PROTECTED_SPACE) {
+                            c = ' ';
+                        }
+                        if (t == PROTECTED_SPACE) {
+                            t = ' ';
+                        }
+                    }
 
                     if (caseInsensitive) {
                         eq = (c == t) || this.compareIgnoreCase(c, t);
