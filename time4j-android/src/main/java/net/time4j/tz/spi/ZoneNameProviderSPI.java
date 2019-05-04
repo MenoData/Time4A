@@ -80,7 +80,7 @@ public class ZoneNameProviderSPI
         loadTerritories(temp, name);
         TERRITORIES = Collections.unmodifiableMap(temp);
 
-        // CLDR32 - supplemental\metaZones.xml - primaryZones
+        // CLDR35 - supplemental\metaZones.xml - primaryZones
         Map<String, String> primaries = new HashMap<String, String>();
         addPrimary(primaries, "CL", "America/Santiago");
         addPrimary(primaries, "CN", "Asia/Shanghai");
@@ -115,7 +115,6 @@ public class ZoneNameProviderSPI
                 tzids.add("America/Los_Angeles");
                 tzids.add("America/Anchorage");
                 tzids.add("Pacific/Honolulu");
-                tzids.add("America/Adak");
                 return Collections.unmodifiableSet(tzids);
             } else {
                 String primaryZone = PRIMARIES.get(country);
