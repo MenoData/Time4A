@@ -36,10 +36,12 @@ import net.time4j.format.TextWidth;
 import net.time4j.format.expert.ChronoFormatter;
 import net.time4j.format.expert.PatternType;
 import net.time4j.i18n.IsoTextProviderSPI;
+import net.time4j.tz.NameStyle;
 import net.time4j.tz.TZID;
 import net.time4j.tz.Timezone;
 import net.time4j.tz.ZonalOffset;
 import net.time4j.tz.olson.EUROPE;
+import net.time4j.tz.other.WindowsZone;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -168,6 +170,15 @@ public class TimeDemoApp
                 PatternType.DYNAMIC,
                 Locale.GERMAN,
                 BadiCalendar.axis());
+
+        try {
+            TZID winzoneID = WindowsZone.of("Romance Standard Time").resolveSmart(Locale.FRANCE);
+            WindowsZone.registerAsTimezone();
+            String winzoneName = Timezone.of(winzoneID).getDisplayName(NameStyle.LONG_STANDARD_TIME, Locale.FRANCE);
+            Log.i("TIME4A", "Winzone: " + winzoneID.canonical() + "=>" + winzoneName);
+        } catch (IllegalArgumentException ex) {
+            Log.e("TIME4A", "Winzone not known.");
+        }
 
         return "\n\n\n\n"
                 + "=> Current time (UTC): " + moment.toString()
