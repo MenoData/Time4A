@@ -1,5 +1,6 @@
 ## [v4.4-2019?] not yet released
 ### Added
+- Support for Windows zones [#756]
 - Support for Kurdish (ku) and Somali (so) languages [#866]
 - More translations for Badi calendar [#862]
 - More translations for new Japanese era REIWA [#860]
