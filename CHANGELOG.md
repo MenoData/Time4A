@@ -1,4 +1,6 @@
-## [v4.4-2019?] not yet released
+## [v4.5-2019?] not yet released
+
+## [v4.4-2019a] published on 2019-05-25
 ### Added
 - Anomalistic month (apogee/perigee of moon) [#859]
 - Support for Windows zones [#756]
