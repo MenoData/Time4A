@@ -1,4 +1,6 @@
 ## [v4.5-2019?] not yet released
+### Fixed
+- Document that Hebrew calendar starting at 18:00 is an approximation for sunset [#873]
 
 ## [v4.4-2019a] published on 2019-05-25
 ### Added
