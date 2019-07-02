@@ -1,4 +1,9 @@
 ## [v4.5-2019?] not yet released
+
+## [v4.4.1-2019b] published on 2019-07-02
+### Changed
+- Update to TZDB 2019b [#875]
+
 ### Fixed
 - Document that Hebrew calendar starting at 18:00 is an approximation for sunset [#873]
 
