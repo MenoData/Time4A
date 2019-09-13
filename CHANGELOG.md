@@ -1,5 +1,12 @@
 ## [v4.5-2019?] not yet released
 
+## [v4.4.2-2019c] published on 2019-09-13
+### Added
+- Customizable initialization [#876]
+
+### Changed
+- Update to TZDB 2019c [#878]
+
 ## [v4.4.1-2019b] published on 2019-07-02
 ### Changed
 - Update to TZDB 2019b [#875]
