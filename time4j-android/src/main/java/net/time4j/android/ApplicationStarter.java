@@ -58,10 +58,10 @@ public class ApplicationStarter {
 
     //~ Statische Felder/Initialisierungen --------------------------------
 
-    private static final String VERSION = "v4.4.1-2019b";
+    private static final String VERSION = "v4.4.2-2019c";
     private static final int RELEASE_YEAR = 2019;
-    private static final int RELEASE_MONTH = 7;
-    private static final int RELEASE_DAY = 2;
+    private static final int RELEASE_MONTH = 9;
+    private static final int RELEASE_DAY = 13;
     private static final String TIME4A = "TIME4A";
 
     private static final AtomicBoolean PREPARED = new AtomicBoolean(false);
@@ -112,31 +112,13 @@ public class ApplicationStarter {
         boolean prefetch
     ) {
 
-//        if (BuildConfig.DEBUG) {
-//            StrictMode.setThreadPolicy(
-//                new StrictMode.ThreadPolicy.Builder()
-//                .detectDiskReads()
-//                .detectDiskWrites()
-//                .detectNetwork()
-//                .penaltyLog()
-//                .build());
-//        }
-
-        long start = System.nanoTime();
-
-        prepareAssets(context, null); // initialize AndroidResourceLoader (must be called first)
-        registerReceiver(context.getApplicationContext()); // includes NPE-check
-
-        // ensures that class PlainDate is loaded before any further initialization
-        PlainDate releaseDate = PlainDate.of(RELEASE_YEAR, RELEASE_MONTH, RELEASE_DAY);
-        Log.i(TIME4A, "Starting Time4A (" + VERSION + " published on " + releaseDate +")");
-
-        if (prefetch) {
-            final long start2 = System.nanoTime();
-            Runnable runnable =
-                new Runnable() {
+        initialize(
+            context,
+            prefetch
+                ? new Runnable() {
                     @Override
                     public void run() {
+                        long start2 = System.nanoTime();
                         DisplayMode style = DisplayMode.FULL;
                         TZID tzid = Timezone.ofSystem().getID();
                         Locale sysloc = Locale.getDefault();
@@ -163,8 +145,59 @@ public class ApplicationStarter {
                         long delta = (System.nanoTime() - start2) / 1000000;
                         Log.i(TIME4A, "Prefetch thread consumed (in ms): " + delta);
                     }
-                };
-            Executors.defaultThreadFactory().newThread(runnable).start();
+                }
+                : null
+        );
+
+    }
+
+    /**
+     * <p>Customizable initialization. </p>
+     *
+     * <p>This kind of initialization enables to determine which parts of Time4A should be
+     * prefetched. However, the class {@code PlainDate} will always be prefetched. </p>
+     *
+     * @param   context     Android context
+     * @param   prefetch    some code to be performed on background thread (optional)
+     * @since   4.4.2
+     */
+    /*[deutsch]
+     * <p>Benutzerdefinierte Initialisierung. </p>
+     *
+     * <p>Diese Art der Initialisierung erm&ouml;glicht es festzulegen, welche Teile von Time4A
+     * im Hintergrund vorgeladen werden. Jedoch wird die Klasse {@code PlainDate} immer vorher
+     * geladen. </p>
+     *
+     * @param   context     Android context
+     * @param   prefetch    some code to be performed on background thread (optional)
+     * @since   4.4.2
+     */
+    public static void initialize(
+        Context context,
+        Runnable prefetch
+    ) {
+
+//        if (BuildConfig.DEBUG) {
+//            StrictMode.setThreadPolicy(
+//                new StrictMode.ThreadPolicy.Builder()
+//                .detectDiskReads()
+//                .detectDiskWrites()
+//                .detectNetwork()
+//                .penaltyLog()
+//                .build());
+//        }
+
+        long start = System.nanoTime();
+
+        prepareAssets(context, null); // initialize AndroidResourceLoader (must be called first)
+        registerReceiver(context.getApplicationContext()); // includes NPE-check
+
+        // ensures that class PlainDate is loaded before any further initialization
+        PlainDate releaseDate = PlainDate.of(RELEASE_YEAR, RELEASE_MONTH, RELEASE_DAY);
+        Log.i(TIME4A, "Starting Time4A (" + VERSION + " published on " + releaseDate +")");
+
+        if (prefetch != null) {
+            Executors.defaultThreadFactory().newThread(prefetch).start();
         }
 
         long delta = (System.nanoTime() - start) / 1000000;
