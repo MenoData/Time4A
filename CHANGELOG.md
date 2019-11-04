@@ -1,5 +1,9 @@
 ## [v4.5-2019?] not yet released
 
+## [v4.4.3-2019c] published on 2019-11-04
+### Added
+- Reversible time metric [#881]
+
 ## [v4.4.2-2019c] published on 2019-09-13
 ### Added
 - Customizable initialization [#876]
