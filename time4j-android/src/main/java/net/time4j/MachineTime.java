@@ -101,34 +101,34 @@ public final class MachineTime<U>
             new MachineTime<SI>(0, 0, UTC);
 
     /**
-     * Metric on the POSIX scale (without leap seconds).
+     * Reversible metric on the POSIX scale (without leap seconds).
      *
      * @since   2.0
      */
     /*[deutsch]
-     * Metrik auf der POSIX-Skala (ohne Schaltsekunden).
+     * Umkehrbare Metrik auf der POSIX-Skala (ohne Schaltsekunden).
      *
      * @since   2.0
      */
     public static final TimeMetric<TimeUnit, MachineTime<TimeUnit>> ON_POSIX_SCALE =
-            new Metric<TimeUnit>(POSIX);
+        new Metric<TimeUnit>(POSIX);
 
     /**
-     * <p>Metric on the UTC scale (inclusive leap seconds). </p>
+     * <p>Reversible metric on the UTC scale (inclusive leap seconds). </p>
      * 
      * <p>Time points before 1972 are not supported. </p>
      *
      * @since   2.0
      */
     /*[deutsch]
-     * <p>Metrik auf der UTC-Skala (inklusive Schaltsekunden). </p>
+     * <p>Umkehrbare Metrik auf der UTC-Skala (inklusive Schaltsekunden). </p>
      *
      * <p>Zeitpunkte vor 1972 werden nicht unterst&uuml;tzt. </p>
      *
      * @since   2.0
      */
     public static final TimeMetric<TimeUnit, MachineTime<SI>> ON_UTC_SCALE =
-            new Metric<SI>(UTC);
+        new Metric<SI>(UTC);
 
     private static final long serialVersionUID = -4150291820807606229L;
 
@@ -1735,6 +1735,11 @@ public final class MachineTime<U>
 
             return new MachineTime<U>(secs, nanos, this.scale);
 
+        }
+
+        @Override
+        public TimeMetric<TimeUnit, MachineTime<U>> reversible() {
+            return this;
         }
 
     }

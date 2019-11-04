@@ -40,6 +40,9 @@ import java.util.List;
  * the duration will be normalized such that small units will be
  * converted to larger units if possible. </p>
  *
+ * <p>This metric can be changed to a reversible one by calling {@code reversible()}
+ * (third invariance in {@code AbstractDuration}. </p>
+ *
  * @param   <U> generic type of time unit ({@code ChronoUnit})
  * @param   <P> generic type of duration result
  * @author  Meno Hochschild
@@ -59,18 +62,21 @@ import java.util.List;
  * in der Regel normalisiert, also kleine Zeiteinheiten so weit wie
  * m&ouml;glich in gro&szlig;e Einheiten umgerechnet. </p>
  *
+ * <p>Diese Metrik kann mittels Aufruf von {@code reversible()} umkehrbar gemacht werden
+ * (dritte Invarianzbedingung in {@code AbstractDuration}. </p>
+ *
  * @param   <U> generic type of time unit ({@code ChronoUnit})
  * @param   <P> generic type of duration result
  * @author  Meno Hochschild
  * @see     AbstractDuration
  */
-public abstract class AbstractMetric
-    <U extends ChronoUnit, P extends AbstractDuration<U>>
-    implements TimeMetric<U, P>, Comparator<U> {
+public abstract class AbstractMetric<U extends ChronoUnit, P extends AbstractDuration<U>>
+        implements TimeMetric<U, P>, Comparator<U> {
 
     //~ Statische Felder/Initialisierungen --------------------------------
 
     private static final int MIO = 1000000;
+    private static final double LENGTH_OF_FORTNIGHT = 86400.0 * 14;
 
     //~ Instanzvariablen --------------------------------------------------
 
@@ -105,9 +111,10 @@ public abstract class AbstractMetric
      * @throws  IllegalArgumentException if any time unit is given more than
      *          once or if there is no time unit at all
      */
+    @SafeVarargs
     protected AbstractMetric(
-        boolean normalizing,
-        U... units
+            boolean normalizing,
+            U... units
     ) {
         super();
 
@@ -120,9 +127,11 @@ public abstract class AbstractMetric
         Collections.sort(list, this);
 
         for (int i = 0, n = list.size(); i < n; i++) {
+            U unit = list.get(i);
+
             for (int j = i + 1; j < n; j++) {
-                if (list.get(i).equals(list.get(j))) {
-                    throw new IllegalArgumentException("Duplicate unit: " + list.get(i));
+                if (unit.equals(list.get(j))) {
+                    throw new IllegalArgumentException("Duplicate unit: " + unit);
                 }
             }
         }
@@ -158,8 +167,19 @@ public abstract class AbstractMetric
 
     @Override
     public <T extends TimePoint<? super U, T>> P between(
-        T start,
-        T end
+            T start,
+            T end
+    ) {
+
+        return this.between(start, end, -1);
+
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T extends TimePoint<? super U, T>> P between(
+            T start,
+            T end,
+            int monthIndex
     ) {
 
         if (end.equals(start)) {
@@ -180,26 +200,19 @@ public abstract class AbstractMetric
 
         List<TimeSpan.Item<U>> resultList = new ArrayList<TimeSpan.Item<U>>(10);
         TimeAxis<? super U, T> engine = start.getChronology();
-        U unit = null;
-        long amount = 0;
         int index = 0;
         int endIndex = this.sortedUnits.size();
 
         while (index < endIndex) {
 
-            // Nächste Subtraktion vorbereiten
-            if (amount > 0) {
-                t1 = t1.plus(amount, unit);
-            }
-
             // Aktuelle Zeiteinheit bestimmen
-            unit = this.sortedUnits.get(index);
+            U unit = this.sortedUnits.get(index);
 
             if (
-                (this.getLength(engine, unit) < 1.0)
-                && (index < endIndex - 1)
-            ) {
-                amount = 0; // Millis oder Mikros vor Nanos nicht berechnen (maximal eine fraktionale Einheit)
+                    (this.getLength(engine, unit) < 1.0)
+                            && (index < endIndex - 1)
+                    ) {
+                // Millis oder Mikros vor Nanos nicht berechnen (maximal eine fraktionale Einheit)
             } else {
                 // konvertierbare Einheiten zusammenfassen
                 int k = index + 1;
@@ -209,9 +222,9 @@ public abstract class AbstractMetric
                     U nextUnit = this.sortedUnits.get(k);
                     factor *= this.getFactor(engine, unit, nextUnit);
                     if (
-                        (factor < MIO)
-                        && engine.isConvertible(unit, nextUnit)
-                    ) {
+                            (factor < MIO)
+                                    && engine.isConvertible(unit, nextUnit)
+                            ) {
                         unit = nextUnit;
                     } else {
                         break;
@@ -221,15 +234,29 @@ public abstract class AbstractMetric
                 index = k - 1;
 
                 // Differenz in einer Einheit berechnen
-                amount = t1.until(t2, unit);
-                
-                if (amount > 0) {
-                    resultList.add(this.resolve(TimeSpan.Item.of(amount, unit)));
-                } else if (amount < 0) {
+                long amount = t1.until(t2, unit);
+
+                if (amount < 0) {
                     throw new IllegalStateException(
-                        "Implementation error: "
-                        + "Cannot compute timespan "
-                        + "due to illegal negative timespan amounts.");
+                            "Implementation error: "
+                                    + "Cannot compute timespan "
+                                    + "due to illegal negative timespan amounts.");
+                }
+
+                // Dauerkomponente erzeugen, mit Monatsendekorrektur ggf. Betrag verkleinern
+                while (amount > 0) {
+                    T temp = t1.plus(amount, unit);
+                    if (
+                            (index > monthIndex)
+                                    || (index == endIndex - 1)
+                                    || temp.minus(amount, unit).equals(t1)
+                            ) {
+                        t1 = temp;
+                        resultList.add(this.resolve(TimeSpan.Item.of(amount, unit)));
+                        break;
+                    } else {
+                        amount--; // avoid possible end-of-month-correction
+                    }
                 }
             }
             index++;
@@ -240,6 +267,13 @@ public abstract class AbstractMetric
         }
 
         return this.createTimeSpan(resultList, negative);
+
+    }
+
+    @Override
+    public TimeMetric<U, P> reversible() {
+
+        return new ReversalMetric<U, P>(this);
 
     }
 
@@ -273,8 +307,8 @@ public abstract class AbstractMetric
      * @return  new time span
      */
     protected abstract P createTimeSpan(
-        List<TimeSpan.Item<U>> items,
-        boolean negative
+            List<TimeSpan.Item<U>> items,
+            boolean negative
     );
 
     /**
@@ -297,10 +331,11 @@ public abstract class AbstractMetric
 
     }
 
+    @SuppressWarnings("unchecked")
     private <T extends TimePoint<? super U, T>> void normalize(
-        TimeAxis<? super U, T> engine,
-        List<U> sortedUnits,
-        List<TimeSpan.Item<U>> resultList
+            TimeAxis<? super U, T> engine,
+            List<U> sortedUnits,
+            List<TimeSpan.Item<U>> resultList
     ) {
 
         Comparator<? super U> comparator = engine.unitComparator();
@@ -311,11 +346,11 @@ public abstract class AbstractMetric
                 U nextUnit = sortedUnits.get(i - 1);
                 long factor = this.getFactor(engine, nextUnit, currentUnit);
                 if (
-                    (factor < MIO)
-                    && engine.isConvertible(nextUnit, currentUnit)
-                ) {
+                        (factor < MIO)
+                                && engine.isConvertible(nextUnit, currentUnit)
+                        ) {
                     TimeSpan.Item<U> currentItem =
-                        getItem(resultList, currentUnit);
+                            getItem(resultList, currentUnit);
                     if (currentItem != null) {
                         long currentValue = currentItem.getAmount();
                         long overflow = currentValue / factor;
@@ -327,17 +362,15 @@ public abstract class AbstractMetric
                                 putItem(resultList, comparator, a, currentUnit);
                             }
                             TimeSpan.Item<U> nextItem =
-                                getItem(resultList, nextUnit);
+                                    getItem(resultList, nextUnit);
                             if (nextItem == null) {
                                 putItem(resultList, comparator, overflow, nextUnit);
                             } else {
                                 putItem(
-                                    resultList,
-                                    comparator,
-                                    MathUtils.safeAdd(
-                                        nextItem.getAmount(),
-                                        overflow),
-                                    nextUnit
+                                        resultList,
+                                        comparator,
+                                        MathUtils.safeAdd(nextItem.getAmount(), overflow),
+                                        nextUnit
                                 );
                             }
                         }
@@ -349,8 +382,8 @@ public abstract class AbstractMetric
     }
 
     private static <U> TimeSpan.Item<U> getItem(
-        List<TimeSpan.Item<U>> items,
-        U unit
+            List<TimeSpan.Item<U>> items,
+            U unit
     ) {
 
         for (int i = 0, n = items.size(); i < n; i++) {
@@ -365,10 +398,10 @@ public abstract class AbstractMetric
     }
 
     private static <U> void putItem(
-        List<TimeSpan.Item<U>> items,
-        Comparator<? super U> comparator,
-        long amount,
-        U unit
+            List<TimeSpan.Item<U>> items,
+            Comparator<? super U> comparator,
+            long amount,
+            U unit
     ) {
 
         TimeSpan.Item<U> item = TimeSpan.Item.of(amount, unit);
@@ -381,9 +414,9 @@ public abstract class AbstractMetric
                 items.set(i, item);
                 return;
             } else if (
-                (insert == i)
-                && (comparator.compare(u, unit) < 0)
-            ) {
+                    (insert == i)
+                            && (comparator.compare(u, unit) < 0)
+                    ) {
                 insert++;
             }
         }
@@ -393,8 +426,8 @@ public abstract class AbstractMetric
     }
 
     private static <U> void removeItem(
-        List<TimeSpan.Item<U>> items,
-        U unit
+            List<TimeSpan.Item<U>> items,
+            U unit
     ) {
 
         for (int i = 0, n = items.size(); i < n; i++) {
@@ -407,9 +440,9 @@ public abstract class AbstractMetric
     }
 
     private <T extends TimePoint<? super U, T>> long getFactor(
-        TimeAxis<? super U, T> engine,
-        U unit1,
-        U unit2
+            TimeAxis<? super U, T> engine,
+            U unit1,
+            U unit2
     ) {
 
         double d1 = this.getLength(engine, unit1);
@@ -418,13 +451,57 @@ public abstract class AbstractMetric
 
     }
 
+    @SuppressWarnings("unchecked")
     private <T extends TimePoint<? super U, T>> double getLength(
-        TimeAxis<? super U, T> engine,
-        U unit
+            TimeAxis<? super U, T> engine,
+            U unit
     ) {
 
         return engine.getLength(unit);
 
+    }
+
+    //~ Innere Klassen ----------------------------------------------------
+
+    private static class ReversalMetric<U extends ChronoUnit, P extends AbstractDuration<U>>
+            implements TimeMetric<U, P> {
+
+        //~ Instanzvariablen ----------------------------------------------
+
+        private final AbstractMetric<U, P> delegate;
+        private final int monthIndex;
+
+        //~ Konstruktoren -------------------------------------------------
+
+        private ReversalMetric(AbstractMetric<U, P> delegate) {
+            super();
+
+            this.delegate = delegate;
+            int mi = -1;
+
+            for (int i = this.delegate.sortedUnits.size() - 1; i >= 0; i--) {
+                U unit = this.delegate.sortedUnits.get(i);
+
+                if (Double.compare(unit.getLength(), LENGTH_OF_FORTNIGHT) > 0) {
+                    mi = i;
+                    break;
+                }
+            }
+
+            this.monthIndex = mi;
+        }
+
+        //~ Methoden ------------------------------------------------------
+
+        @Override
+        public <T extends TimePoint<? super U, T>> P between(T start, T end) {
+            return this.delegate.between(start, end, this.monthIndex);
+        }
+
+        @Override
+        public TimeMetric<U, P> reversible() {
+            return this;
+        }
     }
 
 }

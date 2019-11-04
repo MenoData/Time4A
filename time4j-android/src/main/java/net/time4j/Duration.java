@@ -567,7 +567,7 @@ public final class Duration<U extends IsoUnit>
      *
      * @param   <U> generic unit type
      * @param   units       time units to be used in calculation
-     * @return  immutable metric for calculating a duration in given units
+     * @return  reversible immutable metric for calculating a duration in given units
      * @throws  IllegalArgumentException if no time unit is given or
      *          if there are unit duplicates
      */
@@ -604,7 +604,7 @@ public final class Duration<U extends IsoUnit>
      *
      * @param   <U> generic unit type
      * @param   units       time units to be used in calculation
-     * @return  immutable metric for calculating a duration in given units
+     * @return  reversible immutable metric for calculating a duration in given units
      * @throws  IllegalArgumentException if no time unit is given or
      *          if there are unit duplicates
      */
@@ -620,7 +620,7 @@ public final class Duration<U extends IsoUnit>
      * <p>Finally the resulting duration will be normalized such that
      * smaller units will be converted to bigger units if possible. </p>
      *
-     * @return  immutable metric for calculating a duration in years,
+     * @return  reversible immutable metric for calculating a duration in years,
      *          months and days
      * @see     #in(IsoUnit[]) in(U[])
      * @see     CalendarUnit#YEARS
@@ -634,7 +634,7 @@ public final class Duration<U extends IsoUnit>
      * Zeiteinheiten so weit wie m&ouml;glich in gro&szlig;e Einheiten
      * umgerechnet. </p>
      *
-     * @return  immutable metric for calculating a duration in years,
+     * @return  reversible immutable metric for calculating a duration in years,
      *          months and days
      * @see     #in(IsoUnit[]) in(U[])
      * @see     CalendarUnit#YEARS
@@ -653,7 +653,7 @@ public final class Duration<U extends IsoUnit>
      * <p>Finally the resulting duration will be normalized such that
      * smaller units will be converted to bigger units if possible. </p>
      *
-     * @return  immutable metric for calculating a duration in clock units
+     * @return  reversible immutable metric for calculating a duration in clock units
      * @see     #in(IsoUnit[]) in(U[])
      * @see     ClockUnit#HOURS
      * @see     ClockUnit#MINUTES
@@ -667,7 +667,7 @@ public final class Duration<U extends IsoUnit>
      * Zeiteinheiten so weit wie m&ouml;glich in gro&szlig;e Einheiten
      * umgerechnet. </p>
      *
-     * @return  immutable metric for calculating a duration in clock units
+     * @return  reversible immutable metric for calculating a duration in clock units
      * @see     #in(IsoUnit[]) in(U[])
      * @see     ClockUnit#HOURS
      * @see     ClockUnit#MINUTES
@@ -686,7 +686,7 @@ public final class Duration<U extends IsoUnit>
      * <p>Finally the resulting duration will be normalized such that
      * smaller units will be converted to bigger units if possible. </p>
      *
-     * @return  immutable metric for calculating a duration in week-based years, weeks and days
+     * @return  reversible immutable metric for calculating a duration in week-based years, weeks and days
      * @see     #in(IsoUnit[]) in(U[])
      * @see     CalendarUnit#weekBasedYears()
      * @see     CalendarUnit#WEEKS
@@ -699,7 +699,7 @@ public final class Duration<U extends IsoUnit>
      * <p>Am Ende wird die Darstellung automatisch normalisiert, also kleine
      * Zeiteinheiten so weit wie m&ouml;glich in gro&szlig;e Einheiten umgerechnet. </p>
      *
-     * @return  immutable metric for calculating a duration in week-based years, weeks and days
+     * @return  reversible immutable metric for calculating a duration in week-based years, weeks and days
      * @see     #in(IsoUnit[]) in(U[])
      * @see     CalendarUnit#weekBasedYears()
      * @see     CalendarUnit#WEEKS
@@ -730,7 +730,7 @@ public final class Duration<U extends IsoUnit>
      *
      * @param   tz          timezone
      * @param   units       time units to be used in calculation
-     * @return  zonal metric for calculating a duration in given units
+     * @return  non-reversible zonal metric for calculating a duration in given units
      * @throws  IllegalArgumentException if no time unit is given or
      *          if there are unit duplicates
      * @since   1.2
@@ -755,7 +755,7 @@ public final class Duration<U extends IsoUnit>
      *
      * @param   tz          timezone
      * @param   units       time units to be used in calculation
-     * @return  zonal metric for calculating a duration in given units
+     * @return  non-reversible zonal metric for calculating a duration in given units
      * @throws  IllegalArgumentException if no time unit is given or
      *          if there are unit duplicates
      * @since   1.2
@@ -4070,6 +4070,11 @@ public final class Duration<U extends IsoUnit>
 
             return duration;
 
+        }
+
+        @Override
+        public TimeMetric<IsoUnit, Duration<IsoUnit>> reversible() {
+            throw new UnsupportedOperationException("Not reversible.");
         }
 
         private int getOffset(ChronoEntity<?> entity) {
