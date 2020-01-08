@@ -33,12 +33,12 @@ gradle.projectsEvaluated {
 }
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '28.0.2'
+    compileSdkVersion 29
+    buildToolsVersion '29.0.2'
 
     defaultConfig {
         minSdkVersion 9
-        targetSdkVersion 26
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
         consumerProguardFiles 'consumer-proguard-rules.pro'
