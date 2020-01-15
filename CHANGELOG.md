@@ -1,4 +1,8 @@
-## [v4.5-2019?] not yet released
+## [v4.5-2020a] not yet released
+
+## [v4.4.4-2019c] published on 2020-01-15
+### Changed
+- Update of Android version dependencies
 
 ## [v4.4.3-2019c] published on 2019-11-04
 ### Added
