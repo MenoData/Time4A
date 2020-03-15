@@ -31,6 +31,7 @@ import net.time4j.format.TextAccessor;
 import net.time4j.format.TextElement;
 import net.time4j.format.TextWidth;
 import net.time4j.format.internal.DualFormatElement;
+import net.time4j.format.internal.DualFormatHelper;
 
 import java.io.IOException;
 import java.io.ObjectStreamException;
@@ -212,7 +213,7 @@ class EastAsianME
             int m = 0;
 
             for (int num = 12; (num >= 1) && (m == 0); num--) {
-                String display = EastAsianMonth.toNumeral(numsys, zeroDigit, num);
+                String display = DualFormatHelper.toNumeral(numsys, zeroDigit, num);
                 int numlen = display.length();
                 for (int i = 0; ; i++) {
                     if ((len > pos + i) && (text.charAt(pos + i) != display.charAt(i))) {

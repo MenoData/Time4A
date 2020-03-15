@@ -67,6 +67,7 @@ import net.time4j.format.TextAccessor;
 import net.time4j.format.TextElement;
 import net.time4j.format.TextWidth;
 import net.time4j.format.internal.DualFormatElement;
+import net.time4j.format.internal.DualFormatHelper;
 import net.time4j.tz.TZID;
 import net.time4j.tz.Timezone;
 
@@ -2690,7 +2691,8 @@ public final class JapaneseCalendar
                 } else {
                     NumberSystem numsys = attributes.get(Attributes.NUMBER_SYSTEM, NumberSystem.ARABIC);
                     char zeroDigit = attributes.get(Attributes.ZERO_DIGIT, numsys.getDigits().charAt(0));
-                    String s = EastAsianMonth.toNumeral(numsys, zeroDigit, num);
+                    String s = DualFormatHelper.toNumeral(numsys, zeroDigit, num);
+
                     if (numsys.isDecimal()) {
                         int padding = count - s.length();
                         while (padding > 0) {

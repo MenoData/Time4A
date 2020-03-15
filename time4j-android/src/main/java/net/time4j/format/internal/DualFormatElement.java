@@ -45,10 +45,16 @@ public interface DualFormatElement // ehemals: net.time4j.history.internal.Histo
 
     /**
      * <p>Special format attribute for text elements which need to know the original pattern length. </p>
+     *
+     * <p>This attribute will only be set if the count indicates numerical formatting and is either
+     * {@code 1} or {@code 2}. </p>
      */
     /*[deutsch]
      * <p>Spezialformatattribut f&uuml;r Textelemente, die die urspr&uuml;ngliche Symboll&auml;nge im Formatmuster
      * kennen m&uuml;ssen. </p>
+     *
+     * <p>Dieses Attribut wird nur gesetzt, wenn die Anzahl eine numerische Formatierung anzeigt und entweder
+     * {@code 1} oder {@code 2} ist. </p>
      */
     AttributeKey<Integer> COUNT_OF_PATTERN_SYMBOLS = Attributes.createKey("COUNT_OF_PATTERN_SYMBOLS", Integer.class);
 
