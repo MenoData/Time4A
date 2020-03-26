@@ -27,6 +27,8 @@ import android.content.IntentFilter;
 import android.util.Log;
 
 import net.time4j.PlainDate;
+import net.time4j.PlainTime;
+import net.time4j.PlainTimestamp;
 import net.time4j.SystemClock;
 import net.time4j.android.spi.AndroidResourceLoader;
 import net.time4j.base.ResourceLoader;
@@ -192,9 +194,10 @@ public class ApplicationStarter {
         prepareAssets(context, null); // initialize AndroidResourceLoader (must be called first)
         registerReceiver(context.getApplicationContext()); // includes NPE-check
 
-        // ensures that class PlainDate is loaded before any further initialization
+        // ensures that classes PlainDate and PlainTime are loaded before any further initialization
         PlainDate releaseDate = PlainDate.of(RELEASE_YEAR, RELEASE_MONTH, RELEASE_DAY);
-        Log.i(TIME4A, "Starting Time4A (" + VERSION + " published on " + releaseDate +")");
+        PlainTimestamp tsp = releaseDate.at(PlainTime.midnightAtStartOfDay());
+        Log.i(TIME4A, "Starting Time4A (" + VERSION + " published on " + tsp.toDate() +")");
 
         if (prefetch != null) {
             Executors.defaultThreadFactory().newThread(prefetch).start();
