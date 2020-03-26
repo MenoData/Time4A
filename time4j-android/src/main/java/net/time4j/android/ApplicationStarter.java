@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.util.Log;
 
+import net.time4j.Moment;
 import net.time4j.PlainDate;
 import net.time4j.PlainTime;
 import net.time4j.PlainTimestamp;
@@ -122,6 +123,7 @@ public class ApplicationStarter {
                     public void run() {
                         long start2 = System.nanoTime();
                         DisplayMode style = DisplayMode.FULL;
+                        Moment moment = SystemClock.currentMoment();
                         TZID tzid = Timezone.ofSystem().getID();
                         Locale sysloc = Locale.getDefault();
                         Log.i(TIME4A, "System time zone at start: [" + tzid.canonical() + "]");
@@ -133,7 +135,7 @@ public class ApplicationStarter {
                                     style,
                                     sysloc,
                                     tzid
-                                ).format(SystemClock.currentMoment());
+                                ).format(moment);
                             Log.i(TIME4A, currentTime);
                         } catch (RuntimeException re) {
                             Log.e(
