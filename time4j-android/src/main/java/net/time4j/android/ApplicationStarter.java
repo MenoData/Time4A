@@ -142,22 +142,14 @@ public class ApplicationStarter {
                                     tzid
                                 ).format(moment);
                             Log.i(TIME4A, currentTime);
-                        } catch (Error error) {
-                            Log.e(
-                                TIME4A,
-                                "Error on prefetch thread with: time zone="
-                                        + tzid.canonical()
-                                        + ", locale=" + sysloc + "!",
-                                error);
-                            throw new IllegalStateException(error); // rethrow for Google Play Store etc.
-                        } catch (RuntimeException re) {
+                        } catch (Throwable thr) {
                             Log.e(
                                 TIME4A,
                                 "Error on prefetch thread with: time zone="
                                     + tzid.canonical()
                                     + ", locale=" + sysloc + "!",
-                                re);
-                            throw re; // rethrow for Google Play Store etc.
+                                thr);
+                            throw new IllegalStateException(thr); // rethrow for Google Play Store etc.
                         }
                         long delta = (System.nanoTime() - start2) / 1000000;
                         Log.i(TIME4A, "Prefetch thread consumed (in ms): " + delta);
