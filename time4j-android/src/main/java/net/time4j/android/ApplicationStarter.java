@@ -37,8 +37,10 @@ import net.time4j.format.DisplayMode;
 import net.time4j.format.expert.ChronoFormatter;
 import net.time4j.tz.TZID;
 import net.time4j.tz.Timezone;
+import net.time4j.tz.ZonalOffset;
 
 import java.util.Locale;
+import java.util.TimeZone;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -122,13 +124,16 @@ public class ApplicationStarter {
                     @Override
                     public void run() {
                         long start2 = System.nanoTime();
-                        DisplayMode style = DisplayMode.FULL;
-                        Moment moment = SystemClock.currentMoment();
-                        TZID tzid = Timezone.ofSystem().getID();
+                        int offset =
+                            TimeZone.getDefault().getOffset(System.currentTimeMillis()) / 1000;
+                        TZID tzid = ZonalOffset.ofTotalSeconds(offset);
                         Locale sysloc = Locale.getDefault();
-                        Log.i(TIME4A, "System time zone at start: [" + tzid.canonical() + "]");
-                        Log.i(TIME4A, "System locale at start: [" + sysloc.toString() + "]");
+                        DisplayMode style = DisplayMode.FULL;
                         try {
+                            Moment moment = SystemClock.currentMoment();
+                            tzid = Timezone.ofSystem().getID();
+                            Log.i(TIME4A, "System time zone at start: [" + tzid.canonical() + "]");
+                            Log.i(TIME4A, "System locale at start: [" + sysloc.toString() + "]");
                             String currentTime =
                                 ChronoFormatter.ofMomentStyle(
                                     style,
@@ -137,6 +142,14 @@ public class ApplicationStarter {
                                     tzid
                                 ).format(moment);
                             Log.i(TIME4A, currentTime);
+                        } catch (Error error) {
+                            Log.e(
+                                TIME4A,
+                                "Error on prefetch thread with: time zone="
+                                        + tzid.canonical()
+                                        + ", locale=" + sysloc + "!",
+                                error);
+                            throw new IllegalStateException(error); // rethrow for Google Play Store etc.
                         } catch (RuntimeException re) {
                             Log.e(
                                 TIME4A,
