@@ -3,6 +3,7 @@
 - Make PatternType.CLDR_DATE being applicable on PlainDate [#889]
 
 ### Fixed
+- Crash during app initialization (rare case) [#894]
 - Incorrect sign in last term of calculation of mean lunar anomaly [#891]
 
 ## [v4.4.4-2019c] published on 2020-01-15
