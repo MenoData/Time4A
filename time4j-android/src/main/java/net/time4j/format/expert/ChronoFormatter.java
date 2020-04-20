@@ -6619,6 +6619,10 @@ public final class ChronoFormatter<T>
          */
         public ChronoFormatter<T> build(Attributes attributes) {
 
+            if (attributes == null) {
+                throw new NullPointerException("Missing format attributes.");
+            }
+
             Map<Integer, FormatStep> m = null;
 
             for (int index = 0, len = this.steps.size(); index < len; index++) {

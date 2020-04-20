@@ -662,7 +662,7 @@ public final class Attributes
     public static final AttributeKey<String> FORMAT_PATTERN =
         PredefinedKey.valueOf("FORMAT_PATTERN", String.class);
 
-    private static final Attributes EMPTY = new Attributes.Builder().build();
+    private static final Attributes EMPTY = new Attributes();
 
     //~ Instanzvariablen --------------------------------------------------
 
@@ -670,11 +670,16 @@ public final class Attributes
 
     //~ Konstruktoren -----------------------------------------------------
 
+    private Attributes() {
+        super();
+
+        this.attributes = Collections.emptyMap();
+    }
+
     private Attributes(Map<String, Object> map) {
         super();
 
         this.attributes = Collections.unmodifiableMap(new HashMap<String, Object>(map));
-
     }
 
     //~ Methoden ----------------------------------------------------------
@@ -818,7 +823,7 @@ public final class Attributes
 
         //~ Instanzvariablen ----------------------------------------------
 
-        private final Map<String, Object> attributes = new HashMap<String, Object>();
+        private final Map<String, Object> attrs = new HashMap<String, Object>();
 
         //~ Konstruktoren -------------------------------------------------
 
@@ -987,7 +992,7 @@ public final class Attributes
             boolean value
         ) {
 
-            this.attributes.put(key.name(), Boolean.valueOf(value));
+            this.attrs.put(key.name(), Boolean.valueOf(value));
             return this;
 
         }
@@ -998,7 +1003,7 @@ public final class Attributes
          * @param   key     attribute key
          * @param   value   attribute value
          * @return  this instance for method chaining
-         * @throws  IllegalArgumentException if an invalid pivot year is given
+         * @throws  IllegalArgumentException if the pivot year is smaller than {@code 100}
          */
         /*[deutsch]
          * <p>Setzt ein Formatattribut vom {@code int}-Typ. </p>
@@ -1006,22 +1011,19 @@ public final class Attributes
          * @param   key     attribute key
          * @param   value   attribute value
          * @return  this instance for method chaining
-         * @throws  IllegalArgumentException if an invalid pivot year is given
+         * @throws  IllegalArgumentException if the pivot year is smaller than {@code 100}
          */
         public Builder set(
             AttributeKey<Integer> key,
             int value
         ) {
 
-            if (
-                (key == Attributes.PIVOT_YEAR)
-                && (value < 100)
-            ) {
+            if ((key == Attributes.PIVOT_YEAR) && (value < 100)) {
                 throw new IllegalArgumentException(
                     "Pivot year in far past not supported: " + value);
             }
 
-            this.attributes.put(key.name(), Integer.valueOf(value));
+            this.attrs.put(key.name(), Integer.valueOf(value));
             return this;
 
         }
@@ -1045,7 +1047,7 @@ public final class Attributes
             char value
         ) {
 
-            this.attributes.put(key.name(), Character.valueOf(value));
+            this.attrs.put(key.name(), Character.valueOf(value));
             return this;
 
         }
@@ -1078,7 +1080,7 @@ public final class Attributes
                     "Enum expected, but found: " + value);
             }
 
-            this.attributes.put(key.name(), value);
+            this.attrs.put(key.name(), value);
 
             Object compare = key; // stellt JDK-6 zufrieden
 
@@ -1136,7 +1138,7 @@ public final class Attributes
          */
         public Builder setAll(Attributes attributes) {
 
-            this.attributes.putAll(attributes.attributes);
+            this.attrs.putAll(attributes.attributes);
             return this;
 
         }
@@ -1155,7 +1157,7 @@ public final class Attributes
          */
         public Builder remove(AttributeKey<?> key) {
 
-            this.attributes.remove(key.name());
+            this.attrs.remove(key.name());
             return this;
 
         }
@@ -1173,7 +1175,7 @@ public final class Attributes
          */
         public Attributes build() {
 
-            return new Attributes(this.attributes);
+            return new Attributes(this.attrs);
 
         }
 
@@ -1186,7 +1188,7 @@ public final class Attributes
                 throw new NullPointerException("Missing attribute value.");
             }
 
-            this.attributes.put(key.name(), value);
+            this.attrs.put(key.name(), value);
 
         }
 
