@@ -1,14 +1,16 @@
 ## [v4.5-2020a] not yet released
+
+## [v4.4.5-2019c] published on 2020-04-20
 ### Added
 - Make PatternType.CLDR_DATE being applicable on PlainDate [#889]
 
 ### Fixed
-- Crash during app initialization (rare case) [#894]
+- Crash during app initialization (rare case) [#894 + #897]
 - Incorrect sign in last term of calculation of mean lunar anomaly [#891]
 
 ## [v4.4.4-2019c] published on 2020-01-15
 ### Changed
-- Update of Android version dependencies
+- Update of Android version dependencies [PR #2]
 
 ## [v4.4.3-2019c] published on 2019-11-04
 ### Added

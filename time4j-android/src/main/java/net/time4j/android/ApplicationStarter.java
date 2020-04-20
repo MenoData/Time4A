@@ -63,10 +63,10 @@ public class ApplicationStarter {
 
     //~ Statische Felder/Initialisierungen --------------------------------
 
-    private static final String VERSION = "v4.4.4-2019c";
+    private static final String VERSION = "v4.4.5-2019c";
     private static final int RELEASE_YEAR = 2020;
-    private static final int RELEASE_MONTH = 1;
-    private static final int RELEASE_DAY = 15;
+    private static final int RELEASE_MONTH = 4;
+    private static final int RELEASE_DAY = 20;
     private static final String TIME4A = "TIME4A";
 
     private static final AtomicBoolean PREPARED = new AtomicBoolean(false);
@@ -119,43 +119,7 @@ public class ApplicationStarter {
 
         initialize(
             context,
-            prefetch
-                ? new Runnable() {
-                    @Override
-                    public void run() {
-                        long start2 = System.nanoTime();
-                        int offset =
-                            TimeZone.getDefault().getOffset(System.currentTimeMillis()) / 1000;
-                        TZID tzid = ZonalOffset.ofTotalSeconds(offset);
-                        Locale sysloc = Locale.getDefault();
-                        DisplayMode style = DisplayMode.FULL;
-                        try {
-                            Moment moment = SystemClock.currentMoment();
-                            tzid = Timezone.ofSystem().getID();
-                            Log.i(TIME4A, "System time zone at start: [" + tzid.canonical() + "]");
-                            Log.i(TIME4A, "System locale at start: [" + sysloc.toString() + "]");
-                            String currentTime =
-                                ChronoFormatter.ofMomentStyle(
-                                    style,
-                                    style,
-                                    sysloc,
-                                    tzid
-                                ).format(moment);
-                            Log.i(TIME4A, currentTime);
-                        } catch (Throwable thr) {
-                            Log.e(
-                                TIME4A,
-                                "Error on prefetch thread with: time zone="
-                                    + tzid.canonical()
-                                    + ", locale=" + sysloc + "!",
-                                thr);
-                            throw new IllegalStateException(thr); // rethrow for Google Play Store etc.
-                        }
-                        long delta = (System.nanoTime() - start2) / 1000000;
-                        Log.i(TIME4A, "Prefetch thread consumed (in ms): " + delta);
-                    }
-                }
-                : null
+            prefetch ? new StdPrefetch() : null
         );
 
     }
@@ -301,6 +265,47 @@ public class ApplicationStarter {
                     + intent.getStringExtra("time-zone")
                     + "]");
 
+        }
+
+    }
+
+    private static class StdPrefetch
+        implements Runnable {
+
+        //~ Methoden ------------------------------------------------------
+
+        @Override
+        public void run() {
+            long start2 = System.nanoTime();
+            int offset = TimeZone.getDefault().getOffset(System.currentTimeMillis()) / 1000;
+            TZID tzid = ZonalOffset.ofTotalSeconds(offset);
+            Locale sysloc = Locale.getDefault();
+
+            try {
+                Moment moment = SystemClock.currentMoment();
+                tzid = Timezone.ofSystem().getID();
+                Log.i(TIME4A, "System time zone at start: [" + tzid.canonical() + "]");
+                Log.i(TIME4A, "System locale at start: [" + sysloc.toString() + "]");
+                String currentTime =
+                        ChronoFormatter.ofMomentStyle(
+                                DisplayMode.FULL,
+                                DisplayMode.FULL,
+                                sysloc,
+                                tzid
+                        ).format(moment);
+                Log.i(TIME4A, currentTime);
+            } catch (Throwable thr) {
+                Log.e(
+                        TIME4A,
+                        "Error on prefetch thread with: time zone="
+                                + tzid.canonical()
+                                + ", locale=" + sysloc + "!",
+                        thr);
+                throw new IllegalStateException(thr); // rethrow for Google Play Store etc.
+            }
+
+            long delta = (System.nanoTime() - start2) / 1000000;
+            Log.i(TIME4A, "Prefetch thread consumed (in ms): " + delta);
         }
 
     }

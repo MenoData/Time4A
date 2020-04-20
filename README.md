@@ -32,7 +32,7 @@ Only two steps are required before coding against the API of Time4A.
 
 ```groovy
 dependencies {
-    implementation group: 'net.time4j', name: 'time4j-android', version: '4.4.4-2019c'
+    implementation group: 'net.time4j', name: 'time4j-android', version: '4.4.5-2019c'
 }
 ```
 

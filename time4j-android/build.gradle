@@ -13,7 +13,7 @@ ext {
     siteUrl = 'https://github.com/menodata/Time4A'
     gitUrl = 'https://github.com/menodata/Time4A.git'
 
-    libraryVersion = '4.4.4-2019c'
+    libraryVersion = '4.4.5-2019c'
 
     developerId = 'mhochschild'
     developerName = 'Meno Hochschild'
@@ -26,8 +26,8 @@ ext {
 
 gradle.projectsEvaluated {
     tasks.withType(JavaCompile) {
-        options.debug = false
-        options.debugOptions.debugLevel = "source"
+        options.debug = true
+        options.debugOptions.debugLevel = "source,lines"
         options.compilerArgs << "-Xlint:deprecation"
     }
 }
