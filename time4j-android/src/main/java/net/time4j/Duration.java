@@ -39,6 +39,7 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -609,6 +610,34 @@ public final class Duration<U extends IsoUnit>
      *          if there are unit duplicates
      */
     public static <U extends IsoUnit> TimeMetric<U, Duration<U>> in(U... units) {
+
+        return new Metric<U>(units);
+
+    }
+
+    /**
+     * <p>Constructs a metric for any kind of standard units in normalized form. </p>
+     *
+     * @param   <U> generic unit type
+     * @param   units       time units to be used in calculation
+     * @return  reversible immutable metric for calculating a duration in given units
+     * @throws  IllegalArgumentException if no time unit is given or if there are unit duplicates
+     * @see     AbstractMetric
+     * @see     #in(IsoUnit[])
+     * @since   4.5
+     */
+    /*[deutsch]
+     * <p>Konstruiert eine Metrik f&uuml;r beliebige Standard-Zeiteinheiten in normalisierter Form. </p>
+     *
+     * @param   <U> generic unit type
+     * @param   units       time units to be used in calculation
+     * @return  reversible immutable metric for calculating a duration in given units
+     * @throws  IllegalArgumentException if no time unit is given or if there are unit duplicates
+     * @see     AbstractMetric
+     * @see     #in(IsoUnit[])
+     * @since   4.5
+     */
+    public static <U extends IsoUnit> TimeMetric<U, Duration<U>> in(Collection<? extends U> units) {
 
         return new Metric<U>(units);
 
@@ -4553,6 +4582,11 @@ public final class Duration<U extends IsoUnit>
 
         private Metric(U... units) {
             super((units.length > 1), units);
+
+        }
+
+        private Metric(Collection<? extends U> units) {
+            super((units.size() > 1), units);
 
         }
 

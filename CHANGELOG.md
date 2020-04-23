@@ -1,4 +1,6 @@
 ## [v4.5-2020a] not yet released
+### Added
+- Support for Duration.in(Collection<? extends Unit>) [#899]
 
 ## [v4.4.5-2019c] published on 2020-04-20
 ### Added

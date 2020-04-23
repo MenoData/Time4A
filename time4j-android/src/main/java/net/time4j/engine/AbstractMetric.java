@@ -22,6 +22,8 @@ package net.time4j.engine;
 import net.time4j.base.MathUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -111,19 +113,57 @@ public abstract class AbstractMetric<U extends ChronoUnit, P extends AbstractDur
      * @throws  IllegalArgumentException if any time unit is given more than
      *          once or if there is no time unit at all
      */
-    @SafeVarargs
     protected AbstractMetric(
-            boolean normalizing,
-            U... units
+        boolean normalizing,
+        U... units
+    ) {
+        this(Arrays.asList(units), normalizing);
+    }
+
+    /**
+     * <p>Creates a new default metric with given collection of time units. </p>
+     *
+     * <p>The given time units can be in any arbitrary order, but internally
+     * the will be automatically sorted by their default estimated length. </p>
+     *
+     * @param   normalizing     Is normalizing required that is shall amounts
+     *                          in small units be converted to bigger units?
+     * @param   units           time units to be used for calculating time span
+     * @throws  IllegalArgumentException if any time unit is given more than once
+     *                                   or if there is no time unit at all
+     * @since   4.5
+     */
+    /*[deutsch]
+     * <p>Konstruiert eine neue Standardmetrik mit einer {@code Collection} von Zeiteinheiten. </p>
+     *
+     * <p>Die Zeiteinheiten k&ouml;nnen in beliebiger Reihenfolge
+     * angegeben werden, aber intern werden sie &uuml;ber ihre
+     * Standardl&auml;nge automatisch sortiert. </p>
+     *
+     * @param   normalizing     Is normalizing required that is shall amounts
+     *                          in small units be converted to bigger units?
+     * @param   units           time units to be used for calculating time span
+     * @throws  IllegalArgumentException if any time unit is given more than once
+     *                                   or if there is no time unit at all
+     * @since   4.5
+     */
+    protected AbstractMetric(
+        boolean normalizing,
+        Collection<? extends U> units
+    ) {
+        this(new ArrayList<U>(units), normalizing);
+    }
+
+    private AbstractMetric(
+        List<U> list,
+        boolean normalizing
     ) {
         super();
 
-        if (units.length == 0) {
+        if (list.isEmpty()) {
             throw new IllegalArgumentException("Missing units.");
         }
 
-        List<U> list = new ArrayList<U>(units.length);
-        Collections.addAll(list, units);
         Collections.sort(list, this);
 
         for (int i = 0, n = list.size(); i < n; i++) {
