@@ -65,11 +65,9 @@ public final class SymbolProviderSPI
         INSTANCE = new SymbolProviderSPI();
 
         Map<String, NumberSystem> map = new HashMap<String, NumberSystem>();
-        map.put("latn", NumberSystem.ARABIC);
-        map.put("arab", NumberSystem.ARABIC_INDIC);
-        map.put("arabext", NumberSystem.ARABIC_INDIC_EXT);
-        map.put("deva", NumberSystem.DEVANAGARI);
-        map.put("mymr", NumberSystem.MYANMAR);
+        for (NumberSystem numsys : NumberSystem.values()) {
+            map.put(numsys.getCode(), numsys);
+        }
         CLDR_NAMES = Collections.unmodifiableMap(map);
     }
 
@@ -135,7 +133,7 @@ public final class SymbolProviderSPI
     @Override
     public NumberSystem getDefaultNumberSystem(Locale locale) {
 
-        String cldr = lookup(locale, "numsys", "latn");
+        String cldr = lookup(locale, "numsys", NumberSystem.ARABIC.getCode());
         return CLDR_NAMES.get(cldr);
 
     }
@@ -155,10 +153,7 @@ public final class SymbolProviderSPI
 
         PropertyBundle rb = getBundle(locale);
 
-        if (
-            (rb != null)
-            && rb.containsKey(key)
-        ) {
+        if ((rb != null) && rb.containsKey(key)) {
             return rb.getString(key).charAt(0);
         }
 
@@ -174,10 +169,7 @@ public final class SymbolProviderSPI
 
         PropertyBundle rb = getBundle(locale);
 
-        if (
-            (rb != null)
-            && rb.containsKey(key)
-        ) {
+        if ((rb != null) && rb.containsKey(key)) {
             return rb.getString(key);
         }
 

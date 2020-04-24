@@ -1074,7 +1074,7 @@ public final class Attributes
         ) {
 
             if (value == null) {
-                throw new NullPointerException("Missing attribute value.");
+                throw new NullPointerException("Missing attribute value for key: " + key);
             } else if (!(value instanceof Enum)) {
                 throw new ClassCastException( // Schutz gegen raw-type-Fehler
                     "Enum expected, but found: " + value);
@@ -1185,7 +1185,7 @@ public final class Attributes
         ) {
 
             if (value == null) {
-                throw new NullPointerException("Missing attribute value.");
+                throw new NullPointerException("Missing attribute value for key: " + key);
             }
 
             this.attrs.put(key.name(), value);
