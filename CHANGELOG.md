@@ -2,12 +2,15 @@
 ### Added
 - Support for Duration.in(Collection<? extends Unit>) [#899]
 
+### Fixed
+- Crash during app initialization (unrecognized number system) [#897]
+
 ## [v4.4.5-2019c] published on 2020-04-20
 ### Added
 - Make PatternType.CLDR_DATE being applicable on PlainDate [#889]
 
 ### Fixed
-- Crash during app initialization (rare case) [#894 + #897]
+- Crash during app initialization (rare case) [#894]
 - Incorrect sign in last term of calculation of mean lunar anomaly [#891]
 
 ## [v4.4.4-2019c] published on 2020-01-15
