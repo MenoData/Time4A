@@ -1,4 +1,6 @@
-## [v4.5-2020a] not yet released
+## [v4.6-2020?] not yet released
+
+## [v4.5-2020a] published on 2020-04-25
 ### Added
 - Support for Duration.in(Collection<? extends Unit>) [#899]
 - Support for Swiss German (Schwyzerdütsch) [#895]
@@ -14,7 +16,7 @@
 - Make PatternType.CLDR_DATE being applicable on PlainDate [#889]
 
 ### Fixed
-- Crash during app initialization (rare case) [#894]
+- Crash during app initialization (race condition) [#894]
 - Incorrect sign in last term of calculation of mean lunar anomaly [#891]
 
 ## [v4.4.4-2019c] published on 2020-01-15
