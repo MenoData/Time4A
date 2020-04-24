@@ -1,6 +1,10 @@
 ## [v4.5-2020a] not yet released
 ### Added
 - Support for Duration.in(Collection<? extends Unit>) [#899]
+- Support for Swiss German (Schwyzerdütsch) [#895]
+
+### Changed
+- Update to TZDB 2020a [#900]
 
 ### Fixed
 - Crash during app initialization (unrecognized number system) [#897]
