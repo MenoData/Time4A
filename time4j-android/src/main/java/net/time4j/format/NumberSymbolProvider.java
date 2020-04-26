@@ -189,13 +189,15 @@ public interface NumberSymbolProvider {
      *
      * @param   locale      language and country setting
      * @return  default number system
+     * @throws  IllegalStateException if the number system cannot be determined
      * @since   3.23/4.19
      */
     /*[deutsch]
-     * <p>Ermitelt das Standardzahlsystem f&uuml;r die angegebene Sprache. </p>
+     * <p>Ermittelt das Standardzahlsystem f&uuml;r die angegebene Sprache. </p>
      *
      * @param   locale      language and country setting
      * @return  default number system
+     * @throws  IllegalStateException if the number system cannot be determined
      * @since   3.23/4.19
      */
     NumberSystem getDefaultNumberSystem(Locale locale);
