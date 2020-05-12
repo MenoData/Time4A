@@ -37,15 +37,15 @@ public interface VariantSource {
     //~ Methoden ----------------------------------------------------------
 
     /**
-     * <p>Yields the variant name. </p>
+     * <p>Yields the variant name of a calendar system. </p>
      *
-     * @return  String
+     * @return  String which is empty if there are no variants
      * @since   3.6/4.4
      */
     /*[deutsch]
-     * <p>Liefert den Variantennamen. </p>
+     * <p>Liefert den Variantennamen eines Kalendersystems. </p>
      *
-     * @return  String
+     * @return  String which is empty if there are no variants
      * @since   3.6/4.4
      */
     String getVariant();

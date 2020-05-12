@@ -27,6 +27,7 @@ import net.time4j.engine.ChronoDisplay;
 import net.time4j.engine.ChronoElement;
 import net.time4j.engine.ChronoException;
 import net.time4j.engine.StartOfDay;
+import net.time4j.engine.VariantSource;
 import net.time4j.tz.TZID;
 import net.time4j.tz.Timezone;
 import net.time4j.tz.ZonalOffset;
@@ -54,7 +55,7 @@ import net.time4j.tz.ZonalOffset;
  * @since   3.8/4.5
  */
 public final class GeneralTimestamp<C>
-    implements ChronoDisplay {
+    implements ChronoDisplay, VariantSource {
 
     //~ Instanzvariablen --------------------------------------------------
 
@@ -225,7 +226,6 @@ public final class GeneralTimestamp<C>
      * @throws  ArithmeticException in case of numerical overflow
      * @see     #at(ZonalOffset, StartOfDay)
      * @see     #in(Timezone, StartOfDay)
-     * @see     Moment#minus(long, Object) Moment.plus(long, TimeUnit)
      * @since   4.0
      */
     /*[deutsch]
@@ -242,7 +242,6 @@ public final class GeneralTimestamp<C>
      * @throws  ArithmeticException in case of numerical overflow
      * @see     #at(ZonalOffset, StartOfDay)
      * @see     #in(Timezone, StartOfDay)
-     * @see     Moment#minus(long, Object) Moment.plus(long, TimeUnit)
      * @since   4.0
      */
     public GeneralTimestamp<C> minus(long amount, ClockUnit unit) {
@@ -288,7 +287,6 @@ public final class GeneralTimestamp<C>
      * @throws  ArithmeticException in case of numerical overflow
      * @see     #at(ZonalOffset, StartOfDay)
      * @see     #in(Timezone, StartOfDay)
-     * @see     Moment#plus(long, Object) Moment.plus(long, TimeUnit)
      * @since   4.0
      */
     /*[deutsch]
@@ -305,7 +303,6 @@ public final class GeneralTimestamp<C>
      * @throws  ArithmeticException in case of numerical overflow
      * @see     #at(ZonalOffset, StartOfDay)
      * @see     #in(Timezone, StartOfDay)
-     * @see     Moment#plus(long, Object) Moment.plus(long, TimeUnit)
      * @since   4.0
      */
     public GeneralTimestamp<C> plus(long amount, ClockUnit unit) {
@@ -496,6 +493,13 @@ public final class GeneralTimestamp<C>
 
         Object date = ((this.cv == null) ? this.ca : this.cv);
         return (ChronoDisplay) date;
+
+    }
+
+    @Override
+    public String getVariant() {
+
+        return ((this.cv == null) ? "" : this.cv.getVariant());
 
     }
 
