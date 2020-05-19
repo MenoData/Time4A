@@ -1,4 +1,6 @@
 ## [v4.6-2020?] not yet released
+### Fixed
+- NPE in deserializing of SolarTime and LunarTime [#901]
 
 ## [v4.5-2020a] published on 2020-04-25
 ### Added
