@@ -1,4 +1,6 @@
 ## [v4.6-2020?] not yet released
+### Fixed
+- Documentation example in SolarTime outdated [#902]
 
 ## [v4.5.1-2020a] published on 2020-05-19
 ### Fixed

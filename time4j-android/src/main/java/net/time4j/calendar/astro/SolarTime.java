@@ -69,11 +69,11 @@ import java.util.concurrent.TimeUnit;
  *          .build();
  *
  *     assertThat(
- *       date.get(kibo5895.sunrise(tzid)),
- *       is(PlainTime.of(6, 10, 34)));
+ *       date.get(kibo5895.sunrise()).get().toZonalTimestamp(tzid).toTime(),
+ *       is(PlainTime.of(6, 10, 35)));
  *     assertThat(
- *       date.get(kibo5895.sunset(tzid)),
- *       is(PlainTime.of(18, 47, 48)));
+ *       date.get(kibo5895.sunset()).get().toZonalTimestamp(tzid).toTime(),
+ *       is(PlainTime.of(18, 47, 47)));
  * </pre>
  *
  * <p><strong>About limitations of accuracy:</strong></p>
@@ -143,11 +143,11 @@ import java.util.concurrent.TimeUnit;
  *          .build();
  *
  *     assertThat(
- *       date.get(kibo5895.sunrise(tzid)),
- *       is(PlainTime.of(6, 10, 34)));
+ *       date.get(kibo5895.sunrise()).get().toZonalTimestamp(tzid).toTime(),
+ *       is(PlainTime.of(6, 10, 35)));
  *     assertThat(
- *       date.get(kibo5895.sunset(tzid)),
- *       is(PlainTime.of(18, 47, 48)));
+ *       date.get(kibo5895.sunset()).get().toZonalTimestamp(tzid).toTime(),
+ *       is(PlainTime.of(18, 47, 47)));
  * </pre>
  *
  * <p><strong>&Uuml;ber die Grenzen der Genauigkeit:</strong></p>
