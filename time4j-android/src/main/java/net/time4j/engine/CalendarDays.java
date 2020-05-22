@@ -28,12 +28,20 @@ import java.io.Serializable;
  * <p>Represents a count of calendar days. </p>
  *
  * @author  Meno Hochschild
+ * @see     Calendrical#plus(CalendarDays)
+ * @see     Calendrical#minus(CalendarDays)
+ * @see     CalendarVariant#plus(CalendarDays)
+ * @see     CalendarVariant#minus(CalendarDays)
  * @since   3.4/4.3
  */
 /*[deutsch]
  * <p>Repr&auml;sentiert eine Anzahl von Kalendertagen. </p>
  *
  * @author  Meno Hochschild
+ * @see     Calendrical#plus(CalendarDays)
+ * @see     Calendrical#minus(CalendarDays)
+ * @see     CalendarVariant#plus(CalendarDays)
+ * @see     CalendarVariant#minus(CalendarDays)
  * @since   3.4/4.3
  */
 public final class CalendarDays
