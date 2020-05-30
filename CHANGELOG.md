@@ -1,4 +1,7 @@
 ## [v4.6-2020?] not yet released
+### Added
+- Local variant data for Hijri calendar [#888]
+
 ### Fixed
 - Documentation example in SolarTime outdated [#902]
 
