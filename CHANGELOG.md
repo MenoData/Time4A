@@ -2,6 +2,9 @@
 ### Added
 - Local variant data for Hijri calendar [#888]
 
+### Deprecated
+- `HijriCalendar.VARIANT_ICU4J` scheduled for future removal [#905]
+
 ### Fixed
 - Documentation example in SolarTime outdated [#902]
 
