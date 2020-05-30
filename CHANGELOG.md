@@ -1,6 +1,7 @@
 ## [v4.6-2020?] not yet released
 ### Added
 - Local variant data for Hijri calendar [#888]
+- Getter for observer zone id in `SolarTime` [#904]
 
 ### Deprecated
 - `HijriCalendar.VARIANT_ICU4J` scheduled for future removal [#905]
