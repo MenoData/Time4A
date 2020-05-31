@@ -1,4 +1,6 @@
-## [v4.6-2020a] not yet released
+## [v4.7-2020?] not yet released
+
+## [v4.6-2020a] published on 2020-05-31
 ### Added
 - Local variant data for Hijri calendar [#888]
 - Getter for observer zone id in `SolarTime` and `LunarTime` [#904]
