@@ -1,4 +1,6 @@
 ## [v4.7-2020?] not yet released
+### Fixed
+- United Kingdom date format [#908]
 
 ## [v4.6-2020a] published on 2020-05-31
 ### Added
