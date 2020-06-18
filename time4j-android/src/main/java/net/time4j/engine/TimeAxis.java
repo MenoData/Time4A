@@ -977,9 +977,10 @@ public final class TimeAxis<U, T extends TimePoint<U, T>>
 
             this.checkUnitDuplicates(unit);
 
-            if (convertibleUnits.contains(null)) {
-                throw new NullPointerException(
-                    "Found convertible unit which is null.");
+            for (Object u : convertibleUnits) {
+                if (u == null) { // sanity check
+                    throw new NullPointerException("Found convertible unit which is null.");
+                }
             }
 
             if (Double.isNaN(length)) {
