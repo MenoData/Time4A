@@ -580,6 +580,9 @@ public final class SolarTime
      *
      * <p>Note: The precision is generally constrained to minutes. </p>
      *
+     * <p>The result might be undefined (indicated by {@code Optional.empty()}) if the sun does not
+     * rise on given day (midnight sun or polar night). </p>
+     *
      * @return  sunrise function applicable on any calendar date
      * @since   3.34/4.29
      */
@@ -595,6 +598,9 @@ public final class SolarTime
      * </pre>
      *
      * <p>Hinweis: Die Genauigkeit liegt generell im Minutenbereich. </p>
+     *
+     * <p>Das Ergebnis kann undefiniert sein (angezeigt durch {@code Optional.empty()})
+     * wenn die Sonne an einem Tag gar nicht aufgeht (Mitternachtssonne oder Polarnacht). </p>
      *
      * @return  sunrise function applicable on any calendar date
      * @since   3.34/4.29
@@ -617,6 +623,9 @@ public final class SolarTime
      * <p>Note: The precision is generally constrained to minutes. And the atmospheric refraction
      * is here not taken into account. </p>
      *
+     * <p>The result might be undefined (indicated by {@code Optional.empty()}) if the twilight event does not
+     * happen on given day. </p>
+     *
      * @param   twilight    relevant definition of twilight
      * @return  twilight function at sunrise applicable on any calendar date
      * @since   3.34/4.29
@@ -626,6 +635,9 @@ public final class SolarTime
      *
      * <p>Hinweis: Die Genauigkeit liegt generell im Minutenbereich. Die atmosp&auml;rische Lichtbeugung wird
      * hier nicht ber&uuml;cksichtigt. </p>
+     *
+     * <p>Das Ergebnis kann undefiniert sein (angezeigt durch {@code Optional.empty()})
+     * wenn das D&auml;mmerungsereignis zum angegebenen Tag nicht eintritt. </p>
      *
      * @param   twilight    relevant definition of twilight
      * @return  twilight function at sunrise applicable on any calendar date
@@ -657,6 +669,9 @@ public final class SolarTime
      *
      * <p>Note: The precision is generally constrained to minutes. </p>
      *
+     * <p>The result might be undefined (indicated by {@code Optional.empty()}) if the sun does not
+     * set on given day (midnight sun or polar night). </p>
+     *
      * @return  sunset function applicable on any calendar date
      * @since   3.34/4.29
      */
@@ -672,6 +687,9 @@ public final class SolarTime
      * </pre>
      *
      * <p>Hinweis: Die Genauigkeit liegt generell im Minutenbereich. </p>
+     *
+     * <p>Das Ergebnis kann undefiniert sein (angezeigt durch {@code Optional.empty()})
+     * wenn die Sonne an einem Tag gar nicht untergeht (Mitternachtssonne oder Polarnacht). </p>
      *
      * @return  sunset function applicable on any calendar date
      * @since   3.34/4.29
@@ -694,6 +712,9 @@ public final class SolarTime
      * <p>Note: The precision is generally constrained to minutes. And the atmospheric refraction
      * is here not taken into account. </p>
      *
+     * <p>The result might be undefined (indicated by {@code Optional.empty()}) if the twilight event does not
+     * happen on given day. </p>
+     *
      * @param   twilight    relevant definition of twilight
      * @return  twilight function at sunset applicable on any calendar date
      * @since   3.34/4.29
@@ -703,6 +724,9 @@ public final class SolarTime
      *
      * <p>Hinweis: Die Genauigkeit liegt generell im Minutenbereich. Die atmosp&auml;rische Lichtbeugung wird
      * hier nicht ber&uuml;cksichtigt. </p>
+     *
+     * <p>Das Ergebnis kann undefiniert sein (angezeigt durch {@code Optional.empty()})
+     * wenn das D&auml;mmerungsereignis zum angegebenen Tag nicht eintritt. </p>
      *
      * @param   twilight    relevant definition of twilight
      * @return  twilight function at sunset applicable on any calendar date
@@ -855,7 +879,8 @@ public final class SolarTime
     /**
      * <p>Calculates the moment of noon at the location of this instance (solar transit). </p>
      *
-     * <p>Note: The transit time does not tell if the sun is above or below the horizon. </p>
+     * <p>Note 1: The transit time does not tell if the sun is above or below the horizon. </p>
+     * <p>Note 2: Here, the term noon is not related to civil timekeeping but the sundial time. </p>
      *
      * @return  noon function applicable on any calendar date
      * @since   3.34/4.29
@@ -863,7 +888,9 @@ public final class SolarTime
     /*[deutsch]
      * <p>Berechnet den Moment der h&ouml;chsten Position der Sonne an der Position dieser Instanz. </p>
      *
-     * <p>Hinweis: Die Transit-Zeit besagt nicht, ob die Sonne &uuml;ber oder unter dem Horizont ist. </p>
+     * <p>Hinweis 1: Die Transit-Zeit besagt nicht, ob die Sonne &uuml;ber oder unter dem Horizont ist. </p>
+     * <p>Hinweis 2: Der Mittagsbegriff ist hier nicht auf die b&uuml;rgerliche Zeit bezogen, sondern
+     * auf die Sonnenuhr (lokale Ortszeit). </p>
      *
      * @return  noon function applicable on any calendar date
      * @since   3.34/4.29
@@ -882,7 +909,8 @@ public final class SolarTime
     /**
      * <p>Calculates the moment of midnight at the location of this instance (lowest position of sun). </p>
      *
-     * <p>Note: The transit time does not tell if the sun is above or below the horizon. </p>
+     * <p>Note 1: The transit time does not tell if the sun is above or below the horizon. </p>
+     * <p>Note 2: Here, the term midnight is not related to civil timekeeping but the sundial time. </p>
      *
      * @return  midnight function applicable on any calendar date
      * @since   3.34/4.29
@@ -890,7 +918,9 @@ public final class SolarTime
     /*[deutsch]
      * <p>Berechnet den Moment der niedrigsten Position der Sonne an der Position dieser Instanz. </p>
      *
-     * <p>Hinweis: Die Transit-Zeit besagt nicht, ob die Sonne &uuml;ber oder unter dem Horizont ist. </p>
+     * <p>Hinweis 1: Die Transit-Zeit besagt nicht, ob die Sonne &uuml;ber oder unter dem Horizont ist. </p>
+     * <p>Hinweis 2: Der Mitternachtsbegriff ist hier nicht auf die b&uuml;rgerliche Zeit bezogen, sondern
+     * auf die Sonnenuhr (lokale Ortszeit). </p>
      *
      * @return  midnight function applicable on any calendar date
      * @since   3.34/4.29
