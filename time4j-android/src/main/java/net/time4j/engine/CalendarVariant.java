@@ -516,6 +516,24 @@ public abstract class CalendarVariant<D extends CalendarVariant<D>>
     @Override
     protected abstract CalendarFamily<D> getChronology();
 
+    /**
+     * <p>Obtains the calendar system of the underlying variant. </p>
+     *
+     * @return  CalendarSystem
+     * @since   4.7
+     */
+    /*[deutsch]
+     * <p>Liefert das Kalendersystem der zugrundeliegenden Variante. </p>
+     *
+     * @return  CalendarSystem
+     * @since   4.7
+     */
+    protected CalendarSystem<D> getCalendarSystem() {
+
+        return this.getChronology().getCalendarSystem(this.getVariant());
+
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     <V> ElementRule<D, V> getRule(ChronoElement<V> element) {
@@ -526,12 +544,6 @@ public abstract class CalendarVariant<D extends CalendarVariant<D>>
         } else {
             return super.getRule(element);
         }
-
-    }
-
-    private CalendarSystem<D> getCalendarSystem() {
-
-        return this.getChronology().getCalendarSystem(this.getVariant());
 
     }
 

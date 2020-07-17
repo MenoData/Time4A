@@ -1428,7 +1428,8 @@ public final class HijriCalendar
      *
      * @return  associated calendar system
      */
-    EraYearMonthDaySystem<HijriCalendar> getCalendarSystem() {
+    @Override
+    protected EraYearMonthDaySystem<HijriCalendar> getCalendarSystem() {
 
         return getCalendarSystem(this.variant);
 

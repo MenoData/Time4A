@@ -27,6 +27,11 @@ import net.time4j.calendar.astro.LunarTime;
 import net.time4j.calendar.astro.SolarTime;
 import net.time4j.calendar.bahai.BadiCalendar;
 import net.time4j.calendar.frenchrev.FrenchRepublicanCalendar;
+import net.time4j.calendar.hindu.HinduCalendar;
+import net.time4j.calendar.hindu.HinduDay;
+import net.time4j.calendar.hindu.HinduEra;
+import net.time4j.calendar.hindu.HinduMonth;
+import net.time4j.calendar.hindu.HinduRule;
 import net.time4j.engine.CalendarDays;
 import net.time4j.engine.StartOfDay;
 import net.time4j.format.CalendarText;
@@ -116,7 +121,7 @@ public class TimeDemoApp
                         .addPattern("MM/dd/yyyy", PatternType.CLDR_DATE).build();
         HijriCalendar hijriDate =
                 SystemClock.inLocalView().now(
-                        HijriCalendar.family(), HijriCalendar.VARIANT_ICU4J, StartOfDay.EVENING
+                        HijriCalendar.family(), HijriCalendar.VARIANT_UMALQURA, StartOfDay.EVENING
                 ).toDate();
         String germanTime =
                 SystemClock.inLocalView().now().toTime().print(
@@ -170,6 +175,11 @@ public class TimeDemoApp
                 PatternType.DYNAMIC,
                 Locale.GERMAN,
                 BadiCalendar.axis());
+        ChronoFormatter<HinduCalendar> hinduFormatter = ChronoFormatter.ofPattern(
+                "G y, MMMM d",
+                PatternType.CLDR,
+                Locale.ENGLISH,
+                HinduCalendar.family());
 
         try {
             TZID winzoneID = WindowsZone.of("Romance Standard Time").resolveSmart(Locale.FRANCE);
@@ -236,6 +246,7 @@ public class TimeDemoApp
                 + "\n=> Gregorian/Dangi date=" + gregKorean.format(PlainDate.nowInSystemTime())
                 + "\n=> Chinese-today=" + fc.format(ChineseCalendar.nowInSystemTime())
                 + "\n=> Badi-formatted=" + badiFormatter.print(BadiCalendar.ofIntercalary(5, 11, 2))
+                + "\n=> Hindu-Amanta=" + hinduFormatter.print(HinduCalendar.nowInSystemTime(HinduRule.AMANTA.variant()))
                 ;
     }
 
