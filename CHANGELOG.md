@@ -1,6 +1,6 @@
 ## [v4.7-2020?] not yet released
 ### Added
-- Modern Hindu calendar (algorithmic) [#851]
+- Hindu calendar (algorithmic) [#851 + #892]
 
 ### Fixed
 - United Kingdom date format [#908]
