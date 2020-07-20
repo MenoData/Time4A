@@ -1,8 +1,10 @@
 ## [v4.7-2020?] not yet released
 ### Added
 - Hindu calendar (algorithmic) [#851 + #892]
+- Stems and branches of month and day in Chinese calendar [#910]
 
 ### Fixed
+- Invalid combination of stems and branches not documented [#912]
 - United Kingdom date format [#908]
 
 ## [v4.6-2020a] published on 2020-05-31
