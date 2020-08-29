@@ -186,6 +186,8 @@ public class AndroidResourceLoader
             }
         } catch (IOException ioe) {
             return null;
+        } catch (RuntimeException re) {
+            return null;
         }
 
     }
