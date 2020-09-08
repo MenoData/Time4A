@@ -25,6 +25,7 @@ import net.time4j.Moment;
 import net.time4j.PlainDate;
 import net.time4j.PlainTime;
 import net.time4j.PlainTimestamp;
+import net.time4j.base.MathUtils;
 import net.time4j.base.ResourceLoader;
 import net.time4j.engine.CalendarDate;
 import net.time4j.engine.ChronoCondition;
@@ -205,6 +206,7 @@ public final class SolarTime
     static final double STD_ZENITH = 90.0 + (SUN_RADIUS + STD_REFRACTION) / 60.0;
     static final String DECLINATION = "declination";
     static final String RIGHT_ASCENSION = "right-ascension";
+    static final double ARC_MIN = 1.0 / 60;
 
     private static final Calculator DEFAULT_CALCULATOR;
     private static final ConcurrentMap<String, Calculator> CALCULATORS;
@@ -936,6 +938,104 @@ public final class SolarTime
 
     }
 
+    /**
+     * <p>Calculates the moment before noon when the given shadow occurs on given date
+     * at the location of this instance. </p>
+     *
+     * <p>The function is not supported in polar regions (+/- 66°) because the angle of sun
+     * is often changing too slowly to guarantee reliable results. Furthermore, the function
+     * might obtain a null result if the given shadow is too short for the date in question. </p>
+     *
+     * @param   objectHeight    the height of object in meters, must be positive
+     * @param   shadowLength    the length of shadow thrown by the object in meters, must not be negative
+     * @return  function for calculating the time of shadow applicable on any calendar date in minute precision
+     * @throws  IllegalArgumentException if one or both parameters are not finite or out of range
+     * @throws  UnsupportedOperationException if this instance is within the arctic or antarctic circle
+     * @see     SunPosition#getShadowLength(double)
+     * @see     #timeOfShadowAfterNoon(double, double)
+     * @since   4.7
+     */
+    /*[deutsch]
+     * <p>Berechnet den Moment in der ersten Tagesh&auml;lfte, zu dem der fragliche Schatten beobachtet
+     * wird, an der Position dieser Instanz. </p>
+     *
+     * <p>Die Funktion wird in Polargebieten (+/- 66°) nicht unterst&uuml;tzt, weil sich der Winkel der Sonne
+     * oft zu wenig ver&auml;ndert, um zuverl&auml;ssige Ergebnisse zu erm&ouml;glichen. Au&szlig;erdem kann
+     * die Funktion ohne Ergebnis sein, wenn der angegebene Schatten zum fraglichen Tag zu kurz ist. </p>
+     *
+     * @param   objectHeight    the height of object in meters, must be positive
+     * @param   shadowLength    the length of shadow thrown by the object in meters, must not be negative
+     * @return  function for calculating the time of shadow applicable on any calendar date in minute precision
+     * @throws  IllegalArgumentException if one or both parameters are not finite or out of range
+     * @throws  UnsupportedOperationException if this instance is within the arctic or antarctic circle
+     * @see     SunPosition#getShadowLength(double)
+     * @see     #timeOfShadowAfterNoon(double, double)
+     * @since   4.7
+     */
+    public ChronoFunction<CalendarDate, Moment> timeOfShadowBeforeNoon(
+        final double objectHeight,
+        final double shadowLength
+    ) {
+
+        this.checkShadow(objectHeight, shadowLength);
+        return new ChronoFunction<CalendarDate, Moment>() {
+            @Override
+            public Moment apply(CalendarDate date) {
+                return SolarTime.this.timeOfShadow(date, false, objectHeight, shadowLength);
+            }
+        };
+
+    }
+
+    /**
+     * <p>Calculates the moment after noon when the given shadow occurs on given date
+     * at the location of this instance. </p>
+     *
+     * <p>The function is not supported in polar regions (+/- 66°) because the angle of sun
+     * is often changing too slowly to guarantee reliable results. Furthermore, the function
+     * might obtain a null result if the given shadow is too short for the date in question. </p>
+     *
+     * @param   objectHeight    the height of object in meters, must be positive
+     * @param   shadowLength    the length of shadow thrown by the object in meters, must not be negative
+     * @return  function for calculating the time of shadow applicable on any calendar date in minute precision
+     * @throws  IllegalArgumentException if one or both parameters are not finite or out of range
+     * @throws  UnsupportedOperationException if this instance is within the arctic or antarctic circle
+     * @see     SunPosition#getShadowLength(double)
+     * @see     #timeOfShadowBeforeNoon(double, double)
+     * @since   4.7
+     */
+    /*[deutsch]
+     * <p>Berechnet den Moment in der zweiten Tagesh&auml;lfte, zu dem der fragliche Schatten beobachtet
+     * wird, an der Position dieser Instanz. </p>
+     *
+     * <p>Die Funktion wird in Polargebieten (+/- 66°) nicht unterst&uuml;tzt, weil sich der Winkel der Sonne
+     * oft zu wenig ver&auml;ndert, um zuverl&auml;ssige Ergebnisse zu erm&ouml;glichen. Au&szlig;erdem kann
+     * die Funktion ohne Ergebnis sein, wenn der angegebene Schatten zum fraglichen Tag zu kurz ist. </p>
+     *
+     * @param   objectHeight    the height of object in meters, must be positive
+     * @param   shadowLength    the length of shadow thrown by the object in meters, must not be negative
+     * @return  function for calculating the time of shadow applicable on any calendar date in minute precision
+     * @throws  IllegalArgumentException if one or both parameters are not finite or out of range
+     * @throws  UnsupportedOperationException if this instance is within the arctic or antarctic circle
+     * @see     SunPosition#getShadowLength(double)
+     * @see     #timeOfShadowBeforeNoon(double, double)
+     * @since   4.7
+     */
+    public ChronoFunction<CalendarDate, Moment> timeOfShadowAfterNoon(
+        final double objectHeight,
+        final double shadowLength
+    ) {
+
+        this.checkShadow(objectHeight, shadowLength);
+        return new ChronoFunction<CalendarDate, Moment>() {
+            @Override
+            public Moment apply(CalendarDate date) {
+                return SolarTime.this.timeOfShadow(date, true, objectHeight, shadowLength);
+            }
+        };
+
+    }
+
     @Override
     public boolean equals(Object obj) {
 
@@ -1235,14 +1335,12 @@ public final class SolarTime
     }
 
     private static PlainTimestamp onAverage(Moment context, ZonalOffset offset) {
-
         Moment ut =
             Moment.of(
                 context.getElapsedTime(TimeScale.UT) + 2 * 365 * 86400,
                 context.getNanosecond(TimeScale.UT),
                 TimeScale.POSIX);
         return ut.toZonalTimestamp(offset);
-
     }
 
     private static Moment transitAtNoon(
@@ -1250,10 +1348,8 @@ public final class SolarTime
         double longitude,
         String calculator
     ) {
-
         Moment utc = fromLocalEvent(date, 12, longitude, calculator);
         return utc.with(Moment.PRECISION, precision(calculator));
-
     }
 
     private static Moment transitAtMidnight(
@@ -1261,28 +1357,78 @@ public final class SolarTime
         double longitude,
         String calculator
     ) {
-
         Moment utc = fromLocalEvent(date, 0, longitude, calculator);
         return utc.with(Moment.PRECISION, precision(calculator));
+    }
 
+    private void checkShadow(
+        double objectHeight,
+        double shadowLength
+    ) {
+        if (Double.isInfinite(objectHeight) || Double.isNaN(objectHeight) || (objectHeight <= 0.0)) {
+            throw new IllegalArgumentException("Object height must be finite and positive.");
+        } else if (Double.isInfinite(shadowLength) || Double.isNaN(shadowLength) || (shadowLength < 0.0)) {
+            throw new IllegalArgumentException("Length of shadow must be finite and not negative.");
+        } else if (Math.abs(this.latitude) > 66.0) {
+            throw new UnsupportedOperationException("Cannot calculate time of shadow for polar regions.");
+        }
+    }
+
+    private Moment timeOfShadow(
+        CalendarDate date,
+        boolean afterNoon,
+        double objectHeight,
+        double shadowLength
+    ) {
+        PlainDate d = toGregorian(toLMT(date));
+        Moment riseset = afterNoon ? d.get(sunset()) : d.get(sunrise());
+        assert riseset != null;
+        Moment noon = d.get(transitAtNoon());
+        double maxE = SunPosition.at(noon, this).getElevation();
+
+        if (maxE <= ARC_MIN) {
+            return riseset;
+        } else {
+            double elevation = (
+                (shadowLength == 0.0)
+                    ? 90.0
+                    : Math.toDegrees(Math.atan(objectHeight / shadowLength)));
+
+            if (elevation > maxE + ARC_MIN) {
+                return null;
+            } else {
+                return timeOfShadow(riseset.getPosixTime(), noon.getPosixTime(), elevation);
+            }
+        }
+    }
+
+    private Moment timeOfShadow(
+        long lowSun,
+        long highSun,
+        double elevation
+    ) {
+        Moment center = Moment.of(MathUtils.safeAdd(lowSun, highSun) / 2, TimeScale.POSIX);
+        double sunpos = SunPosition.at(center, this).getElevation();
+
+        if (Math.abs(sunpos - elevation) < ARC_MIN) {
+            return center;
+        } else if (Double.compare(elevation, sunpos) > 0.0) {
+            return timeOfShadow(center.getPosixTime(), highSun, elevation);
+        } else {
+            return timeOfShadow(lowSun, center.getPosixTime(), elevation);
+        }
     }
 
     private static TimeUnit precision(String calculator) {
-
         return (calculator.equals(StdSolarCalculator.SIMPLE.name()) ? TimeUnit.MINUTES : TimeUnit.SECONDS);
-
     }
 
     private double geodeticAngle() {
-
         return this.getCalculator().getGeodeticAngle(this.latitude, this.altitude);
-
     }
 
     private double zenithAngle() {
-
         return this.getCalculator().getZenithAngle(this.latitude, this.altitude);
-
     }
 
     private static void check(
@@ -1291,7 +1437,6 @@ public final class SolarTime
         int altitude,
         String calculator
     ) {
-
         if (Double.isNaN(latitude) || Double.isInfinite(latitude)) {
             throw new IllegalArgumentException("Latitude must be a finite value: " + latitude);
         } else if (Double.isNaN(longitude) || Double.isInfinite(longitude)) {
@@ -1309,11 +1454,9 @@ public final class SolarTime
         } else if (!CALCULATORS.containsKey(calculator)) {
             throw new IllegalArgumentException("Unknown calculator: " + calculator);
         }
-
     }
 
     private CalendarDate toLMT(CalendarDate input) {
-
         if ((this.observerZoneID == null) || (Math.abs(this.longitude) < 150.0)) {
             return input;
         }
@@ -1328,14 +1471,12 @@ public final class SolarTime
 
         ZonalOffset lmtOffset = ZonalOffset.atLongitude(new BigDecimal(this.longitude));
         return noon.inTimezone(this.observerZoneID).toZonalTimestamp(lmtOffset).getCalendarDate();
-
     }
 
     private static boolean equalZones(
         TZID z1,
         TZID z2
     ) {
-
         if (z1 == null) {
             return (z2 == null);
         } else if (z2 == null) {
@@ -1343,7 +1484,6 @@ public final class SolarTime
         } else {
             return z1.canonical().equals(z2.canonical());
         }
-
     }
 
     /**
@@ -1358,7 +1498,6 @@ public final class SolarTime
 
         in.defaultReadObject();
         check(this.latitude, this.longitude, this.altitude, this.calculator);
-
     }
 
     //~ Innere Klassen ----------------------------------------------------
