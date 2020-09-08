@@ -2,6 +2,7 @@
 ### Added
 - Hindu calendar (algorithmic) [#851 + #892]
 - Stems and branches of month and day in Chinese calendar [#910]
+- Getting time of day when shadow length is known [#890]
 
 ### Fixed
 - Invalid combination of stems and branches not documented [#912]
