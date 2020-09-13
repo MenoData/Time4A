@@ -1,4 +1,6 @@
-## [v4.7-2020?] not yet released
+## [v4.8-2020?] not yet released
+
+## [v4.7-2020a] published on 2020-09-13
 ### Added
 - Hindu calendar (algorithmic) [#851 + #892]
 - Stems and branches of month and day in Chinese calendar [#910]
