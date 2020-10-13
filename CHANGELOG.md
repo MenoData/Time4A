@@ -1,4 +1,6 @@
-## [v4.8-2020?] not yet released
+## [v4.8-2020b] not yet released
+### Changed
+- Update to TZDB 2020b [#919]
 
 ## [v4.7-2020a] published on 2020-09-13
 ### Added
