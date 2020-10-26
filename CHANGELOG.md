@@ -1,8 +1,15 @@
 ## [v4.8-2020?] not yet released
 
+## [v4.7.1-2020d] published on 2020-10-26
+### Changed
+- Update to TZDB 2020d [#924]
+
+### Fixed
+- Imprecise translations for relative days in Dutch [#922]
+
 ## [v4.7-2020c] published on 2020-10-19
 ### Changed
-- Update to TZDB v2020c [#923]
+- Update to TZDB 2020c [#923]
 
 ## [v4.7-2020a] published on 2020-09-13
 ### Added
