@@ -1,4 +1,6 @@
 ## [v4.8-2020?] not yet released
+### Fixed
+- Proguard breaks serialization of Hindu calendar [#925]
 
 ## [v4.7.1-2020d] published on 2020-10-26
 ### Changed
