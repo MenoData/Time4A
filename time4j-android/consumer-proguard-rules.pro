@@ -39,9 +39,10 @@
 -keepnames class net.time4j.calendar.VietnameseCalendar$SPX
 -keepnames class net.time4j.calendar.bahai.SPX
 -keepnames class net.time4j.calendar.frenchrev.SPX
+-keepnames class net.time4j.calendar.hindu.SPX
 -keepnames class net.time4j.history.SPX
 
--keepclassmembers class * implements java.io.Serializable {
+-keepclassmembers class net.time4j.** implements java.io.Serializable {
     static final long serialVersionUID;
     !static !transient <fields>;
     private void writeObject(java.io.ObjectOutputStream);
