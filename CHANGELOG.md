@@ -1,4 +1,9 @@
 ## [v4.8-2020?] not yet released
+
+## [v4.7.2-2020e] published on 2020-12-30
+### Changed
+- Update to TZDB 2020e [#927]
+
 ### Fixed
 - Proguard breaks serialization of Hindu calendar [#925]
 
