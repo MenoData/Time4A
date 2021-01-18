@@ -1,4 +1,6 @@
 ## [v4.8-2020?] not yet released
+### Fixed
+- New Japanese nengo defined in system property not correctly checked [#929]
 
 ## [v4.7.2-2020e] published on 2020-12-30
 ### Changed

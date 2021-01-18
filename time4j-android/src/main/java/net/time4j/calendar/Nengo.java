@@ -224,8 +224,10 @@ public final class Nengo
                 }
             }
             if ((name != null) && (kanji != null) && (since != null)) {
-                if (since.isBefore(PlainDate.of(1989, 1, 9))) {
-                    throw new IllegalStateException("New Japanese era must be after Heisei.");
+                Nengo lastDefined = official.get(official.size() - 1);
+                if (!since.isAfter(lastDefined.getStart())) {
+                    throw new IllegalStateException(
+                        "New Japanese era must be after last defined nengo: " + lastDefined.romaji);
                 } else {
                     if (chinese == null) {
                         chinese = kanji;
