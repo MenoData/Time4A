@@ -399,25 +399,37 @@ public final class ChineseCalendar
      * <p>Represents the solar term as one of 24 possible stations of the sun on the ecliptic. </p>
      *
      * <p>When manipulating then this element behaves as if the next solar term on or after new year
-     * is set. Example: </p>
+     * is set. The behaviour is equivalent to {@code date.with(solarTerm.sinceNewYear())}. Please be
+     * aware of the fact that the resulting date might be sometimes in the next calendar year. An
+     * alternative being more consistent with gregorian year cycles is given by the expression
+     * {@code date.with(solarTerm.sinceLichun())}. Example: </p>
      *
      * <pre>
      *     ChineseCalendar date = PlainDate.of(2017, 12, 22).transform(ChineseCalendar.axis());
      *     date = date.with(ChineseCalendar.SOLAR_TERM, SolarTerm.MINOR_03_QINGMING_015);
      *     System.out.println(date.transform(PlainDate.axis())); // 2017-04-04
      * </pre>
+     *
+     * @see     SolarTerm#sinceNewYear()
+     * @see     SolarTerm#sinceLichun()
      */
     /*[deutsch]
      * <p>Repr&auml;sentiert den Sonnenmonat als eine von 24 m&ouml;glichen Stationen auf der Ekliptik der Sonne. </p>
      *
      * <p>In Manipulationen verh&auml;lt sich dieses Element so, da&szlig; der am oder nach dem aktuellen
-     * Neujahrstag passende Sonnenmonat bestimmt wird. Beispiel: </p>
+     * Neujahrstag passende Sonnenmonat bestimmt wird. Das Verhalten ist &auml;quivalent zum Ausdruck
+     * {@code date.with(solarTerm.sinceNewYear())}. Bitte beachten Sie, da&szlig; das Ergebnis der Manipulation
+     * im n&auml;chsten Jahr liegen kann. Eine Alternative, die besser zu gregorianischen Jahreszyklen passt,
+     * steht mit dem Ausdruck {@code date.with(solarTerm.sinceLichun())} zur Verf&uuml;gung. Beispiel: </p>
      *
      * <pre>
      *     ChineseCalendar date = PlainDate.of(2017, 12, 22).transform(ChineseCalendar.axis());
      *     date = date.with(ChineseCalendar.SOLAR_TERM, SolarTerm.MINOR_03_QINGMING_015);
      *     System.out.println(date.transform(PlainDate.axis())); // 2017-04-04
      * </pre>
+     *
+     * @see     SolarTerm#sinceNewYear()
+     * @see     SolarTerm#sinceLichun()
      */
     public static final ChronoElement<SolarTerm> SOLAR_TERM = EastAsianST.getInstance();
 
@@ -657,7 +669,7 @@ public final class ChineseCalendar
     public static ChineseCalendar ofQingMing(int gregorianYear) {
 
         ChineseCalendar newyear = ChineseCalendar.ofNewYear(gregorianYear);
-        return newyear.with(ChineseCalendar.SOLAR_TERM, SolarTerm.MINOR_03_QINGMING_015);
+        return newyear.with(SolarTerm.MINOR_03_QINGMING_015.<ChineseCalendar>sinceLichun());
 
     }
 
@@ -1411,12 +1423,10 @@ public final class ChineseCalendar
 
             byte header = in.readByte();
 
-            switch (header) {
-                case CHINESE:
-                    this.obj = this.readChinese(in);
-                    break;
-                default:
-                    throw new InvalidObjectException("Unknown calendar type.");
+            if (header == CHINESE) {
+                this.obj = this.readChinese(in);
+            } else {
+                throw new InvalidObjectException("Unknown calendar type.");
             }
 
         }

@@ -1,5 +1,9 @@
-## [v4.8-2020?] not yet released
+## [v4.8-2021a] not yet released
+### Added
+- New methods for solar terms creating lists and operators [#928]
+
 ### Fixed
+- Documentation of solar term handling in East Asian calendars improved [#928]
 - New Japanese nengo defined in system property not correctly checked [#929]
 
 ## [v4.7.2-2020e] published on 2020-12-30

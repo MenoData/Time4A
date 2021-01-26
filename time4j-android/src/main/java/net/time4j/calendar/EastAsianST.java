@@ -21,10 +21,10 @@ package net.time4j.calendar;
 
 import net.time4j.Moment;
 import net.time4j.engine.AttributeQuery;
-import net.time4j.engine.CalendarDays;
 import net.time4j.engine.ChronoDisplay;
 import net.time4j.engine.ChronoElement;
 import net.time4j.engine.ChronoException;
+import net.time4j.engine.ChronoOperator;
 import net.time4j.engine.ElementRule;
 import net.time4j.format.Attributes;
 import net.time4j.format.TextElement;
@@ -191,8 +191,8 @@ class EastAsianST<D extends EastAsianCalendar<?, D>>
         if (value == null) {
             throw new IllegalArgumentException("Missing solar term.");
         } else {
-            long newYear = context.getCalendarSystem().newYear(context.getCycle(), context.getYear().getNumber());
-            return value.onOrAfter(context.minus(CalendarDays.of(context.getDaysSinceEpochUTC() - newYear)));
+            ChronoOperator<D> op = value.sinceNewYear();
+            return context.with(op);
         }
     }
 

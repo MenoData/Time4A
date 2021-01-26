@@ -126,7 +126,8 @@ public abstract class ChronoEntity<T extends ChronoEntity<T>>
      * strategy pattern hereby enables the externalization of querying
      * the interpretation and evaluation of this entity, consequently
      * enabling user-defined queries with arbitrary result types R.
-     * Main difference to chronological elements is read-only access.
+     * Main difference to chronological elements are lack of formattability
+     * and read-only access.
      * Users have to consult the documentation of given query to decide
      * if this method will yield {@code null} or throws an exception
      * if the result is undefined or otherwise not obtainable. </p>
@@ -144,7 +145,8 @@ public abstract class ChronoEntity<T extends ChronoEntity<T>>
      * Vorgang der Zeitinterpretation externalisiert und erm&ouml;glicht
      * so benutzerdefinierte Abfragen mit beliebigen Ergebnistypen. Anders
      * als bei chronologischen Elementen ist hier nur ein Lesezugriff
-     * m&ouml;glich. In der Dokumentation der jeweiligen {@code ChronoFunction}
+     * m&ouml;glich. Eine Eignung f&uuml;r die Formatierung ist nicht gegeben.
+     * In der Dokumentation der jeweiligen {@code ChronoFunction}
      * ist nachzuschauen, ob diese Methode im Fall undefinierter Ergebnisse
      * {@code null} zur&uuml;ckgibt oder eine Ausnahme wirft. </p>
      *
