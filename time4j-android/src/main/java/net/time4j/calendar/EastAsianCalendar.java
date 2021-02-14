@@ -285,6 +285,100 @@ public abstract class EastAsianCalendar<U, D extends EastAsianCalendar<U, D>>
     }
 
     /**
+     * <p>Tries to obtain the leap month of the calendar year associated with this calendar date. </p>
+     *
+     * <p>Note: If the current year is a leap year then it is possible that the found leap month is before
+     * the current calendar date. </p>
+     *
+     * @return  East Asian month as leap month of current calendar year, maybe {@code null}
+     * @since   4.8
+     * @see     #isLeapYear()
+     * @see     #withBeginOfNextLeapMonth()
+     */
+    /*[deutsch]
+     * <p>Versucht, den Schaltmonat des mit diesem Kalenderdatum verkn&uuml;pften Jahr zu finden. </p>
+     *
+     * <p>Hinweis: Falls das aktuelle Jahr ein Schaltjahr ist, ist es m&ouml;glich, da&szlig; der gefundene
+     * Schaltmonat vor dem aktuellen Kalenderdatum liegt. </p>
+     *
+     * @return  East Asian month as leap month of current calendar year, maybe {@code null}
+     * @since   4.8
+     * @see     #isLeapYear()
+     * @see     #withBeginOfNextLeapMonth()
+     */
+    public EastAsianMonth findLeapMonth() {
+
+        int lm = this.getCalendarSystem().getLeapMonth(this.getCycle(), this.getYear().getNumber());
+        return (lm == 0) ? null : EastAsianMonth.valueOf(lm).withLeap();
+
+    }
+
+    /**
+     * <p>Obtains the calendar date of the begin of next leap month. </p>
+     *
+     * <p>Example: </p>
+     *
+     * <pre>
+     *     ChineseCalendar cc = ChineseCalendar.ofNewYear(2018);
+     *     cc = cc.withBeginOfNextLeapMonth();
+     *     System.out.println(cc); // chinese[geng-zi(2020)-*4-01]
+     * </pre>
+     *
+     * @return  the calendar date when the next leap month starts
+     * @throws  IllegalArgumentException if the next leap month is out of range of supported calendar dates
+     * @see     #isLeapYear()
+     * @see     #findLeapMonth()
+     * @since   4.8
+     */
+    /*[deutsch]
+     * <p>Liefert das Kalenderdatums des Beginns des n&auml;chsten Schaltmonats. </p>
+     *
+     * <p>Beispiel: </p>
+     *
+     * <pre>
+     *     ChineseCalendar cc = ChineseCalendar.ofNewYear(2018);
+     *     cc = cc.withBeginOfNextLeapMonth();
+     *     System.out.println(cc); // chinese[geng-zi(2020)-*4-01]
+     * </pre>
+     *
+     * @return  the calendar date when the next leap month starts
+     * @throws  IllegalArgumentException if the next leap month is out of range of supported calendar dates
+     * @see     #isLeapYear()
+     * @see     #findLeapMonth()
+     * @since   4.8
+     */
+    public D withBeginOfNextLeapMonth() {
+
+        D date = this.getContext();
+        EastAsianCS<D> calsys = date.getCalendarSystem();
+        int cycle = date.getCycle();
+        int yoc = date.getYear().getNumber();
+
+        while (true) {
+            int lm = calsys.getLeapMonth(cycle, yoc);
+
+            if (lm > 0) {
+                EastAsianMonth om = EastAsianMonth.valueOf(lm).withLeap();
+
+                if (date.getMonth().compareTo(om) < 0) {
+                    long utcDays = calsys.transform(cycle, yoc, om, 1);
+                    return calsys.transform(utcDays);
+                }
+            }
+
+            yoc++;
+
+            if (yoc > 60) {
+                yoc = 1;
+                cycle++;
+            }
+
+            date = calsys.transform(calsys.transform(cycle, yoc, EastAsianMonth.valueOf(1), 1));
+        }
+
+    }
+
+    /**
      * <p>Yields the length of current month in days. </p>
      *
      * @return  int
