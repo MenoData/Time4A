@@ -7,6 +7,7 @@
 - Update to TZDB 2021a [#931]
 
 ### Fixed
+- Crash in OldApiTimezone when Saturday is hit [#939]
 - Documentation of solar term handling in East Asian calendars improved [#928]
 - New Japanese nengo defined in system property not correctly checked [#929]
 
