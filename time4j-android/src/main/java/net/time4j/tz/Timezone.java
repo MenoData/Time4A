@@ -19,6 +19,8 @@
 
 package net.time4j.tz;
 
+import android.util.TimeUtils;
+
 import net.time4j.base.GregorianDate;
 import net.time4j.base.ResourceLoader;
 import net.time4j.base.UnixTime;
@@ -1958,7 +1960,7 @@ public abstract class Timezone
         @Override
         public String getVersion() {
 
-            return "";
+            return TimeUtils.getTimeZoneDatabaseVersion();
 
         }
 
