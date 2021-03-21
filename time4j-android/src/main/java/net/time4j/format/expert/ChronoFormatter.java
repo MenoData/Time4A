@@ -506,7 +506,11 @@ public final class ChronoFormatter<T>
      * also true if more than one pattern was used via the builder so that there is no longer
      * a unique pattern. </p>
      *
+     * <p>If this formatter is style-based then this method can find the generated format pattern
+     * although the format attribute for patterns is not filled for style-based formatters. </p>
+     *
      * @return  pattern string, maybe empty
+     * @see     Attributes#FORMAT_PATTERN
      * @since   3.33/4.28
      */
     /*[deutsch]
@@ -516,13 +520,25 @@ public final class ChronoFormatter<T>
      * Das ist auch der Fall, wenn &uuml;ber den <i>Builder</i> mehr als ein Formatmuster verwendet wird
      * und daher kein eindeutiges Formatmuster vorliegt. </p>
      *
+     * <p>Wenn dieser Formatierer stilbasiert ist, kann diese Methode das erzeugte Formatmuster finden,
+     * obwohl das Formatattribut f&uuml;r Formatmuster dann nicht gesetzt ist. </p>
+     *
      * @return  pattern string, maybe empty
+     * @see     Attributes#FORMAT_PATTERN
      * @since   3.33/4.28
      */
     public String getPattern() {
 
-        return this.globalAttributes.get(Attributes.FORMAT_PATTERN, "");
+        String defaultPattern = "";
 
+        if (this.isSingleStepOptimizationPossible()) {
+            FormatProcessor<?> processor = this.steps.get(0).getProcessor();
+            if (processor instanceof StyleProcessor) {
+                defaultPattern = StyleProcessor.class.cast(processor).getGeneratedPattern();
+            }
+        }
+
+        return this.getPattern0(defaultPattern);
     }
 
     /**
@@ -2791,6 +2807,12 @@ public final class ChronoFormatter<T>
         }
 
         return optSingleStep;
+
+    }
+
+    private String getPattern0(String defaultPattern) {
+
+        return this.globalAttributes.get(Attributes.FORMAT_PATTERN, defaultPattern);
 
     }
 
@@ -6668,10 +6690,12 @@ public final class ChronoFormatter<T>
                     this.deepestParser
                 );
 
-            if ((this.dayPeriod != null) || (this.pattern != null && !this.pattern.isEmpty())) {
+            String cldrPattern = (this.pattern == null) ? "" : this.pattern;
+
+            if ((this.dayPeriod != null) || !cldrPattern.isEmpty()) {
                 AttributeSet as = formatter.globalAttributes;
-                if ((this.pattern != null) && !this.pattern.isEmpty()) {
-                    as = as.withInternal(Attributes.FORMAT_PATTERN, this.pattern);
+                if (!cldrPattern.isEmpty()) {
+                    as = as.withInternal(Attributes.FORMAT_PATTERN, cldrPattern);
                 }
                 if (this.dayPeriod != null) {
                     as = as.withInternal(CUSTOM_DAY_PERIOD, this.dayPeriod);

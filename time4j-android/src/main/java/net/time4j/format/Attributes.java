@@ -649,13 +649,13 @@ public final class Attributes
 
     /**
      * <p>Defines a read-only attribute key which can show the global format pattern
-     * when the formatter was constructed by pattern. </p>
+     * when the formatter was directly constructed by a format pattern. </p>
      *
      * @since       3.33/4.28
      */
     /*[deutsch]
      * <p>Definiert ein schreibgesch&uuml;tztes Formatattribut, das das bei der Konstruktion
-     * des Formatierers verwendete Formatmuster zeigen kann. </p>
+     * des Formatierers unmittelbar verwendete Formatmuster zeigen kann. </p>
      *
      * @since       3.33/4.28
      */
