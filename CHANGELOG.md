@@ -3,6 +3,7 @@
 - Specific leap month queries in East Asian calendars [#913]
 - New methods for solar terms in East Asian calendars creating lists and operators [#928]
 - Android platform timezone with version info [#940]
+- Styled formatters should give an pattern info [#941]
 
 ### Changed
 - Update to TZDB 2021a [#931]
