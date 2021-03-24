@@ -102,7 +102,7 @@ public enum BadiEra
                 throw new UnsupportedOperationException(width.name());
         }
 
-        CalendarText ct = CalendarText.getInstance("extra/bahai", locale);
+        CalendarText ct = CalendarText.getInstance("bahai", locale);
         return ct.getTextForms("E", BadiEra.class, variant);
 
     }

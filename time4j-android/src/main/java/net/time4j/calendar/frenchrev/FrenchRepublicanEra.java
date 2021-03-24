@@ -74,7 +74,7 @@ public enum FrenchRepublicanEra
         TextWidth width
     ) {
 
-        CalendarText names = CalendarText.getInstance("extra/frenchrev", locale);
+        CalendarText names = CalendarText.getInstance("frenchrev", locale);
         return names.getEras(width).print(this);
 
     }

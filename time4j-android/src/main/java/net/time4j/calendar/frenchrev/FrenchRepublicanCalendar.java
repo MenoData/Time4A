@@ -288,7 +288,7 @@ import java.util.Locale;
  * @see     DayOfDecade
  * @since   3.33/4.28
  */
-@CalendarType("extra/frenchrev")
+@CalendarType("frenchrev")
 public final class FrenchRepublicanCalendar
     extends Calendrical<FrenchRepublicanCalendar.Unit, FrenchRepublicanCalendar> {
 
@@ -2167,7 +2167,7 @@ public final class FrenchRepublicanCalendar
         public String getDisplayName(Locale language) {
 
             String key = "L_dayofdecade";
-            String lname = CalendarText.getInstance("extra/frenchrev", language).getTextForms().get(key);
+            String lname = CalendarText.getInstance("frenchrev", language).getTextForms().get(key);
             return ((lname == null) ? this.name() : lname);
 
         }
@@ -2201,7 +2201,7 @@ public final class FrenchRepublicanCalendar
             TextWidth width = attributes.get(Attributes.TEXT_WIDTH, TextWidth.WIDE);
             OutputContext oc = attributes.get(Attributes.OUTPUT_CONTEXT, OutputContext.FORMAT);
             String variant = ((width == TextWidth.NARROW) ? "N" : (oc == OutputContext.FORMAT ? "w" : "W"));
-            return CalendarText.getInstance("extra/frenchrev", lang).getTextForms(this.name(), this.getType(), variant);
+            return CalendarText.getInstance("frenchrev", lang).getTextForms(this.name(), this.getType(), variant);
 
         }
 
@@ -2378,7 +2378,7 @@ public final class FrenchRepublicanCalendar
         @Override
         public String getDisplayName(Locale language) {
             String key = "L_sansculottides";
-            String lname = CalendarText.getInstance("extra/frenchrev", language).getTextForms().get(key);
+            String lname = CalendarText.getInstance("frenchrev", language).getTextForms().get(key);
             return ((lname == null) ? this.name() : lname);
 
         }
@@ -2389,7 +2389,7 @@ public final class FrenchRepublicanCalendar
         ) {
 
             String variant = ((outputContext == OutputContext.FORMAT) ? "w" : "W");
-            return CalendarText.getInstance("extra/frenchrev", lang).getTextForms(this.name(), this.getType(), variant);
+            return CalendarText.getInstance("frenchrev", lang).getTextForms(this.name(), this.getType(), variant);
 
         }
 

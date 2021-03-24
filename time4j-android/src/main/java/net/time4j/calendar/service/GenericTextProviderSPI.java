@@ -58,7 +58,7 @@ public final class GenericTextProviderSPI
     static {
         PropertyBundle rb =
             PropertyBundle.load(
-                "calendar/names/generic",
+                "calendar/names/generic/generic",
                 Locale.ROOT);
 
         String[] languages = rb.getString("languages").split(" ");
@@ -85,8 +85,8 @@ public final class GenericTextProviderSPI
         types.add("coptic");
         types.add("dangi");
         types.add("ethiopic");
-        types.add("extra/frenchrev");
-        types.add("extra/hindu");
+        types.add("frenchrev");
+        types.add("hindu");
         types.add("generic");
         types.add("hebrew");
         types.add("indian");
@@ -153,7 +153,7 @@ public final class GenericTextProviderSPI
             return new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13" };
         } else if (calendarType.equals("dangi") || calendarType.equals("vietnam")) {
             calendarType = "chinese"; // Umleitung
-        } else if (calendarType.equals("extra/hindu")) {
+        } else if (calendarType.equals("hindu")) {
             calendarType = "indian"; // Umleitung
         } else if (calendarType.equals("juche")) {
             return CalendarText.getIsoInstance(locale).getStdMonths(tw, oc).getTextForms().toArray(new String[12]);
@@ -309,7 +309,7 @@ public final class GenericTextProviderSPI
     ) {
 
         return PropertyBundle.load(
-            "calendar/names/" + calendarType,
+            "calendar/names/" + calendarType + "/" + calendarType,
             LANGUAGES.contains(LanguageMatch.getAlias(desired)) ? desired : Locale.ROOT);
 
     }
@@ -460,7 +460,7 @@ public final class GenericTextProviderSPI
 
     private static int countOfEras(String ct) {
 
-        if (ct.equals("extra/hindu")) {
+        if (ct.equals("hindu")) {
             return 6;
         }
 

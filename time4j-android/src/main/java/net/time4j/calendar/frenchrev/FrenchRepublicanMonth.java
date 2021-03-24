@@ -624,7 +624,7 @@ public enum FrenchRepublicanMonth {
         OutputContext oc
     ) {
 
-        CalendarText names = CalendarText.getInstance("extra/frenchrev", locale);
+        CalendarText names = CalendarText.getInstance("frenchrev", locale);
         return names.getStdMonths(width, oc).print(this);
 
     }

@@ -26,6 +26,7 @@ import net.time4j.engine.ChronoElement;
 import net.time4j.engine.Chronology;
 import net.time4j.format.internal.ExtendedPatterns;
 import net.time4j.format.internal.FormatUtils;
+import net.time4j.i18n.IsoTextProviderSPI;
 import net.time4j.i18n.PropertyBundle;
 
 import java.text.DateFormat;
@@ -37,6 +38,7 @@ import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
@@ -175,16 +177,17 @@ public final class CalendarText {
     private static final FormatPatternProvider FORMAT_PATTERN_PROVIDER;
 
     static {
-        FormatPatternProvider provider = new FormatPatterns(null);
+        Iterator<FormatPatternProvider> iter =
+                ResourceLoader.getInstance().services(FormatPatternProvider.class).iterator();
+        FormatPatternProvider provider;
 
-        for (FormatPatternProvider fpp : ResourceLoader.getInstance().services(FormatPatternProvider.class)) {
-            provider = new FormatPatterns(fpp);
-            if (!fpp.getClass().getName().startsWith("net.time4j.")) {
-                break;
-            }
+        if (iter.hasNext()) {
+            provider = iter.next();
+        } else {
+            provider = new IsoTextProviderSPI();
         }
 
-        FORMAT_PATTERN_PROVIDER = provider;
+        FORMAT_PATTERN_PROVIDER = new FormatPatterns(provider);
     }
 
     /**
@@ -304,10 +307,9 @@ public final class CalendarText {
         MissingResourceException tmpMre = null;
 
         try {
-            String module = calendarType.equals(ISO_CALENDAR_TYPE) ? "i18n" : "calendar";
             PropertyBundle rb =
                 PropertyBundle.load(
-                        module + "/names/" + calendarType,
+                    "calendar/names/" + calendarType + "/" + calendarType,
                     locale);
             for (String key : rb.keySet()) {
                 map.put(key, rb.getString(key));

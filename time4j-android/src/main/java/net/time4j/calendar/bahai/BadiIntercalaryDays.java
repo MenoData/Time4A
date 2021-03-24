@@ -68,7 +68,7 @@ public enum BadiIntercalaryDays
      */
     public String getDisplayName(Locale locale) {
 
-        return CalendarText.getInstance("extra/bahai", locale).getTextForms().get("A");
+        return CalendarText.getInstance("bahai", locale).getTextForms().get("A");
 
     }
 
@@ -92,7 +92,7 @@ public enum BadiIntercalaryDays
      */
     public String getMeaning(Locale locale) {
 
-        Map<String, String> names = CalendarText.getInstance("extra/bahai", locale).getTextForms();
+        Map<String, String> names = CalendarText.getInstance("bahai", locale).getTextForms();
         String meaning = names.get("a");
         return (meaning == null) ? names.get("A") : meaning;
 

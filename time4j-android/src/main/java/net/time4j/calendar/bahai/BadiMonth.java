@@ -29,14 +29,12 @@ import java.util.Locale;
  * <p>Represents the months used in the Badi calendar. </p>
  *
  * @author  Meno Hochschild
- * @see     BadiDivision#comparator()
  * @since   5.3
  */
 /*[deutsch]
  * <p>Repr&auml;sentiert die Monate, die im Badi-Kalender Verwendung finden. </p>
  *
  * @author  Meno Hochschild
- * @see     BadiDivision#comparator()
  * @since   5.3
  */
 public enum BadiMonth
@@ -285,7 +283,7 @@ public enum BadiMonth
         FormattedContent fc
     ) {
 
-        CalendarText ct = CalendarText.getInstance("extra/bahai", lang);
+        CalendarText ct = CalendarText.getInstance("bahai", lang);
         return ct.getTextForms("M", BadiMonth.class, fc.variant());
 
     }

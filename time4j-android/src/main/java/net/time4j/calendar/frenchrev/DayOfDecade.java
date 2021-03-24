@@ -216,7 +216,7 @@ public enum DayOfDecade {
         OutputContext oc
     ) {
 
-        CalendarText names = CalendarText.getInstance("extra/frenchrev", locale);
+        CalendarText names = CalendarText.getInstance("frenchrev", locale);
         String key = ((width == TextWidth.NARROW) ? "N" : (oc == OutputContext.FORMAT ? "w" : "W"));
         return names.getTextForms().get("D(" + key + ")_" + this.getValue());
 

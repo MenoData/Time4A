@@ -7,6 +7,7 @@
 
 ### Changed
 - Update to TZDB 2021a [#931]
+- Simplify calendar type identifiers for frenchrev, bahai, hindu [#942]
 
 ### Fixed
 - Crash in OldApiTimezone when Saturday is hit [#939]

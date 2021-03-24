@@ -159,7 +159,7 @@ public enum Sansculottides {
         OutputContext oc
     ) {
 
-        CalendarText names = CalendarText.getInstance("extra/frenchrev", locale);
+        CalendarText names = CalendarText.getInstance("frenchrev", locale);
         String key = "S(" + (oc == OutputContext.STANDALONE ? "W" : "w") + ")_" + this.getValue();
         String desc = names.getTextForms().get(key);
 

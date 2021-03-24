@@ -262,7 +262,7 @@ import java.util.Locale;
  * @author  Meno Hochschild
  * @since   5.3
  */
-@CalendarType("extra/bahai")
+@CalendarType("bahai")
 public final class BadiCalendar
     extends Calendrical<BadiCalendar.Unit, BadiCalendar> {
 
@@ -484,7 +484,7 @@ public final class BadiCalendar
         new StdIntegerDateElement<BadiCalendar>("KULL_I_SHAI", BadiCalendar.class, 1, 3, 'K') {
             @Override
             public String getDisplayName(Locale language) {
-                return CalendarText.getInstance("extra/bahai", language).getTextForms().get("K");
+                return CalendarText.getInstance("bahai", language).getTextForms().get("K");
             }
         };
 
@@ -499,7 +499,7 @@ public final class BadiCalendar
         new StdIntegerDateElement<BadiCalendar>("VAHID", BadiCalendar.class, 1, 19, 'V') {
             @Override
             public String getDisplayName(Locale language) {
-                return CalendarText.getInstance("extra/bahai", language).getTextForms().get("V");
+                return CalendarText.getInstance("bahai", language).getTextForms().get("V");
             }
         };
 
@@ -2122,7 +2122,7 @@ public final class BadiCalendar
 
             Locale lang = getLocale(attributes);
             FormattedContent fc = getFormattedContent(attributes);
-            CalendarText ct = CalendarText.getInstance("extra/bahai", lang);
+            CalendarText ct = CalendarText.getInstance("bahai", lang);
             return ct.getTextForms("M", BadiMonth.class, fc.variant());
 
         }
@@ -2183,7 +2183,7 @@ public final class BadiCalendar
 
             Locale lang = getLocale(attributes);
             FormattedContent fc = getFormattedContent(attributes);
-            CalendarText ct = CalendarText.getInstance("extra/bahai", lang);
+            CalendarText ct = CalendarText.getInstance("bahai", lang);
             return ct.getTextForms("D", Weekday.class, fc.variant());
 
         }
@@ -2291,7 +2291,7 @@ public final class BadiCalendar
 
             Locale lang = getLocale(attributes);
             FormattedContent fc = getFormattedContent(attributes);
-            CalendarText ct = CalendarText.getInstance("extra/bahai", lang);
+            CalendarText ct = CalendarText.getInstance("bahai", lang);
             return ct.getTextForms("YOV", enumAccess(), fc.variant());
 
         }
@@ -2476,7 +2476,7 @@ public final class BadiCalendar
 
 
             FormattedContent fc = attributes.get(TEXT_CONTENT_ATTRIBUTE, FormattedContent.TRANSCRIPTION);
-            CalendarText ct = CalendarText.getInstance("extra/bahai", lang);
+            CalendarText ct = CalendarText.getInstance("bahai", lang);
             String nameKey = "A";
 
             if ((fc == FormattedContent.MEANING) && ct.getTextForms().containsKey("a")) {

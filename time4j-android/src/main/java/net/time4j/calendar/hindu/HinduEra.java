@@ -142,7 +142,7 @@ public enum HinduEra
         Locale locale,
         TextWidth width
     ) {
-        CalendarText names = CalendarText.getInstance("extra/hindu", locale);
+        CalendarText names = CalendarText.getInstance("hindu", locale);
         return names.getEras(width).print(this);
     }
 

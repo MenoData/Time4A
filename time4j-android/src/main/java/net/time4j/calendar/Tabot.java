@@ -214,7 +214,7 @@ public final class Tabot
     private static PropertyBundle getBundle(Locale locale) {
 
         return PropertyBundle.load(
-            "calendar/names/ethiopic",
+            "calendar/names/ethiopic/ethiopic",
             locale);
 
     }
@@ -323,7 +323,7 @@ public final class Tabot
 
                 if (
                     offset + len <= text.length()
-                    && test.equals(text.subSequence(offset, offset + len))
+                    && test.equals(text.subSequence(offset, offset + len).toString())
                 ) {
                     status.setIndex(offset + len);
                     return Tabot.of(i);

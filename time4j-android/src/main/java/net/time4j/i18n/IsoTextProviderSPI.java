@@ -52,12 +52,11 @@ public final class IsoTextProviderSPI
     private static final Set<String> LANGUAGES;
     private static final Set<Locale> LOCALES;
 
-    static {
-        PropertyBundle rb =
-            PropertyBundle.load(
-                "i18n/names/" + ISO_CALENDAR_TYPE,
-                Locale.ROOT);
+    private static final String ISO_PATH =
+        "calendar/names/" + ISO_CALENDAR_TYPE + "/" + ISO_CALENDAR_TYPE;
 
+    static {
+        PropertyBundle rb = PropertyBundle.load(ISO_PATH, Locale.ROOT);
         String[] languages = rb.getString("languages").split(" ");
         Set<String> tmp = new HashSet<String>();
         Collections.addAll(tmp, languages);
@@ -483,9 +482,7 @@ public final class IsoTextProviderSPI
     private static PropertyBundle getBundle(Locale desired)
         throws MissingResourceException {
 
-        return PropertyBundle.load(
-            "i18n/names/" + ISO_CALENDAR_TYPE,
-            desired);
+        return PropertyBundle.load(ISO_PATH, desired);
 
     }
 
